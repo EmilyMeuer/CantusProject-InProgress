@@ -7,7 +7,7 @@ void setup (){
 
 void draw(){
   
-  fill(255);
+  fill(115);
   rect(mouseX,mouseY,10,10);
   
   
