@@ -16,7 +16,6 @@ void settings()
 
 void setup()
 {
-//   size(512, 200);
    testInput  = new Input();
 }
 
