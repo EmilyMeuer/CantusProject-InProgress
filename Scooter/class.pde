@@ -67,7 +67,7 @@ class Input
 
     this.freq = Frequency.ofHertz((float)loudestFreq);
     this.amplitude = loudestFreqAmp;
-    println("this.freq"+this.freq);
+   // println("this.freq"+this.freq);
     
   } // setFreq
   
