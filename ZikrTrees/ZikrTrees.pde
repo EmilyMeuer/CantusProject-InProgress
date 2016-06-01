@@ -8,7 +8,9 @@
  First speeds up at 2:50;
  Again at (4:11) 4:19.
  
- 
+ Just use makey-makey?  
+  - How will that signal come in?
+  - what will trigger things before that?
  ----
  Polyphonic Interface: http://code.compartmental.net/minim/javadoc/ddf/minim/Polyphonic.html
  "object that can have multiple AudioSignals attached to it. It is 
@@ -32,15 +34,16 @@ void setup()
 {
   minim = new Minim(this);
   beat  = new BeatDetect();
-  beat.setSensitivity(800);
+  beat.setSensitivity(500);
   background(0);
-  angle  = PI / 2;
+  angle  = PI / 4;
   //input  = new Input();
-  player  = minim.loadFile("Zikr");
+  player  = minim.loadFile("Daft Punk correct key reference.mp3");
+ // player.play();
   player.play(150000);
-  player.play();
   
- // beat.detectMode(BeatDetect.FREQ_ENERGY);
+  //beat.detectMode(BeatDetect.FREQ_ENERGY);
+  beat.detectMode(BeatDetect.SOUND_ENERGY);
 }
 
 void draw()
@@ -48,20 +51,17 @@ void draw()
   stroke(255);
   translate(width/2, height);
   
-  
   beat.detect(player.mix);
-  if(beat.isOnset())  {  println("Onset at " + player.position());  }
+  if(beat.isOnset())  {  println("Onset at " + player.position()/60000 + ":" + player.position()%60000);  }
   branch(100);
-  
-  //player.position();
 }
 
 void branch(float len)
 {
-  line(0, 0, 0, -len);
+  line(0, 0, 0, -len); 
   translate(0, -len);
   
-  if(beat.isOnset() && len > 4)
+  if(len > 4)
   {
     pushMatrix();
     rotate(angle);
