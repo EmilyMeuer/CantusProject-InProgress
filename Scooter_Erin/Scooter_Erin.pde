@@ -8,10 +8,10 @@ void setup() {
   
   fullScreen();
   name = new Input();
-  img = loadImage("dad.jpg");//choice of picture
+  img = loadImage("pepper.jpg");//choice of picture
   img.resize(width,height);
-  smallPoint = 10; //smallest dot size
-  largePoint = 100;//largest dot size
+  smallPoint = 1; //smallest dot size
+  largePoint = 70;//largest dot size
   imageMode(CENTER);
   noStroke();
   smooth(); //sets background so things can fade away
@@ -21,7 +21,7 @@ void setup() {
 
 void draw() { 
 
- /* fill(255, 10); // semi-transparent white
+  /*fill(255,10); // semi-transparent white
   rect(0, 0, width, height);
   fill(random(255));*/
   //above part is for fading out
