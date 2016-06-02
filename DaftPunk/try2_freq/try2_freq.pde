@@ -27,9 +27,11 @@ void draw()
     for (int i = 0; i<this.fft.specSize(); i++)
     {
       float freq = this.fft.indexToFreq(i);
-      float amp = this.fft.getFreq(freq);
+      //float amp = this.fft.getFreq(freq);
+      float amp = this.fft.getBand(i);
       if (amp>loudAmp)
       {
+        println("amp is "+amp);
         loudAmp=amp;
         loudFreq=freq;
       }
@@ -45,6 +47,6 @@ void draw()
     }
     line(j, 50+in.left.get(j)*50, j+1, 50+in.left.get(j+1)*50);
     line(j, 150+in.right.get(j)*50, j+1, 150+in.right.get(j+1)*50);
+    
   }
-  println("loudFreq is "+loudFreq);
 }

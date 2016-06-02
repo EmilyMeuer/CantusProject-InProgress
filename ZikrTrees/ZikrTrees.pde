@@ -38,7 +38,7 @@ Minim  minim;
 
 void settings()
 {
-  size(800, 800);
+  size(400, 400);
 }
 
 void setup()
@@ -88,10 +88,8 @@ void draw()
   if (beat.isOnset()) {  
     println("Onset at " + player.position()/60000 + ":" + player.position()%60000);
   }
-  
   //branch(100);
 
-/*
   for (int i = 0; i < allTrees.size(); i++)
   {
     ArrayList<Branch> curTree  = allTrees.get(i);
@@ -113,28 +111,25 @@ void draw()
      curTree.get(j).show();
     } // for
   } // for
-  */
 }
 
 void mousePressed()
 {
-  
-  for(int i = tree1.size()-1; i >= 0; i--)
+  /*
+  for(int i = allTrees.size()-1; i >= 0; i--)
    {
-   if(!tree1.get(i).finished)
+   if(!tree.get(i).finished)
    {
-     tree1.add(tree1.get(i).branchA());
-     tree1.get(i).show();
-     tree1.add(tree1.get(i).branchB());
-     tree1.get(i).show();
+   tree.add(tree.get(i).branchA());
+   tree.add(tree.get(i).branchB());
    }
    } // for
-   
+   */
 } // mousePressed
 
 void branch(float len)
 {
-  line(0, 0, 0, -len);
+  line(0, 0, 0, -len); 
   translate(0, -len);
 
   if (len > 4)
