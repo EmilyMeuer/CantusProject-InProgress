@@ -13,6 +13,7 @@ class Input
    */
 
   float      amplitude;
+  //BandPass   bandPass;    // could add later, but right now will work w/amplitude for a similar effect.
   Minim      minim;
   FFT        fft;
   Frequency  freq;
