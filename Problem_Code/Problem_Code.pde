@@ -22,8 +22,11 @@ void draw()
   // draw the waveforms so we can see what we are monitoring
   for(int i = 0; i < in.bufferSize() - 1; i++)
   {
+    // N.B.: "getFreq" actually returns the amplitude of the frequency i.
     float freq = fft.getFreq(i);
-    println("Frequency: "+freq+" Hz.");
+    
+    // Commenting out the following line makes it work fine:
+    //println("Frequency: "+freq+" Hz.");
     if((freq > 260) && (freq < 265))
     {
       stroke(217, 10, 250);
