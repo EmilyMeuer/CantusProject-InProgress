@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 /*
   06/01/2016
  Emily Meuer
@@ -11,6 +13,9 @@
  Just use makey-makey?  
   - How will that signal come in?
   - what will trigger things before that?
+  
+ Zoom using map()?
+ Color maps/ color map mode
  ----
  Polyphonic Interface: http://code.compartmental.net/minim/javadoc/ddf/minim/Polyphonic.html
  "object that can have multiple AudioSignals attached to it. It is 
@@ -22,6 +27,9 @@ BeatDetect  beat;
 PShape circle;
 Input  input;
 AudioPlayer player;
+ArrayList<Branch>  tree;
+PVector  vector1;
+PVector  vector2;
 
 Minim  minim;
 
@@ -36,25 +44,51 @@ void setup()
   beat  = new BeatDetect();
   beat.setSensitivity(500);
   background(0);
-  angle  = PI / 4;
+  angle  = PI / 2;
   //input  = new Input();
-  player  = minim.loadFile("Daft Punk correct key reference.mp3");
+  player  = minim.loadFile("Zikr.mp3");
  // player.play();
-  player.play(150000);
+  //player.play(150000);
   
   //beat.detectMode(BeatDetect.FREQ_ENERGY);
   beat.detectMode(BeatDetect.SOUND_ENERGY);
+  
+  vector1  = new PVector(width/2, height);
+  vector2  = new PVector(width/2, height-100);
+  Branch root  = new Branch(vector1, vector2);
+  Branch rightBranch  = root.branchA();
+  Branch leftBranch  = root.branchB();
+  
+  tree  = new ArrayList<Branch>();
+  tree.add(root);
 }
 
 void draw()
 {
   stroke(255);
-  translate(width/2, height);
+  //translate(width/2, height);
   
   beat.detect(player.mix);
   if(beat.isOnset())  {  println("Onset at " + player.position()/60000 + ":" + player.position()%60000);  }
-  branch(100);
+  //branch(100);
+  
+  for(int i = 0; i < tree.size(); i++)
+  {
+    tree.get(i).show();
+  } // for
 }
+
+void mousePressed()
+{
+  for(int i = tree.size()-1; i >= 0; i--)
+  {
+    if(!tree.get(i).finished)
+    {
+      tree.add(tree.get(i).branchA());
+      tree.add(tree.get(i).branchB());
+    }
+  } // for
+} // mousePressed
 
 void branch(float len)
 {
