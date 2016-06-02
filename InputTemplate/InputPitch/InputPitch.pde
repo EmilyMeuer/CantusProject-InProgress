@@ -6,17 +6,17 @@ class Input
 {
   /*
     Emily Meuer
-    05/28/2016
-    
-    Wrapper class to make pitch of a particular input easily accessible.
-  */
-  
+   05/28/2016
+   
+   Wrapper class to make pitch of a particular input easily accessible.
+   */
+
   float      amplitude;
   Minim      minim;
   FFT        fft;
   Frequency  freq;
   AudioInput input;
-  
+
   //  Future: take an int that specifies the channel of this input?
   // It will have to know from what line to get the audio, so probably yes.
   Input()
@@ -26,7 +26,7 @@ class Input
     this.fft    = new FFT(input.bufferSize(), input.sampleRate());
     this.setFreq();
   } // constructor
-   
+
   /**
    * Performs a foward transform on the AudioInput instance var,
    * uses logAverages to group near frequencies and calculate
@@ -41,45 +41,42 @@ class Input
   void setFreq()
   { 
     this.fft.forward(this.input.mix);
-    
+
     /*
     // each average should hopefully be about one half step,
-    // since there are 11 averages and each is split into 12 parts.
-    // (Could calculate smaller averages to get a closer frequency match, e.g. "this.fft.logAverages(11,48);"
-    this.fft.logAverages(11,12);
-    
-    */
-    
-    
-   float  loudestFreq = 0;
-   float  loudestFreqAmp  = 0;    // amplitude of the loudestAvg average band
-   int    loudestAvg    = 0;      // average band w/the highest amplitude
-   
-   /*
+     // since there are 11 averages and each is split into 12 parts.
+     // (Could calculate smaller averages to get a closer frequency match, e.g. "this.fft.logAverages(11,48);"
+     this.fft.logAverages(11,12);
+     */
+
+    float  loudestFreq = 0;
+    float  loudestFreqAmp  = 0;    // amplitude of the loudestAvg average band
+    int    loudestAvg    = 0;      // average band w/the highest amplitude
+
+    /*
    for(int i = 0; i < this.fft.avgSize(); i++)
-   {
+     {
      float lowFreq = this.fft.getAverageCenterFrequency(i) - (this.fft.getAverageBandWidth(i) / 2);
      float hiFreq  = this.fft.getAverageCenterFrequency(i) + (this.fft.getAverageBandWidth(i) / 2);
      float avgAmp = this.fft.calcAvg(lowFreq, hiFreq);
      
      if(avgAmp > loudestFreqAmp)  
      {  
-       loudestAvg  = i;
-       loudestFreqAmp  = avgAmp;
-       loudestFreq = this.fft.getAverageCenterFrequency(i);
+     loudestAvg  = i;
+     loudestFreqAmp  = avgAmp;
+     loudestFreq = this.fft.getAverageCenterFrequency(i);
+     } // if
+     } // for
+     */
+
+    for (int i = 0; i < this.fft.specSize(); i++)
+    {
+      if (this.fft.getBand(i) > loudestFreqAmp)
+      {
+        loudestFreq = this.fft.indexToFreq(i);
+        loudestFreqAmp = this.fft.getFreq(loudestFreq);
       } // if
-   } // for
-   */
-   
-   for(int i = 0; i < this.fft.specSize(); i++)
-   {
-     
-     if(this.fft.getBand(i) > loudestFreqAmp)
-     {
-       loudestFreq = this.fft.indexToFreq(i);
-       loudestFreqAmp = this.fft.getFreq(loudestFreq);
-      } // if
-   } // for
+    } // for
 
     this.freq = Frequency.ofHertz((float)loudestFreq);
     this.amplitude  = loudestFreqAmp;
@@ -100,17 +97,20 @@ class Input
   float getFreqAsHz()  
   {
     this.setFreq();
-    return this.freq.asHz();  
+    return this.freq.asHz();
   }
-  
+
   /**
    * Calls setFreq(), then returns the midi note value of the Frequency instance var.
    */
   float getFreqAsMidiNote()  
   {
     this.setFreq();
-    return this.freq.asMidiNote();  
+    return this.freq.asMidiNote();
   }
-  
-  float getAmplitude()  {  return this.amplitude;  }
+
+  float getAmplitude() {
+    this.setFreq();
+    return this.amplitude;
+  }
 } // class
