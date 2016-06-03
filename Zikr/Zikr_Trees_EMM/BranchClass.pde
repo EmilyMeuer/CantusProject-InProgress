@@ -12,7 +12,7 @@ class Branch
     this.begin  = begin;
     this.end    = end;
     this.finished  = false;
-    this.angle  = PI / 3;
+    this.angle  = PI / 2;
   } // constructor
   
   void show()

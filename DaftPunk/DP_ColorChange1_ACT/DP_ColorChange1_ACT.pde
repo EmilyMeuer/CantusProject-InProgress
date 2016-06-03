@@ -14,6 +14,7 @@ class Input
   // It will have to know from what line to get the audio, so probably yes.
   Input()
   {
+    println("in the Input constructor");
     this.minim  = new Minim(this);
     this.in  = minim.getLineIn();
     this.fft    = new FFT(in.bufferSize(), in.sampleRate());

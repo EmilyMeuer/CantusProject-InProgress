@@ -8,6 +8,8 @@ import ddf.minim.*;
  Zikr
  Testing light that grows w/amplitude
  and reveals an image (mosque pattern).
+ 
+ (Brightness code taken from Michaela.)
  */
 
 Input       input;
