@@ -22,18 +22,17 @@ import java.util.ArrayList;
  implemented by AudioOutput."
  */
 
-float    angle;
-BeatDetect  beat;
-PShape circle;
-Input  input;
-AudioPlayer player;
+float              angle;
+BeatDetect         beat;
+PShape             circle;
+Input              input;
+AudioPlayer        player;
 ArrayList<Branch>  tree1;
 ArrayList<Branch>  tree2;
 ArrayList<Branch>  tree3;
 ArrayList<ArrayList<Branch>> allTrees;
 PVector  vector1;
 PVector  vector2;
-
 Minim  minim;
 
 void settings()
@@ -47,7 +46,6 @@ void setup()
   beat  = new BeatDetect();
   beat.setSensitivity(500);
   background(0);
-  angle  = PI / 6;
   //input  = new Input();
   player  = minim.loadFile("Zikr.mp3");
   // player.play();
@@ -57,16 +55,18 @@ void setup()
   beat.detectMode(BeatDetect.SOUND_ENERGY);
 
   vector1  = new PVector(width/2, height/2);
-  vector2  = new PVector(width/2, height/2-100);
+  vector2  = new PVector(width/2, height/2-150);
   Branch root1  = new Branch(vector1, vector2);
 
   PVector  dir  = PVector.sub(root1.begin, root1.end);
   dir.rotate(radians(60));
-  PVector  newEnd  = PVector.add(root1.begin, dir);
-  Branch root2  = new Branch(root1.begin, newEnd);
+  PVector  end2  = PVector.add(root1.begin, dir);
+  Branch root2  = new Branch(root1.begin, end2);
 
-  stroke(255);
-  root2.show();
+  PVector dir2  = PVector.sub(root2.begin, root2.end);
+  dir2.rotate(radians(60));
+  PVector  end3  = PVector.add(root2.begin, dir2);
+  Branch root3  = new Branch(root2.begin, end3);
 
   tree1  = new ArrayList<Branch>();
   tree1.add(root1);
@@ -74,9 +74,13 @@ void setup()
   tree2 = new ArrayList<Branch>();
   tree2.add(root2);
 
+  tree3 = new ArrayList<Branch>();
+  tree3.add(root3);
+
   allTrees = new ArrayList<ArrayList<Branch>>();
   allTrees.add(tree1);
   allTrees.add(tree2);
+  allTrees.add(tree3);
 }
 
 void draw()
@@ -88,48 +92,51 @@ void draw()
   if (beat.isOnset()) {  
     println("Onset at " + player.position()/60000 + ":" + player.position()%60000);
   }
-  
+
   //branch(100);
 
-/*
+  /*
   for (int i = 0; i < allTrees.size(); i++)
-  {
-    ArrayList<Branch> curTree  = allTrees.get(i);
-    for (int j = allTrees.size()-1; j >= 0; j--)
-    {
-      if (!allTrees.get(i).get(j).finished)
-      {
-        curTree.add(curTree.get(j).branchA());
-        curTree.add(curTree.get(j).branchA());
-      }
-    } // for
-  } // for
-  
-  for (int i = 0; i < allTrees.size(); i++)
-  {
-    ArrayList<Branch> curTree  = allTrees.get(i);
-    for (int j = allTrees.size()-1; j >= 0; j--)
-    {
-     curTree.get(j).show();
-    } // for
-  } // for
-  */
+   {
+   ArrayList<Branch> curTree  = allTrees.get(i);
+   for (int j = allTrees.size()-1; j >= 0; j--)
+   {
+   if (!allTrees.get(i).get(j).finished)
+   {
+   curTree.add(curTree.get(j).branchA());
+   curTree.add(curTree.get(j).branchA());
+   }
+   } // for
+   } // for
+   
+   for (int i = 0; i < allTrees.size(); i++)
+   {
+   ArrayList<Branch> curTree  = allTrees.get(i);
+   for (int j = allTrees.size()-1; j >= 0; j--)
+   {
+   curTree.get(j).show();
+   } // for
+   } // for
+   */
 }
 
 void mousePressed()
 {
-  
-  for(int i = tree1.size()-1; i >= 0; i--)
-   {
-   if(!tree1.get(i).finished)
-   {
-     tree1.add(tree1.get(i).branchA());
-     tree1.get(i).show();
-     tree1.add(tree1.get(i).branchB());
-     tree1.get(i).show();
-   }
-   } // for
-   
+  for (int j = 0; j < allTrees.size(); j++)
+  {
+    ArrayList<Branch> curTree = allTrees.get(j);
+    for (int i = curTree.size()-1; i >= 0; i--)
+    {
+      if (!curTree.get(i).finished)
+      {
+        curTree.add(curTree.get(i).branchA());
+        curTree.get(i).show();
+        curTree.add(curTree.get(i).branchB());
+        curTree.get(i).show();
+        curTree.get(i).finished = true;
+      } // if
+    } // for - i
+  } // for - j
 } // mousePressed
 
 void branch(float len)

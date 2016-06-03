@@ -11,7 +11,8 @@ class Branch
   {
     this.begin  = begin;
     this.end    = end;
-    this.angle  = PI / 6;
+    this.finished  = false;
+    this.angle  = PI / 2;
   } // constructor
   
   void show()
