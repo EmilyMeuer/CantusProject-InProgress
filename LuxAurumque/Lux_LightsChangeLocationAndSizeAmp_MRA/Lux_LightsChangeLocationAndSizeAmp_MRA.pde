@@ -11,6 +11,9 @@ Minim       minim;
 AudioPlayer player;
 PImage  img;
 float  amp, xloc, yloc, lightSize, frames;
+int i;
+int [] arrxloc = {50,50,430,430,200,200};
+int [] arryloc = {125,125,125,125,200,200};
 
 void setup()
 {
@@ -24,8 +27,9 @@ void setup()
   player = minim.loadFile("LuxAurumque.mp3", 1024);  
   frameRate(60);
   frames = 1;
-  xloc = 50;
-  yloc = 50;
+  xloc=50;
+  yloc=50;
+  i = 0;
 }
 
 void draw()
@@ -70,7 +74,7 @@ void pixelBrightness()
 }
 
 void amplitude(){
-  if (frameCount == frames*5) {
+  if (frameCount == frames*10) {
   amp = player.mix.level();
   lightSize = amp*1000;
   frames ++;
@@ -80,16 +84,21 @@ void amplitude(){
 }
 
 void lightPos(){
-  if (millis() % 10 == 0){
+  if (millis() % 5 == 0){
     if (amp <= 0.01){
-      xloc += 5;
-      yloc += 10;
+      xloc = arrxloc[i];
+      yloc = arryloc[i];
+      i ++;
+      delay(1000);
+      if(i == arrxloc.length){
+        i=1;
+      }
+      else{
+      }
     }
     else{
     }
   }
   else{
   }  
-  xloc = constrain(xloc, 0, 480);
-  yloc = constrain(yloc, 0, 357);
 }
