@@ -41,12 +41,14 @@ void draw()
   lightPos();
 }
 
-//This doesn't work yet...
 void Light(){
-  if(key == LEFT){
+  if(keyCode == LEFT){
+    pixelBrightnessR();
+  }
+  else if(keyCode == DOWN){
     pixelBrightnessRG();
   }
-  if(key == RIGHT){
+  else if(keyCode == RIGHT){
     pixelBrightnessRGB();
   }
   else{
@@ -91,7 +93,6 @@ void pixelBrightnessRG()
       float r,g,b;
       r = red (img.pixels[loc]);
       g = green (img.pixels[loc]);
-      b = blue (img.pixels[loc]);
       // Calculate an amount to change brightness based on proximity to the mouse
       amplitude();
       float maxdist = lightSize;//dist(0,0,width,height);
@@ -99,13 +100,10 @@ void pixelBrightnessRG()
       float adjustbrightness = 255*(maxdist-d)/maxdist;
       r += adjustbrightness;
       g += adjustbrightness;
-      //b += adjustbrightness;
       // Constrain RGB to make sure they are within 0-255 color range
       r = constrain(r, 0, 255);
       g = constrain(g, 0, 255);
-      //b = constrain(b, 0, 255);
       // Make a new color and set pixel in the window
-      //color c = color(r, g, b);
       g=g*.8;
       b=0;
       color c = color(r, g, b);
