@@ -1,7 +1,10 @@
 /*
   05/31/2016
   MRA
-  Lux Aurumque - test 1
+  Lux Aurumque
+    - use LEFT, DOWN, and RIGHT to switch between light settings
+    - at "silence" light location moves to next coordinates in xpos and ypos arrays
+    - light size based off amplitude   
 */
 
 import ddf.minim.analysis.*;
@@ -30,7 +33,7 @@ void setup()
   xloc=50;
   yloc=50;
   i = 0;
-}
+}//setup
 
 void draw()
 {
@@ -39,7 +42,7 @@ void draw()
   player.play();
   Light();
   lightPos();
-}
+}//draw
 
 void Light(){
   if(keyCode == LEFT){
@@ -54,7 +57,7 @@ void Light(){
   else{
     pixelBrightnessR();
   }
-}
+}//light
 
 void pixelBrightnessR()
 {
@@ -67,7 +70,6 @@ void pixelBrightnessR()
       r = red (img.pixels[loc]);
       g = green (img.pixels[loc]);
       b = blue (img.pixels[loc]);
-      // Calculate an amount to change brightness based on proximity to the mouse
       amplitude();
       float maxdist = lightSize;//dist(0,0,width,height);
       float d = dist(x, y, xloc, yloc);
@@ -78,10 +80,10 @@ void pixelBrightnessR()
       // Make a new color and set pixel in the window
       color c = color(r);
       pixels[y*width + x] = c;
-    }
-  }
+    }//for y
+  }//for x
   updatePixels();
-}
+}//pixelBrightnessR
 
 void pixelBrightnessRG()
 {
@@ -108,10 +110,10 @@ void pixelBrightnessRG()
       b=0;
       color c = color(r, g, b);
       pixels[y*width + x] = c;
-    }
-  }
+    }//for y
+  }//for x
   updatePixels();
-}
+}//pixelBrightnessRG
 
 void pixelBrightnessRGB()
 {
@@ -139,37 +141,40 @@ void pixelBrightnessRGB()
       // Make a new color and set pixel in the window
       color c = color(r, g, b);
       pixels[y*width + x] = c;
-    }
-  }
+    }//for y
+  }//for x
   updatePixels();
-}
+}//pixelBrightnessRGB
 
 void amplitude(){
   if (frameCount == frames*5) {
   amp = player.mix.level();
   lightSize = amp*1000;
   frames ++;
-  }
+  }//if
   else{
   }
-}
+}//amplitude
 
 void lightPos(){
+  //only runs every 5 ms
   if (millis() % 5 == 0){
+    //if there is "silence" move to next coordinate in array
     if (amp <= 0.005){
       xloc = arrxloc[i];
       yloc = arryloc[i];
       i ++;
       delay(2000);
-      if(i == arrxloc.length){
-        i=1;
-      }
-      else{
-      }
-    }
+        //if at end of array brings back to start
+        if(i == arrxloc.length){
+          i=1;
+        }
+        else{
+        }//if end of array
+    }//if "silence"
     else{
     }
-  }
+  }//if millis
   else{
   }  
-}
+}//lightPos

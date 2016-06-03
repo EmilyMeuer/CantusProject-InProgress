@@ -1,7 +1,7 @@
 /*
   05/31/2016
   MRA
-  Lux Aurumque - test 1
+  Lux Aurumque - THIS DOESN'T WORK YET...
 */
 
 import ddf.minim.analysis.*;
@@ -10,10 +10,8 @@ import ddf.minim.*;
 Minim       minim;
 AudioPlayer player;
 PImage  img;
-float  amp, xloc, yloc, lightSize, frames;
-int i;
-int [] arrxloc = {50,50,430,430,200,200};
-int [] arryloc = {125,125,125,125,200,200};
+float  xloc, yloc, frames;
+freqInput  frequency;
 
 void setup()
 {
@@ -27,9 +25,7 @@ void setup()
   player = minim.loadFile("LuxAurumque.mp3", 1024);  
   frameRate(60);
   frames = 1;
-  xloc=50;
-  yloc=50;
-  i = 0;
+  frequency = new freqInput();
 }
 
 void draw()
@@ -38,7 +34,6 @@ void draw()
   stroke(255);
   player.play();
   pixelBrightness();
-  lightPos();
 }
 
 void pixelBrightness()
@@ -53,8 +48,8 @@ void pixelBrightness()
       g = green (img.pixels[loc]);
       b = blue (img.pixels[loc]);
       // Calculate an amount to change brightness based on proximity to the mouse
-      amplitude();
-      float maxdist = lightSize;//dist(0,0,width,height);
+      ampLocation();
+      float maxdist = 50;//dist(0,0,width,height);
       float d = dist(x, y, xloc, yloc);
       float adjustbrightness = 255*(maxdist-d)/maxdist;
       r += adjustbrightness;
@@ -73,32 +68,16 @@ void pixelBrightness()
   updatePixels();
 }
 
-void amplitude(){
-  if (frameCount == frames*10) {
-  amp = player.mix.level();
-  lightSize = amp*1000;
+void ampLocation(){
+  if (frameCount == frames*30) {
+  float amp = player.mix.level();
+  xloc = amp*10000;
+  yloc = amp*7500;
+  xloc = constrain(xloc, 0, 480);
+  yloc = constrain(yloc, 0, 357);
   frames ++;
+  print(frequency.getFreqAsHz());
   }
   else{
   }
-}
-
-void lightPos(){
-  if (millis() % 5 == 0){
-    if (amp <= 0.01){
-      xloc = arrxloc[i];
-      yloc = arryloc[i];
-      i ++;
-      delay(1000);
-      if(i == arrxloc.length){
-        i=1;
-      }
-      else{
-      }
-    }
-    else{
-    }
-  }
-  else{
-  }  
 }

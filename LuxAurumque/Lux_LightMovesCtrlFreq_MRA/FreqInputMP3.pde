@@ -2,27 +2,31 @@ import ddf.minim.*;
 import ddf.minim.analysis.*;
 import ddf.minim.ugens.*;
 
-class Input
+class freqInput
 {
   /*
     Emily Meuer
     05/28/2016
-    
     Wrapper class to make pitch of a particular input easily accessible.
+    
+    ed Michaela Andrews
+    6/3/2016
+    for use with mp3s  
   */
    
   Minim      minim;
   FFT        fft;
   Frequency  freq;
-  AudioInput input;
+  //AudioInput input;
+  AudioPlayer  player;
   
   //  Future: take an int that specifies the channel of this input?
   // It will have to know from what line to get the audio, so probably yes.
-  Input()
+  freqInput()
   {
-    this.minim  = new Minim(this);
-    this.input  = minim.getLineIn();
-    this.fft    = new FFT(input.bufferSize(), input.sampleRate());
+    minim = new Minim(this);
+    player = minim.loadFile("LuxAurumque.mp3");
+    this.fft    = new FFT(player.bufferSize(), player.sampleRate());
     this.setFreq();
   } // constructor
    
@@ -38,7 +42,7 @@ class Input
    */
   void setFreq()
   { 
-    this.fft.forward(this.input.mix);
+    this.fft.forward(this.player.mix);
     
     // each average should hopefully be about one half step,
     // since there are 11 averages and each is split into 12 parts.
