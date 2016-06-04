@@ -22,10 +22,10 @@ void setup()
 void draw()
 {
   // print is not necessary, but gives you a behind-the-scenes peek at the numbers:
-  println("midi: " + testInput.getFreqAsMidiNote() + "  hz: " + testInput.getFreqAsHz());
+  println("this.freq: " + testInput.getFreqAsHz() + "; this.adjustedFreq: " + testInput.adjustedFreq.asHz());
   
   // divide value by 5 b/c too large for a color value otherwise:
-  background(testInput.getFreqAsHz() / 5, 0, 0);
+  background(testInput.adjustedFreq.asHz() / 5, 0, 0);
   
   // this version less sensitive, b/c midi notes are less exact:
   //background(testInput.getFreqAsMidiNote() * 2, 0, 0);
