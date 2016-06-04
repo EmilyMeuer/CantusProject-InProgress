@@ -65,7 +65,7 @@ void draw()
   {
     translate(width/2, (height - input.getFreqAsHz()/2));
   } else {
-    translate(width/2, (height - input.getPrevFreq().asHz()/2));
+//    translate(width/2, (height - input.getPrevFreq().asHz()/2));
   } // else
 
   shape(circle);

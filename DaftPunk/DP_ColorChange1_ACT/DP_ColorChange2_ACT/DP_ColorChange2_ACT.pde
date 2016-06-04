@@ -43,7 +43,7 @@ void draw()
   float  x2;
 
 
-  for (int i=0; i< testInput.in.bufferSize()-1; i++)
+  for (int i=0; i< testInput.input.bufferSize()-1; i++)
   {
     //if((note/5)>255)
     // {
@@ -54,11 +54,11 @@ void draw()
     stroke(40+note/7, 20+note/7, 80+note/7);
     //}
 
-    x1 = map( i, 0, testInput.in.bufferSize(), 0, width );
-    x2 = map( i+1, 0, testInput.in.bufferSize(), 0, width );
+    x1 = map( i, 0, testInput.input.bufferSize(), 0, width );
+    x2 = map( i+1, 0, testInput.input.bufferSize(), 0, width );
     //line(x1, 100+in.mix.get(i)*100, x2, 100+in.mix.get(i+1)*100);
     //line(i, 150+in.right.get(i)*50, i+1, 150+in.right.get(i+1)*50);
-    line(x1, 200+testInput.in.mix.get(i)*100, x2, 200+testInput.in.mix.get(i+1)*100);
+    line(x1, 200+testInput.input.mix.get(i)*100, x2, 200+testInput.input.mix.get(i+1)*100);
   }
   
   

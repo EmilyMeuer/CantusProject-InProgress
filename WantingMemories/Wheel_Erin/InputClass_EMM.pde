@@ -110,6 +110,9 @@ class Input
     return this.freq.asMidiNote();
   }
 
+  /**
+   * Calls setFreq(), then returns the value of the float amplitude instance var.
+   */
   float getAmplitude() {
     this.setFreq();
     return this.amplitude;

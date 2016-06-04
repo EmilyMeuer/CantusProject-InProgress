@@ -10,6 +10,8 @@ import ddf.minim.*;
  and reveals an image (mosque pattern).
  
  (Brightness code taken from Michaela.)
+ 
+ Fix resizing of bluePattern so that it doesn't stretch.
  */
 
 Input       input;

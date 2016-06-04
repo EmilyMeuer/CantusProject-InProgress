@@ -1,107 +1,73 @@
-import ddf.minim.*;
-import ddf.minim.analysis.*;
-import ddf.minim.ugens.*;
+/*
+  05/30/2016
+ Emily Meuer
+ 
+ This is another way of going about the example in FrequencyAttempts,
+ but using the Input object defined in the InputPitch tab
+ rather than doing all the computations by hand in draw.
+ 
+ The following error occurs when there are AudioInputs taking from the 
+ same line in both this tab and the InputClass tab:
+ "==== JavaSound Minim Error ====
+  ==== Error acquiring TargetDataLine: line with format PCM_SIGNED 44100.0 Hz, 
+  16 bit, stereo, 4 bytes/frame, little-endian not supported.
+"
+  Fixed by commenting out this in and using testInput.in for all input.
+ */
 
-class Input
+Input testInput;
+AudioInput in;
+Minim minim;
+
+void settings()
 {
-  float      amplitude;
-  Minim      minim;
-  FFT        fft;
-  Frequency  freq;
-  AudioInput in;
+  size(512, 200);
+}
 
-  //  Future: take an int that specifies the channel of this input?
-  // It will have to know from what line to get the audio, so probably yes.
-  Input()
+void setup()
+{
+  testInput  = new Input();
+//  minim = new Minim(this);
+ // in = minim.getLineIn();
+}
+
+void draw()
+{
+  //testInput  = new Input();
+  // print is not necessary, but gives you a behind-the-scenes peek at the numbers:
+  //println("midi: " + testInput.getFreqAsMidiNote() + "  hz: " + testInput.getFreqAsHz());
+
+  // divide value by 5 b/c too large for a color value otherwise:
+  //background(testInput.getFreqAsHz() / 5, 0, 0);
+
+  // this version less sensitive, b/c midi notes are less exact:
+  //background(testInput.getFreqAsMidiNote() * 2, 0, 0);
+
+  background(0);
+
+  float  note = testInput.getFreqAsHz();
+  float  x1;
+  float  x2;
+
+
+  for (int i=0; i< testInput.input.bufferSize()-1; i++)
   {
-    println("in the Input constructor");
-    this.minim  = new Minim(this);
-    this.in  = minim.getLineIn();
-    this.fft    = new FFT(in.bufferSize(), in.sampleRate());
-    this.setFreq();
-  } // constructor
+    //if((note/5)>255)
+    // {
+    // stroke(255);
+    //}
+    //else
+    //{
+    stroke(note/5, 50+note/5, 20+note/5);
+    //}
 
-  /**
-   * Performs a foward transform on the AudioInput instance var,
-   * uses logAverages to group near frequencies and calculate
-   * their average amplitude, determines which is the dominant frequency
-   * (by which has the highest amplitude), and sets the Frequency instance
-   * var to be equal to this dominant/loudest frequency.
-   * Also sets the amplitude instance var.
-   *
-   * (To produce correct results, this function needs to be called repeatedly,
-   * and should only be called from the constructor or in one of the getFreq functions.)
-   */
-  void setFreq()
-  { 
-    this.fft.forward(this.in.mix);
-
-    // each average should hopefully be about one half step,
-     // since there are 11 averages and each is split into 12 parts.
-     // (Could calculate smaller averages to get a closer frequency match, e.g. "this.fft.logAverages(11,48);"
-    //this.fft.logAverages(11,12);
-
-    float  loudFreq = 0;
-    float  loudFreqAmp  = 0;    // amplitude of the loudestAvg average band
-    int    loudAvg    = 0;      // average band w/the highest amplitude
-
-    /*
-   for(int i = 0; i < this.fft.avgSize(); i++)
-     {
-     float lowFreq = this.fft.getAverageCenterFrequency(i) - (this.fft.getAverageBandWidth(i) / 2);
-     float hiFreq  = this.fft.getAverageCenterFrequency(i) + (this.fft.getAverageBandWidth(i) / 2);
-     float avgAmp = this.fft.calcAvg(lowFreq, hiFreq);
-     
-     if(avgAmp > loudestFreqAmp)  
-     {  
-     loudestAvg  = i;
-     loudestFreqAmp  = avgAmp;
-     loudestFreq = this.fft.getAverageCenterFrequency(i);
-     } // if
-     } // for
-     */
-
-    for (int i = 0; i < this.fft.specSize(); i++)
-    {
-      if (this.fft.getBand(i) > loudFreqAmp)
-      {
-        loudFreq = this.fft.indexToFreq(i);
-        loudFreqAmp = this.fft.getFreq(loudFreq);
-      } // if
-    } // for
-
-    this.freq = Frequency.ofHertz((float)loudFreq);
-    this.amplitude  = loudFreqAmp;
-  } // setFreq
-
-  /**
-   * Calls setFreq(), then returns the Frequency instance var.
-   */
-  Frequency getFreq()
-  {
-    this.setFreq();
-    return this.freq;
-  } // getFreq()
-  /**
-   * Calls setFreq(), then returns the Frequency instance var in hertz.
-   */
-  float getFreqAsHz()  
-  {
-    this.setFreq();
-    return this.freq.asHz();
+    x1 = map( i, 0, testInput.input.bufferSize(), 0, width );
+    x2 = map( i+1, 0, testInput.input.bufferSize(), 0, width );
+    //line(x1, 100+in.mix.get(i)*100, x2, 100+in.mix.get(i+1)*100);
+    //line(i, 150+in.right.get(i)*50, i+1, 150+in.right.get(i+1)*50);
+    line(x1, 100+testInput.input.mix.get(i)*100, x2, 100+testInput.input.mix.get(i+1)*100);
   }
-
-  /**
-   * Calls setFreq(), then returns the midi note value of the Frequency instance var.
-   */
-  float getFreqAsMidiNote()  
-  {
-    this.setFreq();
-    return this.freq.asMidiNote();
-  }
-
-  float getAmplitude() {
-    this.setFreq();
-    return this.amplitude;
-  }
-} // class
+  
+  
+  
+}

@@ -1,5 +1,6 @@
 import ddf.minim.*;
 import ddf.minim.analysis.*;
+import ddf.minim.effects.*;
 import ddf.minim.ugens.*;
 
 class Input
@@ -15,7 +16,6 @@ class Input
   Minim      minim;
   FFT        fft;
   Frequency  freq;
-  Frequency  prevFreq;
   AudioInput input;
 
   //  Future: take an int that specifies the channel of this input?
@@ -40,40 +40,45 @@ class Input
    * and should only be called from the constructor or in one of the getFreq functions.)
    */
   void setFreq()
-  {
+  { 
     this.fft.forward(this.input.mix);
 
+    /*
     // each average should hopefully be about one half step,
-    // since there are 11 averages and each is split into 12 parts.
-    // (Could calculate smaller averages to get a closer frequency match, e.g. "this.fft.logAverages(11,48);"
-    this.fft.logAverages(11, 12);
+     // since there are 11 averages and each is split into 12 parts.
+     // (Could calculate smaller averages to get a closer frequency match, e.g. "this.fft.logAverages(11,48);"
+     this.fft.logAverages(11,12);
+     */
 
     float  loudestFreq = 0;
     float  loudestFreqAmp  = 0;    // amplitude of the loudestAvg average band
     int    loudestAvg    = 0;      // average band w/the highest amplitude
 
-    for (int i = 0; i < this.fft.avgSize(); i++)
-    {
-      float lowFreq = this.fft.getAverageCenterFrequency(i) - (this.fft.getAverageBandWidth(i) / 2);
-      float hiFreq  = this.fft.getAverageCenterFrequency(i) + (this.fft.getAverageBandWidth(i) / 2);
-      float avgAmp = this.fft.calcAvg(lowFreq, hiFreq);
+    /*
+   for(int i = 0; i < this.fft.avgSize(); i++)
+     {
+     float lowFreq = this.fft.getAverageCenterFrequency(i) - (this.fft.getAverageBandWidth(i) / 2);
+     float hiFreq  = this.fft.getAverageCenterFrequency(i) + (this.fft.getAverageBandWidth(i) / 2);
+     float avgAmp = this.fft.calcAvg(lowFreq, hiFreq);
+     
+     if(avgAmp > loudestFreqAmp)  
+     {  
+     loudestAvg  = i;
+     loudestFreqAmp  = avgAmp;
+     loudestFreq = this.fft.getAverageCenterFrequency(i);
+     } // if
+     } // for
+     */
 
-      if (avgAmp > loudestFreqAmp)  
-      {  
-        loudestAvg  = i;
-        loudestFreqAmp  = avgAmp;
-        loudestFreq = this.fft.getAverageCenterFrequency(i);
+    for (int i = 0; i < this.fft.specSize(); i++)
+    {
+      if (this.fft.getBand(i) > loudestFreqAmp)
+      {
+        loudestFreq = this.fft.indexToFreq(i);
+        loudestFreqAmp = this.fft.getFreq(loudestFreq);
       } // if
     } // for
-    
-    // Saves the previous Frequency for use elsewhere:
-    if(this.freq == null)  
-    {  
-      this.prevFreq = Frequency.ofHertz((float)loudestFreq);  
-    } else {
-      this.prevFreq = this.freq;
-    }
-    
+
     this.freq = Frequency.ofHertz((float)loudestFreq);
     this.amplitude  = loudestFreqAmp;
   } // setFreq
@@ -105,12 +110,11 @@ class Input
     return this.freq.asMidiNote();
   }
 
-  float getAmplitude() {  
+  /**
+   * Calls setFreq(), then returns the value of the float amplitude instance var.
+   */
+  float getAmplitude() {
     this.setFreq();
     return this.amplitude;
-  }
-
-  Frequency getPrevFreq() {  
-    return this.prevFreq;
   }
 } // class
