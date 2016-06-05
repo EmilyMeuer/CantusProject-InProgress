@@ -21,7 +21,7 @@ class Input
   Frequency  freq;
   Frequency  prevFreq;
   AudioInput input;
-  float      sensitivity;  // Volume below which adjustedFreq will not be reset
+  float      sensitivity;  // amplitude below which adjustedFreq will not be reset
 
   //  Future: take an int that specifies the channel of this input?
   // It will have to know from what line to get the audio, so probably yes.
@@ -30,7 +30,7 @@ class Input
     this.minim  = new Minim(this);
     this.input  = minim.getLineIn();
     this.fft    = new FFT(input.bufferSize(), input.sampleRate());
-    this.sensitivity  = 0.5;
+    this.sensitivity  = 5;
     this.setFreq();
   } // constructor
 
@@ -112,7 +112,7 @@ class Input
   } // setFreq
 
   /**
-   * Calls setFreq(), then returns the Frequency instance var.
+   * Calls setFreq(), then returns the freq Frequency instance var.
    */
   Frequency getFreq()
   {
@@ -121,7 +121,7 @@ class Input
   } // getFreq()
 
   /**
-   * Calls setFreq(), then returns the Frequency instance var in hertz.
+   * Calls setFreq(), then returns the freq Frequency instance var in hertz.
    */
   float getFreqAsHz()  
   {
@@ -130,12 +130,39 @@ class Input
   }
 
   /**
-   * Calls setFreq(), then returns the midi note value of the Frequency instance var.
+   * Calls setFreq(), then returns the midi note value of the freq Frequency instance var.
    */
   float getFreqAsMidiNote()  
   {
     this.setFreq();
     return this.freq.asMidiNote();
+  }
+  
+  /**
+   * Calls setFreq(), then returns the adjustedFreq Frequency instance var.
+   */
+  Frequency getAdjustedFreq()
+  {
+    this.setFreq();
+    return this.adjustedFreq;
+  } // getFreq()
+
+  /**
+   * Calls setFreq(), then returns the adjustedFreq Frequency instance var in hertz.
+   */
+  float getAdjustedFreqAsHz()  
+  {
+    this.setFreq();
+    return this.adjustedFreq.asHz();
+  }
+
+  /**
+   * Calls setFreq(), then returns the midi note value of the adjustedFreq Frequency instance var.
+   */
+  float getAdjustedFreqAsMidiNote()  
+  {
+    this.setFreq();
+    return this.adjustedFreq.asMidiNote();
   }
 
   /**

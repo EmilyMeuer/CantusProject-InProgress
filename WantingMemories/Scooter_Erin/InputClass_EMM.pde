@@ -12,11 +12,16 @@ class Input
    Wrapper class to make pitch of a particular input easily accessible.
    */
 
+// adjusted Freq doesn't work :(
+  Frequency  adjustedFreq;  // freq which disregards values below a certain amplitude level
+  Frequency  adjustedPrevFreq;
   float      amplitude;
   Minim      minim;
   FFT        fft;
   Frequency  freq;
+  Frequency  prevFreq;
   AudioInput input;
+  float      sensitivity;  // amplitude below which adjustedFreq will not be reset
 
   //  Future: take an int that specifies the channel of this input?
   // It will have to know from what line to get the audio, so probably yes.
@@ -25,6 +30,7 @@ class Input
     this.minim  = new Minim(this);
     this.input  = minim.getLineIn();
     this.fft    = new FFT(input.bufferSize(), input.sampleRate());
+    this.sensitivity  = 5;
     this.setFreq();
   } // constructor
 
@@ -79,12 +85,34 @@ class Input
       } // if
     } // for
 
+    // set the prevFreq to be equal to the current frequency,
+    // unless the current frequency has not been set,
+    // in which case, set it to be the newly-found loudestFreq.
+    if(this.freq == null)  {  this.prevFreq = Frequency.ofHertz((float)loudestFreq);  }
+    else                   {  this.prevFreq = this.freq;                              }
+    
+    // take the same precautions with setting adjustPrevFreq as when setting prevFreq
+    if(this.adjustedFreq == null)  {  this.adjustedPrevFreq = Frequency.ofHertz((float)loudestFreq);  }
+    else                           {  this.adjustedPrevFreq = this.adjustedFreq;  }
+    
     this.freq = Frequency.ofHertz((float)loudestFreq);
+    // if adjustedFreq has not yet been initialized, set it to the
+    // loudest frequency regardless of its amlitude and sensitivity.
+    if(this.adjustedFreq == null)
+    {
+      this.adjustedFreq  = Frequency.ofHertz((float)loudestFreq);
+    }
+    // in all other cases, only reset adjustedFreq to frequencies higher than the sensitivity:
+    if(loudestFreqAmp > this.sensitivity)    
+    {  
+      this.adjustedFreq = Frequency.ofHertz((float)loudestFreq);  
+    }
+    
     this.amplitude  = loudestFreqAmp;
   } // setFreq
 
   /**
-   * Calls setFreq(), then returns the Frequency instance var.
+   * Calls setFreq(), then returns the freq Frequency instance var.
    */
   Frequency getFreq()
   {
@@ -93,7 +121,7 @@ class Input
   } // getFreq()
 
   /**
-   * Calls setFreq(), then returns the Frequency instance var in hertz.
+   * Calls setFreq(), then returns the freq Frequency instance var in hertz.
    */
   float getFreqAsHz()  
   {
@@ -102,12 +130,39 @@ class Input
   }
 
   /**
-   * Calls setFreq(), then returns the midi note value of the Frequency instance var.
+   * Calls setFreq(), then returns the midi note value of the freq Frequency instance var.
    */
   float getFreqAsMidiNote()  
   {
     this.setFreq();
     return this.freq.asMidiNote();
+  }
+  
+  /**
+   * Calls setFreq(), then returns the adjustedFreq Frequency instance var.
+   */
+  Frequency getAdjustedFreq()
+  {
+    this.setFreq();
+    return this.adjustedFreq;
+  } // getFreq()
+
+  /**
+   * Calls setFreq(), then returns the adjustedFreq Frequency instance var in hertz.
+   */
+  float getAdjustedFreqAsHz()  
+  {
+    this.setFreq();
+    return this.adjustedFreq.asHz();
+  }
+
+  /**
+   * Calls setFreq(), then returns the midi note value of the adjustedFreq Frequency instance var.
+   */
+  float getAdjustedFreqAsMidiNote()  
+  {
+    this.setFreq();
+    return this.adjustedFreq.asMidiNote();
   }
 
   /**
@@ -116,5 +171,10 @@ class Input
   float getAmplitude() {
     this.setFreq();
     return this.amplitude;
+  }
+  
+  void setSensitivity(float newSensitivity)
+  {
+    this.sensitivity = newSensitivity;
   }
 } // class

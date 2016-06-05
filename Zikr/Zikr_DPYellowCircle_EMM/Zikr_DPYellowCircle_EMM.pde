@@ -57,16 +57,8 @@ void draw()
 
   println("freq: " + input.getFreqAsHz() + "; amplitude = " + input.getAmplitude());
 
-  // previous location -- stay there when < 3
-  // Problem: currently, prevFreq changes just as often as freq,
-  // so it doesn't really help;
-  // I need to not reset prevFreq until the amplitude reaches a certain height.
-  if (input.getAmplitude() > 3)
-  {
-    translate(width/2, (height - input.getFreqAsHz()/2));
-  } else {
-//    translate(width/2, (height - input.getPrevFreq().asHz()/2));
-  } // else
+  input.setFreq();
+  translate(width/2, (height - input.adjustedFreq.asHz()/2));
 
   shape(circle);
 
