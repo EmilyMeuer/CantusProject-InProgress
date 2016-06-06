@@ -1,12 +1,3 @@
-/*
-  05/30/2016
- Emily Meuer
- 
- This is another way of going about the example in FrequencyAttempts,
- but using the Input object defined in the InputPitch tab
- rather than doing all the computations by hand in draw.
- */
-
 Input testInput;
 AudioInput in;
 Minim minim;
