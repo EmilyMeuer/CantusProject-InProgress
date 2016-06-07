@@ -23,7 +23,7 @@ float  amp, xloc, yloc, lightSize, frames;
 void setup()
 {
   size(783, 783);
-  this.goldPattern();
+  this.bluePattern();
   
   this.input  = new Input();
   // Only need to load the pixels[] array once, because we're only

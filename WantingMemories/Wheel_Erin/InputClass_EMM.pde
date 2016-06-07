@@ -9,7 +9,7 @@ class Input
     Emily Meuer
    05/28/2016
    
-   Wrapper class to make pitch of a particular input easily accessible.
+   Wrapper class to make the loudest frequency of a particular input easily accessible.
    */
 
 // adjusted Freq doesn't work :(
@@ -166,11 +166,15 @@ class Input
   }
 
   /**
-   * Calls setFreq(), then returns the value of the float amplitude instance var.
+   * Calls setFreq() before returning the amplitude ("level()") of the AudioInput instance var.
+   * If you want only the amplitude of the particular frequency in quesion,
+   * access the float instance var "amplitude" directly.
+   *
+   * @return  amplitude of the AudioInput instance var.
    */
   float getAmplitude() {
     this.setFreq();
-    return this.amplitude;
+    return this.input.mix.level();
   }
   
   void setSensitivity(float newSensitivity)

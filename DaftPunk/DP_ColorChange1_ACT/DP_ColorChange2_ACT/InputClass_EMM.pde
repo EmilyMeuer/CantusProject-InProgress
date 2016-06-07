@@ -9,7 +9,7 @@ class Input
     Emily Meuer
    05/28/2016
    
-   Wrapper class to make pitch of a particular input easily accessible.
+   Wrapper class to make the loudest frequency of a particular input easily accessible.
    */
 
 // adjusted Freq doesn't work :(
@@ -49,9 +49,32 @@ class Input
   { 
     this.fft.forward(this.input.mix);
 
+    /*
+    // each average should hopefully be about one half step,
+     // since there are 11 averages and each is split into 12 parts.
+     // (Could calculate smaller averages to get a closer frequency match, e.g. "this.fft.logAverages(11,48);"
+     this.fft.logAverages(11,12);
+     */
+
     float  loudestFreq = 0;
     float  loudestFreqAmp  = 0;    // amplitude of the loudestAvg average band
     int    loudestAvg    = 0;      // average band w/the highest amplitude
+
+    /*
+   for(int i = 0; i < this.fft.avgSize(); i++)
+     {
+     float lowFreq = this.fft.getAverageCenterFrequency(i) - (this.fft.getAverageBandWidth(i) / 2);
+     float hiFreq  = this.fft.getAverageCenterFrequency(i) + (this.fft.getAverageBandWidth(i) / 2);
+     float avgAmp = this.fft.calcAvg(lowFreq, hiFreq);
+     
+     if(avgAmp > loudestFreqAmp)  
+     {  
+     loudestAvg  = i;
+     loudestFreqAmp  = avgAmp;
+     loudestFreq = this.fft.getAverageCenterFrequency(i);
+     } // if
+     } // for
+     */
 
     for (int i = 0; i < this.fft.specSize(); i++)
     {
@@ -143,11 +166,15 @@ class Input
   }
 
   /**
-   * Calls setFreq(), then returns the value of the float amplitude instance var.
+   * Calls setFreq() before returning the amplitude ("level()") of the AudioInput instance var.
+   * If you want only the amplitude of the particular frequency in quesion,
+   * access the float instance var "amplitude" directly.
+   *
+   * @return  amplitude of the AudioInput instance var.
    */
   float getAmplitude() {
     this.setFreq();
-    return this.amplitude;
+    return this.input.mix.level();
   }
   
   void setSensitivity(float newSensitivity)
