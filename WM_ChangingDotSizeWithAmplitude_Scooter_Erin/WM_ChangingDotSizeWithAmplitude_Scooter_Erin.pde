@@ -8,7 +8,7 @@ void setup() {
   
   fullScreen();
   name = new Input();
-  img = loadImage("pepper.jpg");//choice of picture
+  img = loadImage("dad.jpg");//choice of picture
   img.resize(width,height);
   smallPoint = 1; //smallest dot size
   largePoint = 70;//largest dot size

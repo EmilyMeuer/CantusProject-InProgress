@@ -23,7 +23,7 @@ void setup()
   minim  = new Minim(this);
   input = minim.getLineIn();
   
-  pepper  = loadImage("blurPepper.jpg");
+  pepper  = loadImage("blurPepper 4.04.02 PM.jpg");
   piano  = loadImage("pepper.jpg");
   pepper.resize(384,640);  
 } // setup()
