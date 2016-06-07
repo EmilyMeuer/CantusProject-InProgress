@@ -1,3 +1,5 @@
+import processing.serial.*;
+
 /*
   05/30/2016
   Emily Meuer
@@ -9,6 +11,7 @@
 
 InputPitch      testInput;
 MultipleInputs  multipleInputs;
+Serial          port;
 
 void settings()
 {
@@ -31,6 +34,10 @@ void setup()
   
   // Adding an input by providing the name of an audio file:
   this.multipleInputs.add("Horn-54321.wav");
+  
+  printArray(Serial.list());
+  
+  port  = new Serial(this, Serial.list()[0], 9600);
 }
 
 // The setup() function is called in the InputClass tab;
