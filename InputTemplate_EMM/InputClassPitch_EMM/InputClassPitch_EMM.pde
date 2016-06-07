@@ -4,13 +4,7 @@ import ddf.minim.effects.*;
 import ddf.minim.ugens.*;
 
 Minim      minim;
-
-void setup()
-{
-  // minim must be initialized outside of Input in order to pass the correct value of "this" to its constructor.
-  this.minim  = new Minim(this);
-  testInput  = new InputPitch();
-}
+// minim initialied in other tab
 
 class InputPitch
 {

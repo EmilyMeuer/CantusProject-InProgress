@@ -7,11 +7,30 @@
   rather than doing all the computations by hand in draw.
 */
 
-InputPitch testInput;
+InputPitch      testInput;
+MultipleInputs  multipleInputs;
 
 void settings()
 {
-   size(512, 200);
+   size(500, 500);
+}
+
+void setup()
+{
+  // minim must be initialized outside of Input in order to pass the correct value of "this" to its constructor.
+  this.minim  = new Minim(this);
+  testInput  = new InputPitch();
+  
+  // Creating a new MultipleInputs object from an array of Strings of filenames:
+  String[] names = { "Horn-ChordsPart1.wav", "Horn-ChordsPart2.wav" };
+  this.multipleInputs  = new MultipleInputs(names);
+  
+  // Adding an InputPitch to the MultipleInputs object:
+  InputPitch  input3  = new InputPitch("Horn-ChordsPart3.wav");
+  this.multipleInputs.add(input3);
+  
+  // Adding an input by providing the name of an audio file:
+  this.multipleInputs.add("Horn-54321.wav");
 }
 
 // The setup() function is called in the InputClass tab;
@@ -19,11 +38,21 @@ void settings()
 
 void draw()
 {
+  background(200);
+  stroke(200, 0, 250);
+  fill(250, 0, 250);
+  
+  for(int i = 0; i < this.multipleInputs.size(); i ++)
+  {
+    InputPitch cur = this.multipleInputs.get(i);
+    ellipse((i + 1) * 100, (height - cur.getAdjustedFundAsHz()), 100, 100);
+  } // for
+  
   // print is not necessary, but gives you a behind-the-scenes peek at the numbers:
-  println("this.fundamental: " + testInput.getFundAsHz() + "; this.adjustedFund: " + testInput.getAdjustedFundAsHz() + "; this.amplitude: " + this.testInput.getAmplitude());
+//  println("this.fundamental: " + testInput.getFundAsHz() + "; this.adjustedFund: " + testInput.getAdjustedFundAsHz() + "; this.amplitude: " + this.testInput.getAmplitude());
   
   // divide value by 5 b/c too large for a color value otherwise:
-  background(testInput.getAdjustedFundAsHz() / 3, 0, 0);
+//  background(testInput.getAdjustedFundAsHz() / 3, 0, 0);
   
   // this version less sensitive, b/c midi notes are less exact:
   //background(testInput.getFundAsMidiNote() * 2, 0, 0);
