@@ -7,6 +7,8 @@ import processing.serial.*;
   This is another way of going about the example in FrequencyAttempts,
   but using the Input object defined in the InputClass tab
   rather than doing all the computations by hand in draw.
+  
+  USB emulate serial port?
 */
 
 InputPitch      testInput;
@@ -35,9 +37,9 @@ void setup()
   // Adding an input by providing the name of an audio file:
   this.multipleInputs.add("Horn-54321.wav");
   
-  printArray(Serial.list());
+//  printArray(Serial.list());
   
-  port  = new Serial(this, Serial.list()[0], 9600);
+//  port  = new Serial(this, Serial.list()[0], 9600);
 }
 
 // The setup() function is called in the InputClass tab;
