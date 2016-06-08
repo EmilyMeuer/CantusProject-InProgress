@@ -1,3 +1,8 @@
+import ddf.minim.*;
+import ddf.minim.analysis.*;
+import ddf.minim.ugens.*;
+
+
 PImage img;
 int smallPoint, largePoint;
 
