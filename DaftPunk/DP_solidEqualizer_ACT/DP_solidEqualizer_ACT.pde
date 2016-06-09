@@ -13,7 +13,7 @@
   
 Input testInput;
 AudioInput in;
-Minim minim;
+//Minim minim;
 
 void settings()
 {

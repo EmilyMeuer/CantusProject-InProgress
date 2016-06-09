@@ -85,7 +85,6 @@ void setup()
   allTrees.add(tree3);
 }
 
-// Build a huge tree in setup(), and show as necessary in the draw?
 
 void draw()
 {

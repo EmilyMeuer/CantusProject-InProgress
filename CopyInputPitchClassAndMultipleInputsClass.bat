@@ -1,0 +1,39 @@
+@echo off
+
+xcopy %CD%\InputTemplate_EMM\InputClassPitch_EMM\InputClassPitch_EMM.pde %CD%\DaftPunk\DP_boxEqualizer_ACT
+xcopy %CD%\InputTemplate_EMM\InputClassPitch_EMM\InputClassPitch_EMM.pde %CD%\DaftPunk\DP_ColorChange1_ACT
+xcopy %CD%\InputTemplate_EMM\InputClassPitch_EMM\InputClassPitch_EMM.pde %CD%\DaftPunk\DP_ColorChange1_ACT\DP_ColorChange2_ACT
+xcopy %CD%\InputTemplate_EMM\InputClassPitch_EMM\InputClassPitch_EMM.pde %CD%\DaftPunk\DP_shapes_growsfreq_ACT
+xcopy %CD%\InputTemplate_EMM\InputClassPitch_EMM\InputClassPitch_EMM.pde %CD%\DaftPunk\DP_solidEqualizer_ACT
+xcopy %CD%\InputTemplate_EMM\InputClassPitch_EMM\InputClassPitch_EMM.pde %CD%\DaftPunk\DP_YellowCircle_EMM
+xcopy %CD%\InputTemplate_EMM\InputClassPitch_EMM\InputClassPitch_EMM.pde %CD%\WantingMemories\Scooter_Erin
+xcopy %CD%\InputTemplate_EMM\InputClassPitch_EMM\InputClassPitch_EMM.pde %CD%\WantingMemories\Wheel_Erin
+xcopy %CD%\InputTemplate_EMM\InputClassPitch_EMM\InputClassPitch_EMM.pde %CD%\WantingMemories\WM_ChangingColorWithPitch_Wheel_Erin
+xcopy %CD%\InputTemplate_EMM\InputClassPitch_EMM\InputClassPitch_EMM.pde %CD%\WantingMemories\WM_ChangingDotSizeWithAmplitude_Scooter_Erin
+xcopy %CD%\InputTemplate_EMM\InputClassPitch_EMM\InputClassPitch_EMM.pde %CD%\Zikr\LSystemExperiments_EMM
+xcopy %CD%\InputTemplate_EMM\InputClassPitch_EMM\InputClassPitch_EMM.pde %CD%\Zikr\Zikr_DPYellowCircle_EMM
+xcopy %CD%\InputTemplate_EMM\InputClassPitch_EMM\InputClassPitch_EMM.pde %CD%\Zikr\Zikr_LightOnPatterns_EMM
+xcopy %CD%\InputTemplate_EMM\InputClassPitch_EMM\InputClassPitch_EMM.pde %CD%\Zikr\Zikr_Trees_EMM
+xcopy %CD%\InputTemplate_EMM\InputClassPitch_EMM\InputClassPitch_EMM.pde %CD%\LuxAurumque\Lux_LightMovesCtrlFreq_MRA
+xcopy %CD%\InputTemplate_EMM\InputClassPitch_EMM\InputClassPitch_EMM.pde %CD%\LuxAurumque\Lux_MultipleParts_MRA
+xcopy %CD%\InputTemplate_EMM\InputClassPitch_EMM\InputClassPitch_EMM.pde %CD%\LuxAurumque\Lux_RainingLight_MRA
+xcopy %CD%\InputTemplate_EMM\InputClassPitch_EMM\InputClassPitch_EMM.pde %CD%\LuxAurumque\Lux_TreeLightsCtrlAmp_MRA
+
+xcopy %CD%\InputTemplate_EMM\InputClassPitch_EMM\MultipleInputsClass_EMM.pde %CD%\DaftPunk\DP_boxEqualizer_ACT
+xcopy %CD%\InputTemplate_EMM\InputClassPitch_EMM\MultipleInputsClass_EMM.pde %CD%\DaftPunk\DP_ColorChange1_ACT
+xcopy %CD%\InputTemplate_EMM\InputClassPitch_EMM\MultipleInputsClass_EMM.pde %CD%\DaftPunk\DP_ColorChange1_ACT\DP_ColorChange2_ACT
+xcopy %CD%\InputTemplate_EMM\InputClassPitch_EMM\MultipleInputsClass_EMM.pde %CD%\DaftPunk\DP_shapes_growsfreq_ACT
+xcopy %CD%\InputTemplate_EMM\InputClassPitch_EMM\MultipleInputsClass_EMM.pde %CD%\DaftPunk\DP_solidEqualizer_ACT
+xcopy %CD%\InputTemplate_EMM\InputClassPitch_EMM\MultipleInputsClass_EMM.pde %CD%\DaftPunk\DP_YellowCircle_EMM
+xcopy %CD%\InputTemplate_EMM\InputClassPitch_EMM\MultipleInputsClass_EMM.pde %CD%\WantingMemories\Scooter_Erin
+xcopy %CD%\InputTemplate_EMM\InputClassPitch_EMM\MultipleInputsClass_EMM.pde %CD%\WantingMemories\Wheel_Erin
+xcopy %CD%\InputTemplate_EMM\InputClassPitch_EMM\MultipleInputsClass_EMM.pde %CD%\WantingMemories\WM_ChangingColorWithPitch_Wheel_Erin
+xcopy %CD%\InputTemplate_EMM\InputClassPitch_EMM\MultipleInputsClass_EMM.pde %CD%\WantingMemories\WM_ChangingDotSizeWithAmplitude_Scooter_Erin
+xcopy %CD%\InputTemplate_EMM\InputClassPitch_EMM\MultipleInputsClass_EMM.pde %CD%\Zikr\LSystemExperiments_EMM
+xcopy %CD%\InputTemplate_EMM\InputClassPitch_EMM\MultipleInputsClass_EMM.pde %CD%\Zikr\Zikr_DPYellowCircle_EMM
+xcopy %CD%\InputTemplate_EMM\InputClassPitch_EMM\MultipleInputsClass_EMM.pde %CD%\Zikr\Zikr_LightOnPatterns_EMM
+xcopy %CD%\InputTemplate_EMM\InputClassPitch_EMM\MultipleInputsClass_EMM.pde %CD%\Zikr\Zikr_Trees_EMM
+xcopy %CD%\InputTemplate_EMM\InputClassPitch_EMM\MultipleInputsClass_EMM.pde %CD%\LuxAurumque\Lux_LightMovesCtrlFreq_MRA
+xcopy %CD%\InputTemplate_EMM\InputClassPitch_EMM\MultipleInputsClass_EMM.pde %CD%\LuxAurumque\Lux_MultipleParts_MRA
+xcopy %CD%\InputTemplate_EMM\InputClassPitch_EMM\MultipleInputsClass_EMM.pde %CD%\LuxAurumque\Lux_RainingLight_MRA
+xcopy %CD%\InputTemplate_EMM\InputClassPitch_EMM\MultipleInputsClass_EMM.pde %CD%\LuxAurumque\Lux_TreeLightsCtrlAmp_MRA
