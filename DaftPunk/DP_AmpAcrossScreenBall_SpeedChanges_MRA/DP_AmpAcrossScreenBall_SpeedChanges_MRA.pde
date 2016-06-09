@@ -22,9 +22,6 @@ import ddf.minim.*;
   {
     ballArray[i].move();
   }
-   
-*/
-
 
   Ball[] ballArray = new Ball[10];
   
@@ -39,6 +36,9 @@ import ddf.minim.*;
   {
     ballArray[i].move();
   }
+  
+  */
+
 
 Minim minim;
 AudioInput in;
