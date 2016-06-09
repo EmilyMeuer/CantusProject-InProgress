@@ -15,7 +15,7 @@ import java.util.ArrayList;
  - what will trigger things before that?
  
  Zoom using map()?
- Color maps/ color map mode
+ Color maps / color map mode
  ----
  Polyphonic Interface: http://code.compartmental.net/minim/javadoc/ddf/minim/Polyphonic.html
  "object that can have multiple AudioSignals attached to it. It is 
@@ -85,39 +85,59 @@ void setup()
 
 void draw()
 {
-  stroke(255);
+  stroke(color(255, 0, 255));
   //translate(width/2, height);
 
-  beat.detect(player.mix);
-  if (beat.isOnset()) {  
-    println("Onset at " + player.position()/60000 + ":" + player.position()%60000);
-  }
+  //  beat.detect(player.mix);
+  //  if (beat.isOnset()) {  
+  //    println("Onset at " + player.position()/60000 + ":" + player.position()%60000);
+  //  }
 
   //branch(100);
 
-  /*
-  for (int i = 0; i < allTrees.size(); i++)
-   {
-   ArrayList<Branch> curTree  = allTrees.get(i);
-   for (int j = allTrees.size()-1; j >= 0; j--)
-   {
-   if (!allTrees.get(i).get(j).finished)
-   {
-   curTree.add(curTree.get(j).branchA());
-   curTree.add(curTree.get(j).branchA());
-   }
-   } // for
-   } // for
-   
-   for (int i = 0; i < allTrees.size(); i++)
-   {
-   ArrayList<Branch> curTree  = allTrees.get(i);
-   for (int j = allTrees.size()-1; j >= 0; j--)
-   {
-   curTree.get(j).show();
-   } // for
-   } // for
-   */
+  color[] colors = { color(255, 0, 0), color(255, 150, 0), color(255, 255, 0), color(0, 255, 0), 
+    color(0, 0, 255), color(150, 0, 255), color(250, 0, 250) };
+  for (int i = 0; i < colors.length; i++)
+  {
+    stroke(colors[i]);
+    fill(colors[i]);
+    ellipse(i * 100 + 100, height - 50, 100, 100);
+    //    stroke(0);
+    //    text((char[])i, i * 100 + 100, height - 50, 100, 100);
+  }
+
+  for (int j = 0; j < allTrees.size(); j++)
+  {
+    ArrayList<Branch> curTree = allTrees.get(j);
+    // this level is important...
+    for (int i = 0; i < 7; i++)
+    {
+      curTree.add(curTree.get(i).branchA());
+      curTree.add(curTree.get(i).branchB());
+      //        curTree.get(i).finished = true;
+    } // for - i
+  } // for - j
+
+
+  float strokeWeight = 100;
+  for (int j = 0; j < allTrees.size(); j++)
+  {
+    ArrayList<Branch> curTree = allTrees.get(j);
+    for (int i = 0; i < curTree.size(); i++)
+    {
+      if (!curTree.get(i).finished)
+      {
+        stroke(colors[i % colors.length]);
+        strokeWeight(strokeWeight);
+        
+        curTree.get(i).show();
+        curTree.get(i).show();
+        
+        curTree.get(i).finished = true;
+        if(strokeWeight > 5)  {  strokeWeight = strokeWeight - 5;  }
+      } // if
+    } // for - i
+  } // for - j
 }
 
 void mousePressed()
@@ -130,9 +150,9 @@ void mousePressed()
       if (!curTree.get(i).finished)
       {
         curTree.add(curTree.get(i).branchA());
-        curTree.get(i).show();
+        //        curTree.get(i).show();
         curTree.add(curTree.get(i).branchB());
-        curTree.get(i).show();
+        //        curTree.get(i).show();
         curTree.get(i).finished = true;
       } // if
     } // for - i

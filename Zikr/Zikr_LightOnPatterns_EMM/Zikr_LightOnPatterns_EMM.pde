@@ -45,7 +45,7 @@ void draw()
 {
   background(0);
   stroke(255);
-  //this.player.play();
+  this.player.play();
   pixelBrightness();
 }
 
@@ -115,7 +115,7 @@ void amplitude() {
   if (frameCount == frames*5) 
   {
     //this.amp = player.mix.level();
-    this.amp = this.input.getAmplitude();
+    this.amp = this.input.amplitude;
     this.lightSize = Math.min(map(this.amp, 0, 20, 0, 80), 80);
     this.frames ++;
   }
