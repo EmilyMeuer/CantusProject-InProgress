@@ -11,6 +11,9 @@ class MultipleInputs
 {
   ArrayList<InputPitch>  multipleInputs;
   
+  /**
+   * Constructor for creating an empty MultipleInputs object.
+   */
   MultipleInputs()
   {
     this.multipleInputs = new ArrayList<InputPitch>();
