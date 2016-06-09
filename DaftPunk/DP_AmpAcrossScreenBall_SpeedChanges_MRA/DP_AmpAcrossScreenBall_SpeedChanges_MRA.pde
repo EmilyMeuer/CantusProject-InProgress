@@ -7,6 +7,39 @@ Things to add: color changes??
 
 import ddf.minim.*;
 
+/*
+  1. Make Ball[]
+  2. loop through it; 
+
+  for(int i = 0; i < ballArray.length; i++)
+  {
+    ballArray[i] = new Ball(i * width/balls);
+  }
+  
+  in draw():
+  
+  for(int i = 0; i < ballArray.length; i++)
+  {
+    ballArray[i].move();
+  }
+   
+*/
+
+
+  Ball[] ballArray = new Ball[10];
+  
+  for(int i = 0; i < ballArray.length; i++)
+  {
+    ballArray[i] = new Ball(i * width/balls);
+  }
+  
+//  in draw():
+  
+  for(int i = 0; i < ballArray.length; i++)
+  {
+    ballArray[i].move();
+  }
+
 Minim minim;
 AudioInput in;
 Ball myBall1;

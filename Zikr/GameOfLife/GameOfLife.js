@@ -22,7 +22,7 @@ window.onload = function()
 	var stop;
 	var tempArray;
 
-    size = 151;
+    size = 51;
 	gameBoardArray = create2dArray(size, size, getDeadValue());
 	tempArray = copy(gameBoardArray);
 

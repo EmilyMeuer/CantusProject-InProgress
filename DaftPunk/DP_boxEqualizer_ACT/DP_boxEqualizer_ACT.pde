@@ -52,6 +52,10 @@ void draw()
     }
   }
   
+  
+  // first rectangle parameter is (i * 100) + 110
+  // in this loop: for(int i = 0; i < [someLength - numberOfRectangles, perhaps?]; i++)
+  
   //ORANGE
   stroke(255);
   fill(255, 145, 0); //255 145 0
