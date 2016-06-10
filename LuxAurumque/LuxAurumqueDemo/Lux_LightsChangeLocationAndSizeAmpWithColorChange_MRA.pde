@@ -2,11 +2,16 @@
   05/31/2016
   MRA
   Lux Aurumque
+    - use LEFT, DOWN, and RIGHT to switch between light settings
     - at "silence" light location moves to next coordinates in xpos and ypos arrays
     - light size based off amplitude   
 */
 
-InputPitch musicInput;
+import ddf.minim.analysis.*;
+import ddf.minim.*;
+
+Minim       minim;
+AudioPlayer player;
 PImage  img;
 float  amp, xloc, yloc, lightSize, frames;
 int i;
@@ -16,13 +21,13 @@ int [] arryloc = {125,125,125,125,200,200};
 void setup()
 {
   size(480, 357);
-  minim = new Minim(this);
-  musicInput = new InputPitch("LuxAurumque.mp3");
   img = loadImage("NativityTriptych.jpg");
   img.loadPixels();
   // Only need to load the pixels[] array once, because we're only
   // manipulating pixels[] inside draw(), not drawing shapes.
-  loadPixels();  
+  loadPixels();
+  minim = new Minim(this);
+  player = minim.loadFile("LuxAurumque.mp3", 1024);  
   frameRate(60);
   frames = 1;
   xloc=50;
@@ -34,6 +39,7 @@ void draw()
 {
   background(0);
   stroke(255);
+  player.play();
   lightPos();
   pixelBrightnessRGB();
 }//draw
@@ -80,7 +86,7 @@ void pixelBrightnessRGB()
 
 void amplitude(){
   if (frameCount == frames*5) {
-  amp = musicInput.getAmplitude();
+  amp = player.mix.level();
   lightSize = amp*1000;
   frames ++;
   }//if
