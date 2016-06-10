@@ -2,32 +2,26 @@
   05/31/2016
   MRA
   Lux Aurumque
-    - use LEFT, DOWN, and RIGHT to switch between light settings
     - at "silence" light location moves to next coordinates in xpos and ypos arrays
     - light size based off amplitude   
 */
 
-import ddf.minim.analysis.*;
-import ddf.minim.*;
-
-Minim       minim;
-AudioPlayer player;
+InputPitch musicInput;
 PImage  img;
 float  amp, xloc, yloc, lightSize, frames;
 int i;
-int [] arrxloc = {50,50,50,430,430,240,240,200,200};
-int [] arryloc = {125,125,125,125,125,50,50,200,200};
+int [] arrxloc = {50,50,430,430,200,200};
+int [] arryloc = {125,125,125,125,200,200};
 
 void setup()
 {
   size(480, 357);
+  musicInput = new InputPitch("LuxAurumque.mp3");
   img = loadImage("NativityTriptych.jpg");
   img.loadPixels();
   // Only need to load the pixels[] array once, because we're only
   // manipulating pixels[] inside draw(), not drawing shapes.
-  loadPixels();
-  minim = new Minim(this);
-  player = minim.loadFile("LuxAurumque.mp3");  
+  loadPixels();  
   frameRate(60);
   frames = 1;
   xloc=50;
@@ -39,7 +33,6 @@ void draw()
 {
   background(0);
   stroke(255);
-  player.play();
   lightPos();
   pixelBrightnessRGB();
 }//draw
@@ -72,7 +65,7 @@ void pixelBrightnessRGB()
       b = constrain(b, 0, 255);
       // Make a new color and set pixel in the window
       if (millis()<40000){
-      color c = color(r);
+      color c = color(r+50);
       pixels[y*width + x] = c;
       }//if
       else{
@@ -86,7 +79,7 @@ void pixelBrightnessRGB()
 
 void amplitude(){
   if (frameCount == frames*5) {
-  amp = player.mix.level();
+  amp = musicInput.getAmplitude();
   lightSize = amp*1000;
   frames ++;
   }//if
