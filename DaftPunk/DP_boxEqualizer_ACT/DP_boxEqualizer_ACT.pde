@@ -43,12 +43,12 @@ void draw()
   stroke(255);
   fill(255, 0, 0); //255 0 0
   rectMode(CORNERS);
-  while((volume%100)==0)
+  while((volume%5)==0)
   {
     float i = volume/100;
     for(i=volume/100; i>-1; i--)
     {
-      rect(10,800,100,10*i+800-100*i);
+      rect(10,800,100,10*i+800-5*i);
     }
   }
   
