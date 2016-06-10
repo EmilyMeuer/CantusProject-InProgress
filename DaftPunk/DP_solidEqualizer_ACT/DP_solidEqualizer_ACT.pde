@@ -13,7 +13,7 @@
   
 Input testInput;
 AudioInput in;
-Minim minim;
+//Minim minim;
 
 void settings()
 {
@@ -31,6 +31,10 @@ void draw()
   background(0);
   //float  note = testInput.getFreqAsHz();  //I use this to easily reference frequency
   float volume = testInput.getAmplitude();  //an easy reference to amplitude
+
+  // This line is an example of getting the amplitude from the first input in a MutipleInputs object
+  // (I didn't make the MI object; you'll have to do that.)
+  // float volume = multipleInputs.get(0).getAmplitude();
 
   /*the following code creates rectangles which represent
    *the 9 different voices/inputs.

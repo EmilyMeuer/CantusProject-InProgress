@@ -42,6 +42,8 @@ void settings()
 
 void setup()
 {
+  smooth(3);
+  
   minim = new Minim(this);
   beat  = new BeatDetect();
   beat.setSensitivity(500);
@@ -55,7 +57,7 @@ void setup()
   beat.detectMode(BeatDetect.SOUND_ENERGY);
 
   vector1  = new PVector(width/2, height/2);
-  vector2  = new PVector(width/2, height/2-150);
+  vector2  = new PVector(width/2, height/2-100);
   Branch root1  = new Branch(vector1, vector2);
 
   PVector  dir  = PVector.sub(root1.begin, root1.end);
@@ -83,7 +85,6 @@ void setup()
   allTrees.add(tree3);
 }
 
-// Build a huge tree in setup(), and show as necessary in the draw?
 
 void draw()
 {

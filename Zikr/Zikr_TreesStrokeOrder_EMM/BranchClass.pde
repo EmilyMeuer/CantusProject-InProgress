@@ -26,7 +26,7 @@ class Branch
   {
     PVector  dir  = PVector.sub(end,begin);
     dir.rotate(angle);
-    dir.mult(0.67);
+//    dir.mult(0.8);
     PVector  newEnd  = PVector.add(this.end, dir);
     Branch right  = new Branch(this.end, newEnd);
     return right;
@@ -36,7 +36,7 @@ class Branch
   {
     PVector  dir  = PVector.sub(end,begin);
     dir.rotate(-angle);
-    dir.mult(0.67);
+//    dir.mult(0.8);
     PVector  newEnd  = PVector.add(this.end, dir);
     Branch left  = new Branch(this.end, newEnd);
     return left;

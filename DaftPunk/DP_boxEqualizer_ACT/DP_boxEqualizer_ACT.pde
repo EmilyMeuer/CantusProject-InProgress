@@ -12,7 +12,7 @@
   
 Input testInput;
 AudioInput in;
-Minim minim;
+//Minim minim;
 
 void settings()
 {
@@ -51,6 +51,10 @@ void draw()
       rect(10,800,100,10*i+800-5*i);
     }
   }
+  
+  
+  // first rectangle parameter is (i * 100) + 110
+  // in this loop: for(int i = 0; i < [someLength - numberOfRectangles, perhaps?]; i++)
   
   //ORANGE
   stroke(255);

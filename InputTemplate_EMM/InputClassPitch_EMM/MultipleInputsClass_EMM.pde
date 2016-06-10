@@ -12,6 +12,14 @@ class MultipleInputs
   ArrayList<InputPitch>  multipleInputs;
   
   /**
+   * Constructor for creating an empty MultipleInputs object.
+   */
+  MultipleInputs()
+  {
+    this.multipleInputs = new ArrayList<InputPitch>();
+  } // constructor
+  
+  /**
    * Constructor for creating a new MultipleInputs object from an array of Strings
    * that correspond to names of audio files to be made into InputPitch objects.
    */

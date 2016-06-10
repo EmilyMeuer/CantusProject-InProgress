@@ -48,8 +48,8 @@ void setup()
 void draw()
 {
   background(200);
-  stroke(200, 0, 250);
-  fill(250, 0, 250);
+  stroke(225, 75, 250);
+  fill(225, 75, 250);
   
   for(int i = 0; i < this.multipleInputs.size(); i ++)
   {

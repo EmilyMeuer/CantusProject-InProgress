@@ -25,15 +25,16 @@ import java.util.ArrayList;
 float              angle;
 BeatDetect         beat;
 PShape             circle;
-Input              input;
-AudioPlayer        player;
+InputPitch         input;
+//AudioPlayer        player;
 ArrayList<Branch>  tree1;
 ArrayList<Branch>  tree2;
 ArrayList<Branch>  tree3;
 ArrayList<ArrayList<Branch>> allTrees;
 PVector  vector1;
 PVector  vector2;
-Minim  minim;
+
+MultipleInputs    multipleInputs;
 
 void settings()
 {
@@ -46,10 +47,11 @@ void setup()
   beat  = new BeatDetect();
   beat.setSensitivity(500);
   background(0);
-  //input  = new Input();
-  player  = minim.loadFile("Zikr.mp3");
-  // player.play();
-  //player.play(150000);
+  
+  this.multipleInputs = new MultipleInputs(new String[] { "DP parts - Bass 1.mp3", "DP parts - Bass 2.mp3", "DP parts - Tenor 1.mp3", "DP parts - Tenor 2.mp3" });
+//  input  = new InputPitch("Zikr.mp3");
+//  input.player.play();
+  //this.input.player.play(35000);
 
   //beat.detectMode(BeatDetect.FREQ_ENERGY);
   beat.detectMode(BeatDetect.SOUND_ENERGY);
@@ -81,11 +83,27 @@ void setup()
   allTrees.add(tree1);
   allTrees.add(tree2);
   allTrees.add(tree3);
+
+  // Build a huge tree in setup(), and show as necessary in the draw?
+  for (int j = 0; j < allTrees.size(); j++)
+  {
+    ArrayList<Branch> curTree = allTrees.get(j);
+    // this level is important...
+    for (int i = 0; i < 31; i++)
+    {
+      curTree.add(curTree.get(i).branchA());
+      curTree.add(curTree.get(i).branchB());
+      //        curTree.get(i).finished = true;
+    } // for - i
+  } // for - j
 }
+
 
 void draw()
 {
+  background(0);
   stroke(color(255, 0, 255));
+  strokeWeight(3);
   //translate(width/2, height);
 
   //  beat.detect(player.mix);
@@ -102,62 +120,30 @@ void draw()
     stroke(colors[i]);
     fill(colors[i]);
     ellipse(i * 100 + 100, height - 50, 100, 100);
-    //    stroke(0);
-    //    text((char[])i, i * 100 + 100, height - 50, 100, 100);
   }
 
+//  float strokeWeight = 100;
   for (int j = 0; j < allTrees.size(); j++)
   {
     ArrayList<Branch> curTree = allTrees.get(j);
-    // this level is important...
-    for (int i = 0; i < 7; i++)
-    {
-      curTree.add(curTree.get(i).branchA());
-      curTree.add(curTree.get(i).branchB());
-      //        curTree.get(i).finished = true;
-    } // for - i
-  } // for - j
-
-
-  float strokeWeight = 100;
-  for (int j = 0; j < allTrees.size(); j++)
-  {
-    ArrayList<Branch> curTree = allTrees.get(j);
-    for (int i = 0; i < curTree.size(); i++)
+    for (int i = 0; i < Math.min(curTree.size(), Math.floor(this.multipleInputs.get(0).getAdjustedFundAsHz() / 50)); i++)
     {
       if (!curTree.get(i).finished)
       {
         stroke(colors[i % colors.length]);
-        strokeWeight(strokeWeight);
+//        strokeWeight(strokeWeight);
         
         curTree.get(i).show();
         curTree.get(i).show();
         
-        curTree.get(i).finished = true;
-        if(strokeWeight > 5)  {  strokeWeight = strokeWeight - 5;  }
+//        curTree.get(i).finished = true;
+//        if(strokeWeight > 5)  {  strokeWeight = strokeWeight - 5;  }
       } // if
     } // for - i
   } // for - j
-}
-
-void mousePressed()
-{
-  for (int j = 0; j < allTrees.size(); j++)
-  {
-    ArrayList<Branch> curTree = allTrees.get(j);
-    for (int i = curTree.size()-1; i >= 0; i--)
-    {
-      if (!curTree.get(i).finished)
-      {
-        curTree.add(curTree.get(i).branchA());
-        //        curTree.get(i).show();
-        curTree.add(curTree.get(i).branchB());
-        //        curTree.get(i).show();
-        curTree.get(i).finished = true;
-      } // if
-    } // for - i
-  } // for - j
-} // mousePressed
+  
+// println("this.input.getAdjustedFundAsHz() / 100: " + (this.input.getAdjustedFundAsHz() / 50));
+ } // draw()
 
 void branch(float len)
 {
@@ -177,3 +163,24 @@ void branch(float len)
     popMatrix();
   } // if
 } // branch
+
+/*
+void mousePressed()
+{
+  for (int j = 0; j < allTrees.size(); j++)
+  {
+    ArrayList<Branch> curTree = allTrees.get(j);
+    for (int i = curTree.size()-1; i >= 0; i--)
+    {
+      if (!curTree.get(i).finished)
+      {
+        curTree.add(curTree.get(i).branchA());
+        //        curTree.get(i).show();
+        curTree.add(curTree.get(i).branchB());
+        //        curTree.get(i).show();
+        curTree.get(i).finished = true;
+      } // if
+    } // for - i
+  } // for - j
+} // mousePressed
+*/
