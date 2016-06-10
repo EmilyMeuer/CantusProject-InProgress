@@ -15,7 +15,7 @@ import java.util.ArrayList;
  - what will trigger things before that?
  
  Zoom using map()?
- Color maps/ color map mode
+ Color maps / color map mode
  ----
  Polyphonic Interface: http://code.compartmental.net/minim/javadoc/ddf/minim/Polyphonic.html
  "object that can have multiple AudioSignals attached to it. It is 
@@ -25,15 +25,16 @@ import java.util.ArrayList;
 float              angle;
 BeatDetect         beat;
 PShape             circle;
-Input              input;
-AudioPlayer        player;
+InputPitch         input;
+//AudioPlayer        player;
 ArrayList<Branch>  tree1;
 ArrayList<Branch>  tree2;
 ArrayList<Branch>  tree3;
 ArrayList<ArrayList<Branch>> allTrees;
 PVector  vector1;
 PVector  vector2;
-Minim  minim;
+
+MultipleInputs    multipleInputs;
 
 void settings()
 {
@@ -46,10 +47,11 @@ void setup()
   beat  = new BeatDetect();
   beat.setSensitivity(500);
   background(0);
-  //input  = new Input();
-  player  = minim.loadFile("Zikr.mp3");
-  // player.play();
-  //player.play(150000);
+  
+  this.multipleInputs = new MultipleInputs(new String[] { "DP parts - Bass 1.mp3", "DP parts - Bass 2.mp3", "DP parts - Tenor 1.mp3", "DP parts - Tenor 2.mp3" });
+//  input  = new InputPitch("Zikr.mp3");
+//  input.player.play();
+  //this.input.player.play(35000);
 
   //beat.detectMode(BeatDetect.FREQ_ENERGY);
   beat.detectMode(BeatDetect.SOUND_ENERGY);
@@ -81,63 +83,67 @@ void setup()
   allTrees.add(tree1);
   allTrees.add(tree2);
   allTrees.add(tree3);
-}
 
-void draw()
-{
-  stroke(255);
-  //translate(width/2, height);
-
-  beat.detect(player.mix);
-  if (beat.isOnset()) {  
-    println("Onset at " + player.position()/60000 + ":" + player.position()%60000);
-  }
-
-  //branch(100);
-
-  /*
-  for (int i = 0; i < allTrees.size(); i++)
-   {
-   ArrayList<Branch> curTree  = allTrees.get(i);
-   for (int j = allTrees.size()-1; j >= 0; j--)
-   {
-   if (!allTrees.get(i).get(j).finished)
-   {
-   curTree.add(curTree.get(j).branchA());
-   curTree.add(curTree.get(j).branchA());
-   }
-   } // for
-   } // for
-   
-   for (int i = 0; i < allTrees.size(); i++)
-   {
-   ArrayList<Branch> curTree  = allTrees.get(i);
-   for (int j = allTrees.size()-1; j >= 0; j--)
-   {
-   curTree.get(j).show();
-   } // for
-   } // for
-   */
-}
-
-void mousePressed()
-{
+  // Build a huge tree in setup(), and show as necessary in the draw?
   for (int j = 0; j < allTrees.size(); j++)
   {
     ArrayList<Branch> curTree = allTrees.get(j);
-    for (int i = curTree.size()-1; i >= 0; i--)
+    // this level is important...
+    for (int i = 0; i < 31; i++)
+    {
+      curTree.add(curTree.get(i).branchA());
+      curTree.add(curTree.get(i).branchB());
+      //        curTree.get(i).finished = true;
+    } // for - i
+  } // for - j
+}
+
+
+void draw()
+{
+  background(0);
+  stroke(color(255, 0, 255));
+  strokeWeight(3);
+  //translate(width/2, height);
+
+  //  beat.detect(player.mix);
+  //  if (beat.isOnset()) {  
+  //    println("Onset at " + player.position()/60000 + ":" + player.position()%60000);
+  //  }
+
+  //branch(100);
+
+  color[] colors = { color(255, 0, 0), color(255, 150, 0), color(255, 255, 0), color(0, 255, 0), 
+    color(0, 0, 255), color(150, 0, 255), color(250, 0, 250) };
+  for (int i = 0; i < colors.length; i++)
+  {
+    stroke(colors[i]);
+    fill(colors[i]);
+    ellipse(i * 100 + 100, height - 50, 100, 100);
+  }
+
+//  float strokeWeight = 100;
+  for (int j = 0; j < allTrees.size(); j++)
+  {
+    ArrayList<Branch> curTree = allTrees.get(j);
+    for (int i = 0; i < Math.min(curTree.size(), Math.floor(this.multipleInputs.get(0).getAdjustedFundAsHz() / 50)); i++)
     {
       if (!curTree.get(i).finished)
       {
-        curTree.add(curTree.get(i).branchA());
+        stroke(colors[i % colors.length]);
+//        strokeWeight(strokeWeight);
+        
         curTree.get(i).show();
-        curTree.add(curTree.get(i).branchB());
         curTree.get(i).show();
-        curTree.get(i).finished = true;
+        
+//        curTree.get(i).finished = true;
+//        if(strokeWeight > 5)  {  strokeWeight = strokeWeight - 5;  }
       } // if
     } // for - i
   } // for - j
-} // mousePressed
+  
+// println("this.input.getAdjustedFundAsHz() / 100: " + (this.input.getAdjustedFundAsHz() / 50));
+ } // draw()
 
 void branch(float len)
 {
@@ -157,3 +163,24 @@ void branch(float len)
     popMatrix();
   } // if
 } // branch
+
+/*
+void mousePressed()
+{
+  for (int j = 0; j < allTrees.size(); j++)
+  {
+    ArrayList<Branch> curTree = allTrees.get(j);
+    for (int i = curTree.size()-1; i >= 0; i--)
+    {
+      if (!curTree.get(i).finished)
+      {
+        curTree.add(curTree.get(i).branchA());
+        //        curTree.get(i).show();
+        curTree.add(curTree.get(i).branchB());
+        //        curTree.get(i).show();
+        curTree.get(i).finished = true;
+      } // if
+    } // for - i
+  } // for - j
+} // mousePressed
+*/

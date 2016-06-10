@@ -4,7 +4,7 @@ import ddf.minim.effects.*;
 import ddf.minim.ugens.*;
 
 Minim      minim;
-// minim initialied in other tab
+// minim initialized in other tab
 
 class InputPitch
 {
@@ -71,6 +71,8 @@ class InputPitch
   } // constructor()
 
   /**
+   * The following comments from InputClassFreq; this no longer uses averages:
+   *
    * Performs a foward transform on the AudioInput instance var,
    * uses logAverages to group near frequencies and calculate
    * their average amplitude, determines which is the dominant frequency
@@ -84,43 +86,6 @@ class InputPitch
   void setFund()
   { 
     this.fft.forward(this.source.mix);
-
-    /*
-    // each average should hopefully be about one half step,
-     // since there are 11 averages and each is split into 12 parts.
-     // (Could calculate smaller averages to get a closer frequency match, e.g. "this.fft.logAverages(11,48);"
-     this.fft.logAverages(11,12);
-     
-     
-     float  loudestFreq = 0;
-     float  loudestFreqAmp  = 0;    // amplitude of the loudestAvg average band
-     int    loudestAvg    = 0;      // average band w/the highest amplitude
-     
-     
-     for(int i = 0; i < this.fft.avgSize(); i++)
-     {
-     float lowFreq = this.fft.getAverageCenterFrequency(i) - (this.fft.getAverageBandWidth(i) / 2);
-     float hiFreq  = this.fft.getAverageCenterFrequency(i) + (this.fft.getAverageBandWidth(i) / 2);
-     float avgAmp = this.fft.calcAvg(lowFreq, hiFreq);
-     
-     if(avgAmp > loudestFreqAmp)  
-     {  
-     loudestAvg  = i;
-     loudestFreqAmp  = avgAmp;
-     loudestFreq = this.fft.getAverageCenterFrequency(i);
-     } // if
-     } // for
-     
-     
-     for (int i = 0; i < this.fft.specSize(); i++)
-     {
-     if (this.fft.getBand(i) > loudestFreqAmp)
-     {
-     loudestFreq = this.fft.indexToFreq(i);
-     loudestFreqAmp = this.fft.getFreq(loudestFreq);
-     } // if
-     } // for
-     */
 
     for (int i = 4; i < fft.specSize(); i++)
     {

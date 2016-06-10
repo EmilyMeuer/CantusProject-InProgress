@@ -66,44 +66,6 @@ class Input
   void setFund()
   { 
     this.fft.forward(this.player.mix);
- //   this.findFund = 140;
-
-    /*
-    // each average should hopefully be about one half step,
-     // since there are 11 averages and each is split into 12 parts.
-     // (Could calculate smaller averages to get a closer frequency match, e.g. "this.fft.logAverages(11,48);"
-     this.fft.logAverages(11,12);
-     
-     
-     float  loudestFreq = 0;
-     float  loudestFreqAmp  = 0;    // amplitude of the loudestAvg average band
-     int    loudestAvg    = 0;      // average band w/the highest amplitude
-     
-     
-     for(int i = 0; i < this.fft.avgSize(); i++)
-     {
-     float lowFreq = this.fft.getAverageCenterFrequency(i) - (this.fft.getAverageBandWidth(i) / 2);
-     float hiFreq  = this.fft.getAverageCenterFrequency(i) + (this.fft.getAverageBandWidth(i) / 2);
-     float avgAmp = this.fft.calcAvg(lowFreq, hiFreq);
-     
-     if(avgAmp > loudestFreqAmp)  
-     {  
-     loudestAvg  = i;
-     loudestFreqAmp  = avgAmp;
-     loudestFreq = this.fft.getAverageCenterFrequency(i);
-     } // if
-     } // for
-     
-     
-     for (int i = 0; i < this.fft.specSize(); i++)
-     {
-     if (this.fft.getBand(i) > loudestFreqAmp)
-     {
-     loudestFreq = this.fft.indexToFreq(i);
-     loudestFreqAmp = this.fft.getFreq(loudestFreq);
-     } // if
-     } // for
-     */
 
     for (int i = 4; i < fft.specSize(); i++)
     {
@@ -116,7 +78,6 @@ class Input
       } // if
     } // for
 
- //   println("findFund = " + findFund);
     // set the prevFreq to be equal to the current frequency,
     // unless the current frequency has not been set,
     // in which case, set it to be the newly-found fundamental.

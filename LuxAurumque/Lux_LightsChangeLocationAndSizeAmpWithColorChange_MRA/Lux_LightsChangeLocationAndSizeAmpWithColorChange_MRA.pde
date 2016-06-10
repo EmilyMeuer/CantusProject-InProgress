@@ -15,8 +15,8 @@ AudioPlayer player;
 PImage  img;
 float  amp, xloc, yloc, lightSize, frames;
 int i;
-int [] arrxloc = {50,50,430,430,200,200};
-int [] arryloc = {125,125,125,125,200,200};
+int [] arrxloc = {50,50,50,430,430,240,240,200,200};
+int [] arryloc = {125,125,125,125,125,50,50,200,200};
 
 void setup()
 {
@@ -27,7 +27,7 @@ void setup()
   // manipulating pixels[] inside draw(), not drawing shapes.
   loadPixels();
   minim = new Minim(this);
-  player = minim.loadFile("LuxAurumque.mp3", 1024);  
+  player = minim.loadFile("LuxAurumque.mp3");  
   frameRate(60);
   frames = 1;
   xloc=50;
@@ -40,80 +40,9 @@ void draw()
   background(0);
   stroke(255);
   player.play();
-  Light();
   lightPos();
+  pixelBrightnessRGB();
 }//draw
-
-void Light(){
-  if(keyCode == LEFT){
-    pixelBrightnessR();
-  }
-  else if(keyCode == DOWN){
-    pixelBrightnessRG();
-  }
-  else if(keyCode == RIGHT){
-    pixelBrightnessRGB();
-  }
-  else{
-    pixelBrightnessR();
-  }
-}//light
-
-void pixelBrightnessR()
-{
-  for (int x = 0; x < img.width; x++) {
-    for (int y = 0; y < img.height; y++ ) {
-      // Calculate the 1D location from a 2D grid
-      int loc = x + y*img.width;
-      // Get the R,G,B values from image
-      float r,g,b;
-      r = red (img.pixels[loc]);
-      g = green (img.pixels[loc]);
-      b = blue (img.pixels[loc]);
-      amplitude();
-      float maxdist = lightSize;//dist(0,0,width,height);
-      float d = dist(x, y, xloc, yloc);
-      float adjustbrightness = 255*(maxdist-d)/maxdist;
-      r += adjustbrightness;
-      // Constrain RGB to make sure they are within 0-255 color range
-      r = constrain(r, 0, 255);
-      // Make a new color and set pixel in the window
-      color c = color(r);
-      pixels[y*width + x] = c;
-    }//for y
-  }//for x
-  updatePixels();
-}//pixelBrightnessR
-
-void pixelBrightnessRG()
-{
-  for (int x = 0; x < img.width; x++) {
-    for (int y = 0; y < img.height; y++ ) {
-      // Calculate the 1D location from a 2D grid
-      int loc = x + y*img.width;
-      // Get the R,G,B values from image
-      float r,g,b;
-      r = red (img.pixels[loc]);
-      g = green (img.pixels[loc]);
-      // Calculate an amount to change brightness based on proximity to the mouse
-      amplitude();
-      float maxdist = lightSize;//dist(0,0,width,height);
-      float d = dist(x, y, xloc, yloc);
-      float adjustbrightness = 255*(maxdist-d)/maxdist;
-      r += adjustbrightness;
-      g += adjustbrightness;
-      // Constrain RGB to make sure they are within 0-255 color range
-      r = constrain(r, 0, 255);
-      g = constrain(g, 0, 255);
-      // Make a new color and set pixel in the window
-      g=g*.8;
-      b=0;
-      color c = color(r, g, b);
-      pixels[y*width + x] = c;
-    }//for y
-  }//for x
-  updatePixels();
-}//pixelBrightnessRG
 
 void pixelBrightnessRGB()
 {
@@ -134,13 +63,22 @@ void pixelBrightnessRGB()
       r += adjustbrightness;
       g += adjustbrightness;
       b += adjustbrightness;
+      r = r*millis()/100000;
+      b = 0;
+      g = g*millis()/150000;
       // Constrain RGB to make sure they are within 0-255 color range
       r = constrain(r, 0, 255);
       g = constrain(g, 0, 255);
       b = constrain(b, 0, 255);
       // Make a new color and set pixel in the window
+      if (millis()<40000){
+      color c = color(r);
+      pixels[y*width + x] = c;
+      }//if
+      else{
       color c = color(r, g, b);
       pixels[y*width + x] = c;
+      }//else
     }//for y
   }//for x
   updatePixels();
