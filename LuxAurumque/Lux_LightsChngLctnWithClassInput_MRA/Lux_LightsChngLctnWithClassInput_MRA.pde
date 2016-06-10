@@ -57,22 +57,17 @@ void pixelBrightnessRGB()
       r += adjustbrightness;
       g += adjustbrightness;
       b += adjustbrightness;
-      r = r*millis()/100000;
-      b = 0;
-      g = g*millis()/150000;
+      //PROBLEM LINES COMMENTED OUT BELOW
+      //r = r*musicInput.getFundAsHz()/220;
+      //g = g*musicInput.getFundAsHz()/300;
+      b = 0.1*b;
       // Constrain RGB to make sure they are within 0-255 color range
       r = constrain(r, 0, 255);
       g = constrain(g, 0, 255);
       b = constrain(b, 0, 255);
       // Make a new color and set pixel in the window
-      if (millis()<40000){
-      color c = color(r+50);
-      pixels[y*width + x] = c;
-      }//if
-      else{
       color c = color(r, g, b);
       pixels[y*width + x] = c;
-      }//else
     }//for y
   }//for x
   updatePixels();
