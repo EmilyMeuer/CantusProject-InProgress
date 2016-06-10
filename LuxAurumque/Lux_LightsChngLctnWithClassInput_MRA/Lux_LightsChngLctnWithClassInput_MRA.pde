@@ -16,6 +16,7 @@ int [] arryloc = {125,125,125,125,200,200};
 void setup()
 {
   size(480, 357);
+  minim = new Minim(this);
   musicInput = new InputPitch("LuxAurumque.mp3");
   img = loadImage("NativityTriptych.jpg");
   img.loadPixels();
