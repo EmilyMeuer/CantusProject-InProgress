@@ -4,7 +4,7 @@ import ddf.minim.effects.*;
 import ddf.minim.ugens.*;
 
 Minim      minim;
-// minim initialized in other tab
+// minim initialized in other tab, in setup()
 
 class InputPitch
 {
@@ -42,7 +42,7 @@ class InputPitch
     this.findFund     = 120;
     
     try {
-      this.player  = minim.loadFile(filename);
+      this.player  = minim.loadFile(filename, 8192); // 4096 before.
     } 
     catch (NullPointerException npe) {
       throw new IllegalArgumentException("The file \"" + filename + "\" cannot be found in this sketch folder.");
@@ -91,6 +91,8 @@ class InputPitch
     {
       if (this.fft.getBand(i) > this.fft.getFreq(findFund))
       {     
+//        if (this.fft.indexToFreq(i) - findFund < (findFund / 1.8))
+//      switched to the following line for this piece:
         if (this.fft.indexToFreq(i) - findFund < (findFund / 2))
         {
           this.findFund = this.fft.indexToFreq(i);

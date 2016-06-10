@@ -23,7 +23,8 @@ void settings()
 void setup()
 {
   // minim must be initialized outside of Input in order to pass the correct value of "this" to its constructor.
-  this.minim  = new Minim(this);
+//  this.minim  = new Minim(this);
+  println("sketch path: " + sketchPath("") + "\ndata path: " + dataPath(""));
   testInput  = new InputPitch();
   
   // Creating a new MultipleInputs object from an array of Strings of filenames:
