@@ -30,7 +30,7 @@ void setup()
   // to be 1024 samples (or ms??) long because our FFT needs to have 
   // a power-of-two buffer size and this is a good size.
   
-  play = minim.loadFile("Zikr.mp3",4096);
+  play = minim.loadFile("Zikr - parts - Bass.mp3", 8192); //4096);
 //  in = minim.getLineIn(Minim.STEREO, 256);  
   
   // loop the file indefinitely
