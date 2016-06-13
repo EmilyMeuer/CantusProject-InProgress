@@ -14,7 +14,9 @@ void setup (){
 }
 
 void draw() {
-  InputPitch tenor = a.get(0);
+  InputPitch tenor;
+  tenor = a.get(0);
+  
   InputPitch bass = a.get(1);
   float w = tenor.getAmplitude();
   

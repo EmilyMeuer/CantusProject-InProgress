@@ -21,12 +21,12 @@ void setup() {
 
 void draw() { 
 
-  /*fill(255,10); // semi-transparent white
+ /* fill(255,10); // semi-transparent white
   rect(0, 0, width, height);
   fill(random(255));*/
   //above part is for fading out
 
-  //println(name.getAmplitude());
+  println(name.getAmplitude());
 
   float pointillize = map((30-(Math.min(name.getAmplitude(), 30))), 0, 30, smallPoint, largePoint);
   int x = int(random(img.width)); 
