@@ -27,12 +27,12 @@ AudioInput in;
   * this.input = minim.getLineIn();
   * :(
   */
-
+/*
 void settings()
 {
   size(1000, 1000);
 }
-
+*/
 void setup()
 {
   testInput  = new Input();  //calls the Input_Class
