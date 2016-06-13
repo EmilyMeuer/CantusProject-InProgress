@@ -36,14 +36,9 @@ PVector  vector2;
 
 MultipleInputs    multipleInputs;
 
-void settings()
-{
-  size(800, 800);
-}
-
 void setup()
 {
-  minim = new Minim(this);
+//  minim = new Minim(this);
   beat  = new BeatDetect();
   beat.setSensitivity(500);
   background(0);
