@@ -13,7 +13,7 @@ void settings()
 }
 
 
-class InputPitch
+class Input
 {
   /*
     Emily Meuer
@@ -38,11 +38,11 @@ class InputPitch
   AudioSource source;
   
   /**
-   * Constructor for creating an InputPitch object from an audio file.
+   * Constructor for creating an Input object from an audio file.
    *
    * @param  filename  String specifying the audio file.
    */
-  InputPitch(String filename)
+  Input(String filename)
   {
     if (filename == null) {
       throw new IllegalArgumentException("InputClassPitch.constructor(String): String parameter " + filename + " is null.");
@@ -54,7 +54,7 @@ class InputPitch
       this.player  = minimForAll.loadFile(filename);
     } 
     catch (NullPointerException npe) {
-      throw new IllegalArgumentException("InputPitch.constructor(String): there was an error loading the file \"" + filename + "\" with the Minim " + minimForAll + 
+      throw new IllegalArgumentException("Input.constructor(String): there was an error loading the file \"" + filename + "\" with the Minim " + minimForAll + 
       " (this minim initialized in settings()).");
     }
     this.fft          = new FFT(player.bufferSize(), player.sampleRate());
@@ -66,15 +66,15 @@ class InputPitch
   } // constructor(String)
 
   /**
-   * Constructor for creating an InputPitch object from line in.
+   * Constructor for creating an Input object from line in.
    */
-  InputPitch()
+  Input()
   {
 
     this.findFund     = 120;
     this.input        = minimForAll.getLineIn();     
     this.fft          = new FFT(input.bufferSize(), input.sampleRate());
-    this.sensitivity  = 3;
+    this.sensitivity  = 1;
     this.source = this.input;
     this.setFund();
   } // constructor()
