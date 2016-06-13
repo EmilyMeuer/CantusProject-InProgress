@@ -45,7 +45,7 @@ class InputPitch
       this.player  = minim.loadFile(filename);
     } 
     catch (NullPointerException npe) {
-      throw new IllegalArgumentException("InputClassPitch.constructor(String): There was an error loading the file \"" + filename + ".\"");
+      throw new IllegalArgumentException("The file \"" + filename + "\" cannot be found in this sketch folder.");
     }    
     this.fft          = new FFT(player.bufferSize(), player.sampleRate());
     this.player.loop(); 

@@ -2,11 +2,13 @@ import ddf.minim.*;
 import ddf.minim.analysis.*;
 import ddf.minim.effects.*;
 import ddf.minim.ugens.*;
+import java.nio.file.*;
+import java.io.FileInputStream;
 
-Minim      minim;
+//Minim      minim;
 // minim initialized in other tab
 
-class InputPitch
+public class InputPitch// extends MinimServiceProvider
 {
   /*
     Emily Meuer
@@ -24,6 +26,7 @@ class InputPitch
   Frequency  fundamental;
   float      fundamentalAmp;
   AudioInput input;
+  Minim      minim;
   Frequency  prevFund;
   AudioPlayer player;
   float      sensitivity;  // amplitude below which adjustedFreq will not be reset
@@ -41,12 +44,22 @@ class InputPitch
   {
     this.findFund     = 120;
     
+ //   PApplet pApplet   = new PApplet();
+    this.minim        = new Minim(this);
+    /*
+Initizlizing Minim options:
+ - move setup()
+ - look into why initializing in setup() vs. constructor makes a difference 
+ */
+    println("minim: " + this.minim);
+    println("sketchPath called...: " + this.sketchPath(""));
+    
     try {
-      this.player  = minim.loadFile(filename);
+      this.player  = this.minim.loadFile(filename);
     } 
     catch (NullPointerException npe) {
       throw new IllegalArgumentException("The file \"" + filename + "\" cannot be found in this sketch folder.");
-    }    
+    }
     this.fft          = new FFT(player.bufferSize(), player.sampleRate());
     this.player.loop(); 
      
@@ -62,6 +75,10 @@ class InputPitch
   InputPitch()
   {
     this.findFund     = 120;
+    
+    PApplet pApplet   = new PApplet();
+//    this.minim        = new Minim(pApplet);
+    this.minim        = new Minim(this);
     this.input        = minim.getLineIn();     
     this.fft          = new FFT(input.bufferSize(), input.sampleRate());
     this.sensitivity  = 3;
@@ -69,6 +86,38 @@ class InputPitch
  //   this.findFund    = 140;
     this.setFund();
   } // constructor()
+  
+    /**
+   * Returns the absolute path of the given file by calling sketchPath on it.
+   * This method is necessary for instantiating a Minim object in this class using "this".
+   *
+   * @param  fileName  String whose absolute path is to be found.
+   */
+  String sketchPath(String fileName)
+  {
+    println("sketchPath in InputPitch was called");
+    PApplet pApplet = new PApplet();
+//    return pApplet.sketchPath(fileName);
+    
+    Path path = Paths.get(fileName);
+    println("sketchPath: path.toString() = " + path.toString());
+    return path.toString();
+  } // sketchPath(String)
+
+  /**
+   * Creates an InputStream object from the file specified in the parameter.
+   * This method is necessary for instantiating a Minim object in this class using "this".
+   *
+   * @param  fileName  String specifying a file to be used as input for an InputStream.
+   */
+  InputStream createInput(String fileName)
+  {
+    PApplet pApplet = new PApplet();
+    try {
+    return new FileInputStream(fileName);
+    } catch(Exception fnfe)  {  throw new IllegalArgumentException(fnfe.getMessage());  }
+//    return pApplet.createInput(fileName);
+  } // createInput(String)
 
   /**
    * The following comments from InputClassFreq; this no longer uses averages:
