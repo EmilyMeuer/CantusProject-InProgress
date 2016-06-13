@@ -12,7 +12,7 @@
   * I have yet to find out how to do this
   * with multiple inputs (as of 6/11) but we have the
   * technology so we can rebuild him.
-  *
+  * :)
   * One problem with this is that some colors are just
   * really similar to other colors. Orange ends up
   * looking yellow eventually and the blues look the same too.
