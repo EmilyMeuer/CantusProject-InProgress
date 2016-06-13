@@ -9,7 +9,7 @@ Minim  minimForAll;
 
 void settings()
 {
-  size(800, 800);
+  size(500, 500);
   // minim must be initialized outside of Input in order to pass the correct value of "this" to its constructor.
   minimForAll = new Minim(this);
 }
@@ -62,12 +62,12 @@ public class InputPitch
       this.player  = minimForAll.loadFile(filename);
     } 
     catch (NullPointerException npe) {
-      throw new IllegalArgumentException("The file \"" + filename + "\" cannot be found in this sketch folder.");
+      throw new IllegalArgumentException("InputPitch.constructor(String): there was an error loading the file \"" + filename + "\" with the Minim " + minim + ".");
     }
     this.fft          = new FFT(player.bufferSize(), player.sampleRate());
     this.player.loop(); 
 
-    this.sensitivity  = 0.02;
+    this.sensitivity  = 0.01;
     this.source = this.player;
     this.setFund();
   } // constructor(String)
