@@ -4,7 +4,7 @@
   MRA
   Lux Aurumque
     - Raining Light - Amanda's idea
-    - raindrops = 1 works, anything above that does not...
+    - For some reason this fullScreen version is much slower than the small version...
 */
 
 import ddf.minim.analysis.*;
@@ -13,23 +13,25 @@ Minim  minim;
 
 //Minim       minim;
 AudioPlayer player;
-PImage  img;
+PImage  nativity;
 Raindrop myRaindrop[];
 int raindrops = 8;
-int xStart = 50;
+int xStart = 100;
 
 void setup()
 {
-  size(480, 357);
-  img = loadImage("NativityTriptych.jpg");
-  img.loadPixels();
+  fullScreen();
+  nativity = loadImage("NativityTriptych.jpg");
+  nativity.resize(width, height);
+  image(nativity, 0, 0);
+  nativity.loadPixels();
   loadPixels();
   minim = new Minim(this);
   player = minim.loadFile("LuxAurumque.mp3");  
   myRaindrop = new Raindrop[raindrops];
   for (int i = 0; i < myRaindrop.length; i++){
   myRaindrop[i] = new Raindrop(xStart);
-  xStart += 50;
+  xStart += 200;
   }
 }
 
@@ -54,7 +56,7 @@ class Raindrop {
     xDrop = inputXDrop;
     yDrop = 0;
     speed = 0;
-    gravity = 0.05;
+    gravity = 0.5;
   }
 //What it can do - fall
   void fall() {
@@ -75,15 +77,15 @@ class Raindrop {
 
 void rainfall() {
   float xPos, yPos;
-  for (int x = 0; x < img.width; x++) {
-    for (int y = 0; y < img.height; y++ ) {
+  for (int x = 0; x < nativity.width; x++) {
+    for (int y = 0; y < nativity.height; y++ ) {
 // Calculate the 1D location from a 2D grid
-      int loc = x + y*img.width;
+      int loc = x + y*nativity.width;
 // Get the R,G,B values from image
       float r,g,b;
-      r = red (img.pixels[loc]);
-      g = green (img.pixels[loc]);
-      b = blue (img.pixels[loc]);
+      r = red (nativity.pixels[loc]);
+      g = green (nativity.pixels[loc]);
+      b = blue (nativity.pixels[loc]);
       r = 0.01*r;
       g = 0.01*g;
       b = 0.01*b;
@@ -91,7 +93,7 @@ void rainfall() {
       for (int i = 0; i < myRaindrop.length; i++){
         xPos = myRaindrop[i].getXDrop();
         yPos = myRaindrop[i].getYDrop();
-        float maxdist = 10;//dist(0,0,width,height);
+        float maxdist = 50;//dist(0,0,width,height);
         float d = dist(x, y, xPos, yPos);
         if (d <= 2*maxdist) {
           r = 100*r;

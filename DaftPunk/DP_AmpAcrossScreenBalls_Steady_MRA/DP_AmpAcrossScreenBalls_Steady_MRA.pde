@@ -22,7 +22,7 @@ void setup(){
   //staggared starts for each of the balls
   int balls = 30;
 //ARRAY OBJECTS STEPS 2 and 3 (myBall and for loop)
-  myBall = new Ball[30];
+  myBall = new Ball[balls];
   //staggared starts for each of the balls
   for(int i = 0; i < balls; i++) {
     myBall[i] = new Ball(i * width/balls);
