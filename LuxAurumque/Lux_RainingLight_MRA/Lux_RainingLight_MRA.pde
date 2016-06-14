@@ -7,6 +7,7 @@
 
 import ddf.minim.analysis.*;
 import ddf.minim.*;
+Minim  minim;
 
 //Minim       minim;
 AudioPlayer player;
