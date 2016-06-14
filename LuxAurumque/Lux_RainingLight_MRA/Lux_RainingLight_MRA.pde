@@ -15,32 +15,54 @@ Minim  minim;
 AudioPlayer player;
 PImage  img;
 Raindrop myRaindrop[];
-int raindrops = 8;
-int xStart = 50;
+int raindrops = 4;
+int arrayPos = 0;
+
 
 void setup()
 {
   size(480, 357);
+  int xStart = 50;
   img = loadImage("NativityTriptych.jpg");
   img.loadPixels();
   loadPixels();
   minim = new Minim(this);
-  player = minim.loadFile("LuxAurumque.mp3");  
+  player = minim.loadFile("LuxAurumque.mp3", 1024);  
   myRaindrop = new Raindrop[raindrops];
   for (int i = 0; i < myRaindrop.length; i++){
   myRaindrop[i] = new Raindrop(xStart);
-  xStart += 50;
+  xStart += 100;
   }
 }
 
 void draw(){
-  background(0);
+  /*
   for (int i = 0; i < myRaindrop.length; i++){
   myRaindrop[i].fall();
   }
+  */
+  player.play();
+  
+  if (millis() > 0) {
+    myRaindrop[0].fall();
+  }
+  if (millis() > 1000) {
+    myRaindrop[1].fall();
+  }
+  if (millis() > 2000) {
+    myRaindrop[2].fall();
+  }
+  if (millis() > 3000) {
+    myRaindrop[3].fall();
+  }
+  
+  if (millis() % 10 == 0) {
+    if (player.mix.level() < 0.01) {
+    }
+  }
+  
   rainfall();
 }//draw
-
 
 
 class Raindrop {
@@ -48,7 +70,6 @@ class Raindrop {
   float yDrop;
   float speed;
   float gravity;
-  
 //Constructor with input variable
   Raindrop(float inputXDrop){
     xDrop = inputXDrop;
@@ -60,9 +81,9 @@ class Raindrop {
   void fall() {
     yDrop = yDrop + speed;
     speed = speed + gravity;
-    if (yDrop>height){
+    if (yDrop>height+10){
       speed = speed * -0.5;
-      yDrop = height;
+      yDrop = height+10;
     }
   }//void fall
   float getXDrop(){
@@ -104,8 +125,26 @@ void rainfall() {
           constrain(r, 0, 255);
           constrain(g, 0, 255);
           constrain(b, 0, 255);
-        }
-      }//for raindrop array
+        }//if pixels are near the raindrop location
+      }//for raindrop array    
+      
+      /*THIS BOTTOME SKIRT DOESN"T REALLY WORK YET...
+      if (y > height-50) {
+        float maxdist = 25;//dist(0,0,width,height);
+        float d = dist(x, y, x, height);
+        float adjustbrightness = 255*(maxdist-d)/maxdist;
+        r = 100*r;
+        g = 100*g;
+        b = 100*b;
+        r += adjustbrightness;
+        g += adjustbrightness;
+        b += adjustbrightness;
+        constrain(r, 0, 255);
+        constrain(g, 0, 255);
+        constrain(b, 0, 255);
+      }
+      */
+      
 // Make a new color and set pixel in the window
       color c = color(r, 0.7*g, 0.3*b);
       pixels[y*width + x] = c;
