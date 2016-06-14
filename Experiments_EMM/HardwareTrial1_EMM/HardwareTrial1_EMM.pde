@@ -1,6 +1,8 @@
 import ddf.minim.Minim;
 import ddf.minim.MultiChannelBuffer;
+
 import java.io.ByteArrayOutputStream;
+
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -9,6 +11,8 @@ import javax.sound.sampled.Line;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.Mixer;
 import javax.sound.sampled.TargetDataLine;
+
+import org.tritonus.share.sampled.FloatSampleBuffer;
 
 /*
   06/13/2016
@@ -19,19 +23,6 @@ import javax.sound.sampled.TargetDataLine;
  (USB emulate serial port?)
  
  ** Use a MultiChannelBuffer (Minim), getting a Line from the Java Mixer?
- 
- On AudioFormat:
- "In the Java Sound API, a data format is represented by an AudioFormat object, which includes the following attributes:
- 
- Encoding technique, usually pulse code modulation (PCM)
- Number of channels (1 for mono, 2 for stereo, etc.)
- Sample rate (number of samples per second, per channel)
- Number of bits per sample (per channel)
- Frame rate
- Frame size in bytes
- Byte order (big-endian or little-endian)"
- 
- Use a DataLine to get AudioFormat;
  
  "A SourceDataLine receives audio data for playback."
  
@@ -45,11 +36,15 @@ import javax.sound.sampled.TargetDataLine;
  So can I put these into a Multi-Channel Buffer and send them straight to the FFT from there?
  (AudioSource mentions AudioBuffer and StereoBuffer).
 AudioSource source: https://github.com/ddf/Minim/blob/46408dc3530572274a4e1c6d10fb756b89fdbc76/src/ddf/minim/AudioSource.java
+
+ (FFT note: if not using averages, might want to call noAverages() - can still use calcAvg(), but won't create
+ an average array for every forward.)
  */
 
 Input      testInput;
 MultipleInputs  multipleInputs;
 
+FFT           fft;
 Minim         minim;
 Mixer.Info[]  mixerInfo;
 Mixer         mixer1;
@@ -63,6 +58,8 @@ AudioOutput output;
 AudioFormat       audioFormat;
 AudioInputStream  inputStream;
 
+FloatSampleBuffer  floatSampBuf1;
+
 void setup()
 {
   testInput  = new Input();
@@ -75,11 +72,13 @@ void setup()
     println(i + " = " + mixerInfo[i].getName());
   }
 
-  mixer1  = AudioSystem.getMixer(mixerInfo[4]);
+  mixer1  = AudioSystem.getMixer(mixerInfo[3]);
   Line.Info[] tli1 = mixer1.getTargetLineInfo();
   println("sourceLineInfo.length: " + tli1.length);
   
   mixer2  = AudioSystem.getMixer(mixerInfo[6]);
+  
+  floatSampBuf1 = new FloatSampleBuffer();
 
   // try avoids problem of line1 not being initialized.
   try {
@@ -95,21 +94,38 @@ void setup()
     // Assume that the TargetDataLine, line, has already
     // been obtained and opened.
     ByteArrayOutputStream out  = new ByteArrayOutputStream();
-    int numBytesRead;
+    int numBytesRead = 0;
     byte[] data = new byte[line1.getBufferSize() / 5];
+ //   this.fft = new FFT(data.length, 44100);
 
     audioFormat = line1.getFormat();
+    line1.open(audioFormat); //<>//
     // Begin audio capture.
-    line1.open(audioFormat);
     line1.start();
 
-    while (millis() < 10000) {
+    while (millis() < 1000) {
       // Read the next chunk of data from the TargetDataLine.
       numBytesRead =  line1.read(data, 0, data.length);
+//      this.fft.forward(data);
+      println("numBytesRead: " + numBytesRead);
       // Save this chunk of data.
       out.write(data, 0, numBytesRead);
     } // while
-  } 
+    
+    floatSampBuf1.initFromByteArray(data, 0, numBytesRead, audioFormat);
+    
+    int channelCount = floatSampBuf1.getChannelCount();
+    println("channelCount: " + channelCount);
+    // might want to mixDownChannels() to get it all to 1?
+    
+// Here are my floats!  Could perform an fft on these!
+// (Make this float[] a global variable that keeps getting filled in draw()?  Then do the fft in draw() as well?
+    float[] buffer = floatSampBuf1.getChannel(0);
+    for(int i = 0; i < buffer.length; i++)
+    {
+      println(i + ": " + buffer[i]);
+    } // for
+  } // try
   catch(LineUnavailableException lnae) {
     throw new IllegalArgumentException("HardwareTrial1.setup(): mixer1 - line not available.");
   } // catch     
