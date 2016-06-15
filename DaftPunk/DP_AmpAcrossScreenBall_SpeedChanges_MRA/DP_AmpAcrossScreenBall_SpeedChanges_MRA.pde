@@ -12,10 +12,11 @@ AudioInput in;
 //ARRAY OBJECTS STEP 1 (next three lines)
 Ball[] myBall;
 //how many balls across the screen
-int balls = 30;
+int balls = 50;
+float ampSpeed=0;
 
 void setup(){
-  size(500,500);
+  fullScreen();
   minim = new Minim(this);
   in = minim.getLineIn();
 //ARRAY OBJECTS STEPS 2 and 3 (myBall and for loop)
@@ -28,9 +29,10 @@ void setup(){
 
 void draw(){
   background(0);
+  ampSpeed = 500*in.mix.level();
 //ARRAY OBJECTS STEP 4 (for loop)
   for(int i = 0; i < myBall.length; i++) {
-    myBall[i].move();
+    myBall[i].move(ampSpeed);
   }//for
 }//draw
 
@@ -47,12 +49,12 @@ class Ball{
     amplify = 1500;
     y = height-50;
     x = tempX;
-    speed = 500;
   }
-  void move(){
+  void move(float inSpeed){
     fill(200,100,200);
-    ellipse(x,y,10,10); 
-    x=x-round(speed*in.mix.level());
+    ellipse(x,y,20,20); 
+    speed = inSpeed;
+    x=x-speed;
     if (x<0){
       y = height-50-in.mix.level()*amplify;
       x = width;

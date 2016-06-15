@@ -36,32 +36,11 @@ void setup()
 }
 
 void draw(){
-  /*
   for (int i = 0; i < myRaindrop.length; i++){
   myRaindrop[i].fall();
   }
-  */
-  player.play();
-  
-  if (millis() > 0) {
-    myRaindrop[0].fall();
-  }
-  if (millis() > 1000) {
-    myRaindrop[1].fall();
-  }
-  if (millis() > 2000) {
-    myRaindrop[2].fall();
-  }
-  if (millis() > 3000) {
-    myRaindrop[3].fall();
-  }
-  
-  if (millis() % 10 == 0) {
-    if (player.mix.level() < 0.01) {
-    }
-  }
-  
   rainfall();
+  player.play();
 }//draw
 
 
@@ -85,6 +64,12 @@ class Raindrop {
       speed = speed * -0.5;
       yDrop = height+10;
     }
+//    if (millis() % 10 == 0) {
+      if (player.mix.level() < 0.01) {
+        yDrop = 0;
+        delay(500);
+      }
+//    }
   }//void fall
   float getXDrop(){
     return xDrop;
@@ -93,6 +78,8 @@ class Raindrop {
     return yDrop;
   }
 }//class Raindrop
+
+
 
 void rainfall() {
   float xPos, yPos;
@@ -128,7 +115,7 @@ void rainfall() {
         }//if pixels are near the raindrop location
       }//for raindrop array    
       
-      /*THIS BOTTOME SKIRT DOESN"T REALLY WORK YET...
+      /*THIS BOTTOME SKIRT DOESN"T REALLY WORK...
       if (y > height-50) {
         float maxdist = 25;//dist(0,0,width,height);
         float d = dist(x, y, x, height);

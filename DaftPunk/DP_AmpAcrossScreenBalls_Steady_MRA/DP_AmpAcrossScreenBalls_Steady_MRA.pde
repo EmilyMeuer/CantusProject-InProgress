@@ -13,14 +13,13 @@ AudioInput in;
 //ARRAY OBJECTS STEP 1 (next three lines)
 Ball[] myBall;
 //how many balls across the screen
-int balls = 30;
+int balls = 50;
 
 void setup(){
-  size(500,500);
+  fullScreen();
   minim = new Minim(this);
   in = minim.getLineIn();
   //staggared starts for each of the balls
-  int balls = 30;
 //ARRAY OBJECTS STEPS 2 and 3 (myBall and for loop)
   myBall = new Ball[balls];
   //staggared starts for each of the balls
@@ -45,14 +44,14 @@ class Ball{
   float y;
   float speed;
   Ball(float tempX){
-    amplify = 1500;
+    amplify = 5000;
     y = height-50;
     x = tempX;
-    speed = 5;
+    speed = 10;
   }
   void move(){
     fill(200,100,200);
-    ellipse(x,y,10,10); 
+    ellipse(x,y,20,20); 
     x=x-speed;
     if (x<0){
       y = height-50-in.mix.level()*amplify;
