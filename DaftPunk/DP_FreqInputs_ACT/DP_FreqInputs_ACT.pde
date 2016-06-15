@@ -5,28 +5,39 @@
   * - changes hue depending on frequency
   * - changes height depending on amplitude
   * - responds to multiple inputs
-  * This model focuses on having different inputs.
+  * - adjusts for any screen size
+  * This model focuses on working with any screen size.
   * I also am considering having different stacked shapes
   * for each input, such as circles for one, rectangles for another?
-  *
+  * Another step for the progression of this code is to write
+  * all of it in a loop, which will significantly reduce its length.
+  * Pushed on 6/15
  */
   
-//Input testInput;
 AudioInput in;
-//InputPitch ip;
 MultipleInputs ins;
 
 void setup()
 {
-  //testInput  = new Input();  //calls the Input_Class
-  //ip = new InputPitch(); //calls InputClassPitch_EMM
-  //minim = new Minim(this); //adding this did not help
+  //size can be found in the InputClassPitch_EMM
   this.ins = new MultipleInputs(new String[] {"DP parts - Bass 1.mp3", "DP parts - Bass 2.mp3", "DP parts - Tenor 1.mp3", "DP parts - Tenor 2.mp3"});
 }
 
 void draw()
 {
   background(0);
+  int refy = round(3*height/4);
+  //println("refy is "+refy);
+  int refx = round(width/11);
+  int space = round(height/100);  //for universally determing the space between stacks
+  int w = refx-space;  //for universally determining the width of the bars
+  //println("w is "+w);
+  int h = round(height/30);  //for universally determining the height of the stacks
+  //println("h is "+h);
+  int off = space/2;
+  int crefx = width/2;
+  int halfwmin = crefx - w/2;
+  int halfwplus = crefx + w/2;
   
   /* rf = red and fuchsia
    * op = orange and purple
@@ -35,8 +46,8 @@ void draw()
    */
   
   InputPitch bass1 = ins.get(0);
-  float rfvol = 100*bass1.getAmplitude();
-  float rfpit = bass1.getAdjustedFundAsHz();
+  float rfvol = 100*bass1.getAmplitude();  //'volume' of bass1, used for columns RED and FUCHSIA
+  float rfpit = bass1.getAdjustedFundAsHz();  //'pitch' of bass1, used for columns RED and FUCHSIA
   
   InputPitch bass2 = ins.get(1);
   float opvol = 100*bass2.getAmplitude();
@@ -50,8 +61,6 @@ void draw()
   float gpvol = 100*tenor2.getAmplitude();
   float gppit = tenor2.getAdjustedFundAsHz();
   
-  //cyan will be just hanging out for now
-  
   /*the following code creates rectangles which represent
    *the 9 different voices/inputs.
    *The rectangle needs the y-parameter to have the volume
@@ -60,24 +69,22 @@ void draw()
    *Additionally, rectMode(CORNERS) lets me set the parameters
    *for each corner of the rectangle.
    */
-   //int pitch = round(note/10);
-   //int i = round(volume); //changed from what was previously volume%5
   
   //RED
   stroke(255);
   rectMode(CORNERS);
   int pitchb1 = round(rfpit/10);
   int volb1 = round(rfvol);
-  int oldj=0; //for reversing color stack (darkest on bottom;
-              //stack is from bottom to top)
-  int oldpitchb1=pitchb1/(volb1+1); //have to add 1 because sometimes i is zero
-  for(oldj=0; oldj<volb1; oldj++)
+  int j=0;                  //stack is from bottom to top
+  int oldb1=pitchb1/(volb1+1); //have to add 1 because sometimes volume is zero
+  for(j=0; j<volb1; j++)
   {
-    fill(255-5*oldpitchb1, 0, 0); //255 0 0
-    rect(10,800-30*oldj, 100, 780-30*oldj); //makes boxes!
-    oldpitchb1 = oldpitchb1+pitchb1/(volb1+1);
+    fill(255-5*oldb1, 0, 0); //255 0 0
+    //rect(width-9*refx-w,refy-(space+h)*j, width-8*refx-w-off, (refy-h)-(space+h)*j); //makes boxes!
+    rect(halfwmin-4*space-4*w,refy-(space+h)*j, halfwmin-4*space-3*w, (refy-h)-(space+h)*j);
+    oldb1 = oldb1+pitchb1/(volb1+1);
   }
-  oldpitchb1 = pitchb1/(volb1+1);
+  oldb1 = pitchb1/(volb1+1);
   
  /* The magic formula here for the boxes is
   * rect([1], [2], [3], [4]) where:
@@ -95,7 +102,7 @@ void draw()
   * value is 30. Thus, the [2] parameter is 800-30*j.
   * [4] is kind of the same deal but is at the top of your first
   * box, so in this case (knowing I want a height of 20 pixels)
-  * would have 800-2-30*j, which simplifies to 780-30*j.
+  * would have 800-20-30*j, which simplifies to 780-30*j.
   * Knowing this, we can now make consecutive boxes and shapes of
   * all sizes! :)
   */
@@ -106,10 +113,11 @@ void draw()
   int pitchb2 = round(oppit/10);
   int volb2 = round(opvol);
   int oldb2 = pitchb2/(volb2+1);
-  for(oldj=0; oldj<volb2; oldj++)
+  for(j=0; j<volb2; j++)
   {
     fill(255-5*oldb2, 145-5*oldb2, 0); //255 145 0
-    rect(110,800-30*oldj,200,780-30*oldj);
+    //rect(width-8*refx-w,refy-(space+h)*j,width-7*refx-w-off,(refy-h)-(space+h)*j);
+    rect(halfwmin-3*space-3*w,refy-(space+h)*j,halfwmin-3*space-2*w,(refy-h)-(space+h)*j);
     oldb2 = oldb2 + pitchb2/(volb2+1);
   }
   oldb2=pitchb2/(volb2+1);
@@ -120,10 +128,11 @@ void draw()
   int pitcht1 = round(yipit/10);
   int volt1 = round(yivol);
   int oldt1 = pitcht1/(volt1+1);
-  for(oldj=0; oldj<volt1; oldj++)
+  for(j=0; j<volt1; j++)
   {
     fill(250-5*oldt1, 255-5*oldt1, 0); //250 255 0
-    rect(210,800-30*oldj,300,780-30*oldj);
+    //rect(width-7*refx-w,refy-(space+h)*j,width-6*refx-w-off,(refy-h)-(space+h)*j);
+    rect(halfwmin-2*space-2*w,refy-(space+h)*j,halfwmin-2*space-w,(refy-h)-(space+h)*j);
     oldt1 = oldt1+pitcht1/(volt1+1);
   }
   oldt1=pitcht1/(volt1+1);
@@ -134,10 +143,11 @@ void draw()
   int pitcht2 = round(gppit/10);
   int volt2 = round(gpvol);
   int oldt2 = pitcht2/(volt2+1);
-  for(oldj=0; oldj<volt2; oldj++)
+  for(j=0; j<volt2; j++)
   {
     fill(41-5*oldt2, 255-5*oldt2, 0); //41 255 0
-    rect(310,800-30*oldj,400,780-30*oldj);
+    //rect(width-6*refx-w,refy-(space+h)*j,width-5*refx-w-off,(refy-h)-(space+h)*j);
+    rect(halfwmin - space - w,refy-(space+h)*j,halfwmin - space,(refy-h)-(space+h)*j);
     oldt2=oldt2+pitcht2/(volt2+1);
   }
   oldt2=pitcht2/(volt2+1);
@@ -145,10 +155,11 @@ void draw()
   //CYAN
   stroke(255);
   rectMode(CORNERS);
-  for(oldj=0; oldj<volt2; oldj++)
+  for(j=0; j<volt2; j++)
   {
     fill(0, 255-5*oldt2, 232-5*oldt2); //0 255 232
-    rect(410,800-30*oldj,500,780-30*oldj);
+    //rect(width-5*refx-w,refy-(space+h)*j, width-4*refx-w-off,(refy-h)-(space+h)*j);
+    rect(halfwmin,refy-(space+h)*j, halfwplus,(refy-h)-(space+h)*j);
     oldt2=oldt2+pitcht2/(volt2+1);
   }
   oldt2=pitcht2/(volt2+1);
@@ -156,10 +167,11 @@ void draw()
   //PERIWINKlE
   stroke(255);
   rectMode(CORNERS);
-  for(oldj=0; oldj<volt2; oldj++)
+  for(j=0; j<volt2; j++)
   {
     fill(0, 129-5*oldt2, 255-5*oldt2); //0 129 255
-    rect(510,800-30*oldj,600,780-30*oldj);
+    //rect(width-4*refx-w,refy-(space+h)*j,width-3*refx-w-off,(refy-h)-(space+h)*j);
+    rect(halfwplus+space,refy-(space+h)*j,halfwplus+space+w,(refy-h)-(space+h)*j);
     oldt2=oldt2+pitcht2/(volt2+1);
   }
   oldt2=pitcht2/(volt2+1);
@@ -167,10 +179,11 @@ void draw()
   //INDIGO
   stroke(255);
   rectMode(CORNERS);
-  for(oldj=0; oldj<volt1; oldj++)
+  for(j=0; j<volt1; j++)
   {
     fill(45-5*oldt1, 0, 255-5*oldt1); //45 0 255
-    rect(610,800-30*oldj,700,780-30*oldj);
+    //rect(width-3*refx-w,refy-(space+h)*j,width-2*refx-w-off,(refy-h)-(space+h)*j);
+    rect(halfwplus+2*space+w,refy-(space+h)*j,halfwplus+2*space+2*w,(refy-h)-(space+h)*j);
     oldt1=oldt1+pitcht1/(volt1+1);
   }
   oldt1=pitcht1/(volt1+1);
@@ -178,10 +191,11 @@ void draw()
   //PURPLE
   stroke(255);
   rectMode(CORNERS);
-  for(oldj=0; oldj<volb2; oldj++)
+  for(j=0; j<volb2; j++)
   {
     fill(139-5*oldb2, 0, 255-5*oldb2); //139 0 255
-    rect(710,800-30*oldj,800,780-30*oldj);
+    //rect(width-2*refx-w,refy-(space+h)*j,width-refx-w-off,(refy-h)-(space+h)*j);
+    rect(halfwplus+3*space+2*w,refy-(space+h)*j,halfwplus+3*space+3*w,(refy-h)-(space+h)*j);
     oldb2=oldb2+pitchb2/(volb2+1);
   }
   oldb2=pitchb2/(volb2+1);
@@ -189,12 +203,13 @@ void draw()
   //FUCHSIA
   stroke(255);
   rectMode(CORNERS);
-  for(oldj=0; oldj<volb1; oldj++)
+  for(j=0; j<volb1; j++)
   {
-    fill(255-5*oldpitchb1, 0, 222-5*oldpitchb1); //255 0 222
-    rect(810,800-30*oldj,900,780-30*oldj);
-    oldpitchb1=oldpitchb1+pitchb1/(volb1+1);
+    fill(255-5*oldb1, 0, 222-5*oldb1); //255 0 222
+    //rect(width-refx-w,refy-(space+h)*j,width-refx,(refy-h)-(space+h)*j);
+    rect(halfwplus+4*space+3*w,refy-(space+h)*j,halfwplus+4*space+4*w,(refy-h)-(space+h)*j);
+    oldb1=oldb1+pitchb1/(volb1+1);
   }
-  oldpitchb1=pitchb1/(volb1+1);
+  oldb1=pitchb1/(volb1+1);
   
 }

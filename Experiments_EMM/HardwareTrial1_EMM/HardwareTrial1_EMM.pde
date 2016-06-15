@@ -42,6 +42,7 @@ import org.tritonus.share.sampled.FloatSampleBuffer;
  */
 
 Input      testInput;
+Input      testInput2;
 MultipleInputs  multipleInputs;
 
 FFT           fft;
@@ -61,7 +62,6 @@ TargetDataLine    line2;
 byte[]            data;
 AudioFormat       audioFormat1;
 AudioFormat       audioFormat2;
-//AudioInputStream  inputStream;
 
 FloatSampleBuffer  floatSampBuf1;
 FloatSampleBuffer  floatSampBuf2;
@@ -69,20 +69,24 @@ FloatSampleBuffer  floatSampBuf2;
 void setup()
 {
   testInput  = new Input();
+  testInput2 = new Input();
 
-  minim = new Minim(this);
-  mixerInfo  = AudioSystem.getMixerInfo();
+//  minim = new Minim(this);
+  this.mixerInfo  = AudioSystem.getMixerInfo();
 
   for (int i = 0; i < mixerInfo.length; i++)
   {
     println(i + " = " + mixerInfo[i].getName());
   }
-
+  
+  testInput.getLineFromMixer(6);
+  testInput2.getLineFromMixer(7);
+/*
   mixer1  = AudioSystem.getMixer(mixerInfo[4]);
   Line.Info[] tli1 = mixer1.getTargetLineInfo();
   println("sourceLineInfo.length: " + tli1.length);
 
-  mixer2  = AudioSystem.getMixer(mixerInfo[6]);
+  mixer2  = AudioSystem.getMixer(mixerInfo[5]);
   Line.Info[] tli2 = mixer2.getTargetLineInfo();
   println("sourceLineInfo.length: " + tli2.length);
 
@@ -118,10 +122,16 @@ void setup()
   } // catch     
 
   //1024 = typical sample rate?  8192 used somewhere else, I think.
+  
+  */
 } // setup()
 
 void draw()
 {
+  testInput.fillBuffer();
+  println("amplitude: " + testInput2.getAmplitude());
+  background(testInput.getAmplitude() * 1000, 0, testInput2.getAmplitude() * 1000);
+  /*
   background(200);
   stroke(225, 75, 255);
   fill(225, 75, 255);
@@ -136,8 +146,16 @@ void draw()
     numBytesRead =  line1.read(data, 0, data.length);
     floatSampBuf1.initFromByteArray(data, 0, numBytesRead, audioFormat1);
     buffer1 = floatSampBuf1.getChannel(0);
+    
     line1.stop();
     line1.close();
+
+    for (int j = 0; j < buffer1.length - 1; j++)
+    {
+      line(j, 100+buffer1[j]*40, j+1, 100+buffer1[j+1]*40);
+//      line(j, 300+buffer2[j]*40, j+1, 300+buffer2[j+1]*40);
+//      println("[" + j + "] buffer1: " + buffer1[j] + "; buffer2: " + buffer2[j]);
+    } // for
 
 
     line2.open(audioFormat2);
@@ -148,13 +166,6 @@ void draw()
     buffer2 = floatSampBuf2.getChannel(0);
     line2.stop();
     line2.close();
-
-    for (int j = 0; j < buffer1.length - 1; j++)
-    {
-      line(j, 100+buffer1[j]*40, j+1, 100+buffer1[j+1]*40);
-//      line(j, 300+buffer2[j]*40, j+1, 300+buffer2[j+1]*40);
-//      println("[" + j + "] buffer1: " + buffer1[j] + "; buffer2: " + buffer2[j]);
-    } // for
     
     for (int j = 0; j < buffer2.length - 1; j++)
     {
@@ -165,4 +176,5 @@ void draw()
   }  // try
   catch(LineUnavailableException lue) {
   }
+  */
 }

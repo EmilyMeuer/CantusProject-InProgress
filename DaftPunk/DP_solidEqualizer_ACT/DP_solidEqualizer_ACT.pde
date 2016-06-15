@@ -15,12 +15,6 @@ Input testInput;
 AudioInput in;
 //Minim minim;
 
-void settings()
-{
-  size(1000, 1000);
-
-}
-
 void setup()
 {
   testInput  = new Input();  //calls the Input_Class
