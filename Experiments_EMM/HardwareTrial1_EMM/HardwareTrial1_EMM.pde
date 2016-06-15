@@ -1,4 +1,4 @@
-import ddf.minim.Minim;
+import ddf.minim.Minim; //<>//
 import ddf.minim.MultiChannelBuffer;
 
 import java.io.ByteArrayOutputStream;
@@ -27,7 +27,7 @@ import org.tritonus.share.sampled.FloatSampleBuffer;
  "A SourceDataLine receives audio data for playback."
  
  Can get a Line directly from AudioSystem w/out going through the Mixer; would this be a good idea?
-  - no, this seems to be trickier.
+ - no, this seems to be trickier.
  
  (Could eventually get the lines automatically by comparing the strings in their Mixer.Info objects- 
  but more typical is to let the user choose.)
@@ -35,8 +35,8 @@ import org.tritonus.share.sampled.FloatSampleBuffer;
  Ultimately, all I need for an FFT is a buffer (which is either a float[] or an AudioBuffer - an interface).
  So can I put these into a Multi-Channel Buffer and send them straight to the FFT from there?
  (AudioSource mentions AudioBuffer and StereoBuffer).
-AudioSource source: https://github.com/ddf/Minim/blob/46408dc3530572274a4e1c6d10fb756b89fdbc76/src/ddf/minim/AudioSource.java
-
+ AudioSource source: https://github.com/ddf/Minim/blob/46408dc3530572274a4e1c6d10fb756b89fdbc76/src/ddf/minim/AudioSource.java
+ 
  (FFT note: if not using averages, might want to call noAverages() - can still use calcAvg(), but won't create
  an average array for every forward.)
  */
@@ -55,10 +55,16 @@ AudioInput  input2;
 
 AudioOutput output;
 
-AudioFormat       audioFormat;
-AudioInputStream  inputStream;
+int               numBytesRead;
+TargetDataLine    line1;
+TargetDataLine    line2;
+byte[]            data;
+AudioFormat       audioFormat1;
+AudioFormat       audioFormat2;
+//AudioInputStream  inputStream;
 
 FloatSampleBuffer  floatSampBuf1;
+FloatSampleBuffer  floatSampBuf2;
 
 void setup()
 {
@@ -72,81 +78,91 @@ void setup()
     println(i + " = " + mixerInfo[i].getName());
   }
 
-  mixer1  = AudioSystem.getMixer(mixerInfo[3]);
+  mixer1  = AudioSystem.getMixer(mixerInfo[4]);
   Line.Info[] tli1 = mixer1.getTargetLineInfo();
   println("sourceLineInfo.length: " + tli1.length);
-  
+
   mixer2  = AudioSystem.getMixer(mixerInfo[6]);
-  
+  Line.Info[] tli2 = mixer2.getTargetLineInfo();
+  println("sourceLineInfo.length: " + tli2.length);
+
   floatSampBuf1 = new FloatSampleBuffer();
+  floatSampBuf2 = new FloatSampleBuffer();
 
   // try avoids problem of line1 not being initialized.
   try {
-    TargetDataLine line1;
     if (tli1.length < 1) {
       throw new IllegalArgumentException("HardwareTrial1.setup(): tli1 " + tli1 + " has length of " + tli1.length);
     } else {
       line1 = (TargetDataLine)mixer1.getLine(tli1[0]);
-      //      this.inputStream = new AudioInputStream(line1);
-      //    } // for
+      line2 = (TargetDataLine)mixer1.getLine(tli2[0]);
     } // else
-
     // Assume that the TargetDataLine, line, has already
     // been obtained and opened.
-    ByteArrayOutputStream out  = new ByteArrayOutputStream();
-    int numBytesRead = 0;
-    byte[] data = new byte[line1.getBufferSize() / 5];
- //   this.fft = new FFT(data.length, 44100);
+    numBytesRead = 0;
+    data = new byte[line1.getBufferSize() / 5];
 
-    audioFormat = line1.getFormat();
-    line1.open(audioFormat); //<>//
-    // Begin audio capture.
-    line1.start();
+    //  making this fft is the correct idea, but should use the float[]:
+    //   this.fft = new FFT(data.length, 44100);
 
-    while (millis() < 1000) {
-      // Read the next chunk of data from the TargetDataLine.
-      numBytesRead =  line1.read(data, 0, data.length);
-//      this.fft.forward(data);
-      println("numBytesRead: " + numBytesRead);
-      // Save this chunk of data.
-      out.write(data, 0, numBytesRead);
-    } // while
-    
-    floatSampBuf1.initFromByteArray(data, 0, numBytesRead, audioFormat);
-    
+    audioFormat1 = line1.getFormat();
+
+    audioFormat2 = line2.getFormat();
+
     int channelCount = floatSampBuf1.getChannelCount();
     println("channelCount: " + channelCount);
     // might want to mixDownChannels() to get it all to 1?
-    
-// Here are my floats!  Could perform an fft on these!
-// (Make this float[] a global variable that keeps getting filled in draw()?  Then do the fft in draw() as well?
-    float[] buffer = floatSampBuf1.getChannel(0);
-    for(int i = 0; i < buffer.length; i++)
-    {
-      println(i + ": " + buffer[i]);
-    } // for
   } // try
   catch(LineUnavailableException lnae) {
     throw new IllegalArgumentException("HardwareTrial1.setup(): mixer1 - line not available.");
   } // catch     
 
   //1024 = typical sample rate?  8192 used somewhere else, I think.
-  audioFormat = new AudioFormat(1024, 8, 1, true, true);
-  //public AudioFormat(float sampleRate, int sampleSizeInBits, int channels, boolean signed, boolean bigEndian)
-
 } // setup()
 
 void draw()
 {
   background(200);
-  stroke(225, 75, 250);
-  fill(225, 75, 250);
+  stroke(225, 75, 255);
+  fill(225, 75, 255);
 
-  //  println("this.amplitude: " + this.testInput.getAmplitude());
+  float[] buffer1;
+  float[] buffer2;
 
-  // divide value by 5 b/c too large for a color value otherwise:
-  background(testInput.getAdjustedFundAsHz() / 3, 0, 0);
+  try {
+    line1.open(audioFormat1);
+//    println("line1: " + line1);
+    line1.start();
+    numBytesRead =  line1.read(data, 0, data.length);
+    floatSampBuf1.initFromByteArray(data, 0, numBytesRead, audioFormat1);
+    buffer1 = floatSampBuf1.getChannel(0);
+    line1.stop();
+    line1.close();
 
-  // this version less sensitive, b/c midi notes are less exact:
-  //background(testInput.getFundAsMidiNote() * 2, 0, 0);
+
+    line2.open(audioFormat2);
+//    println("line2: " + line2);
+    line2.start();
+    numBytesRead =  line2.read(data, 0, data.length);
+    floatSampBuf2.initFromByteArray(data, 0, numBytesRead, audioFormat2);
+    buffer2 = floatSampBuf2.getChannel(0);
+    line2.stop();
+    line2.close();
+
+    for (int j = 0; j < buffer1.length - 1; j++)
+    {
+      line(j, 100+buffer1[j]*40, j+1, 100+buffer1[j+1]*40);
+//      line(j, 300+buffer2[j]*40, j+1, 300+buffer2[j+1]*40);
+//      println("[" + j + "] buffer1: " + buffer1[j] + "; buffer2: " + buffer2[j]);
+    } // for
+    
+    for (int j = 0; j < buffer2.length - 1; j++)
+    {
+//      line(j, 100+buffer1[j]*40, j+1, 100+buffer1[j+1]*40);
+      line(j, 300+buffer2[j]*40, j+1, 300+buffer2[j+1]*40);
+//      println("[" + j + "] buffer1: " + buffer1[j] + "; buffer2: " + buffer2[j]);
+    } // for
+  }  // try
+  catch(LineUnavailableException lue) {
+  }
 }
