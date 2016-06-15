@@ -36,7 +36,18 @@ class Input
   AudioPlayer player;
   float      sensitivity;  // amplitude below which adjustedFreq will not be reset
   AudioSource source;
-  
+
+  Mixer.Info[]  mixerInfo;
+  Mixer         mixer;
+
+  int               numBytesRead;
+  TargetDataLine    line;
+  byte[]            data;
+  AudioFormat       audioFormat;
+
+  FloatSampleBuffer  floatSampBuf;
+  float[]            buffer;
+
   /**
    * Constructor for creating an Input object from an audio file.
    *
@@ -55,7 +66,7 @@ class Input
     } 
     catch (NullPointerException npe) {
       throw new IllegalArgumentException("Input.constructor(String): there was an error loading the file \"" + filename + "\" with the Minim " + minimForAll + 
-      " (this minim initialized in settings()).");
+        " (this minim initialized in settings()).");
     }
     this.fft          = new FFT(player.bufferSize(), player.sampleRate());
     this.player.loop(); 
@@ -70,7 +81,6 @@ class Input
    */
   Input()
   {
-
     this.findFund     = 120;
     this.input        = minimForAll.getLineIn();     
     this.fft          = new FFT(input.bufferSize(), input.sampleRate());
@@ -78,6 +88,66 @@ class Input
     this.source = this.input;
     this.setFund();
   } // constructor()
+
+  void getLineFromMixer(int mixerNum)
+  {
+    this.mixerInfo  = AudioSystem.getMixerInfo();
+    mixer  = AudioSystem.getMixer(mixerInfo[mixerNum]);
+    Line.Info[] tli = mixer.getTargetLineInfo();
+    println("sourceLineInfo.length: " + tli.length);
+
+
+    floatSampBuf = new FloatSampleBuffer();
+
+    // try avoids problem of line1 not being initialized.
+    try {
+      if (tli.length < 1) {
+        throw new IllegalArgumentException("HardwareTrial1.setup(): tli1 " + tli + " has length of " + tli.length);
+      } else {
+        line = (TargetDataLine)mixer.getLine(tli[0]);
+      } // else
+      // Assume that the TargetDataLine, line, has already
+      // been obtained and opened.
+      numBytesRead = 0;
+
+      // This size will be an issue when creating the FFT/performing the Fourier Transform
+      data = new byte[line.getBufferSize() / 5];
+
+      audioFormat = line.getFormat();
+
+      int channelCount = floatSampBuf.getChannelCount();
+      println("channelCount: " + channelCount);
+      // might want to mixDownChannels() to get it all to 1?
+    } // try
+    catch(LineUnavailableException lnae) {
+      throw new IllegalArgumentException("HardwareTrial1.setup(): mixer1 - line not available.");
+    } // catch
+  } // getLineFromMixer(int)
+
+  void fillBuffer()
+  {
+    try {
+      this.line.open(audioFormat);
+      this.line.start();
+      this.numBytesRead =  this.line.read(data, 0, data.length);
+      this.floatSampBuf.initFromByteArray(data, 0, this.numBytesRead, this.audioFormat);
+      this.buffer = floatSampBuf.getChannel(0);
+      
+      this.amplitude = this.line.getLevel();
+
+      this.line.stop();
+      this.line.close();
+
+      for (int j = 0; j < this.buffer.length - 1; j++)
+      {
+        line(j, 100+this.buffer[j]*40, j+1, 100+this.buffer[j+1]*40);
+        //      println("[" + j + "] buffer1: " + buffer1[j] + "; buffer2: " + buffer2[j]);
+      } // for
+    }  // try
+    catch(LineUnavailableException lue) {
+      throw new IllegalArgumentException("InputClass_EMM.fillBuffer: caught LineUnavailableException.");
+    } // catch()
+  } // fillBuffer
 
   /**
    * The following comments from InputClassFreq; this no longer uses averages:
