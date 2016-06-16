@@ -4,8 +4,8 @@
   MRA
   Lux Aurumque
     - Raining Light - Amanda's idea
-    - press a key to change to next scene (only 2 right now)
-    - this is set to typical projector resolution (1024 x 768)
+    - Trying to do a canvas stretch to full screen instead of the full screen command
+      I want the full screen presentation without additional pixels (I just want it stretched)
 */
 
 Input  myInput1;
@@ -18,6 +18,7 @@ Raindrop myRaindrop[];
 int raindrops = 3;
 int arrayPos = 0;
 Glow myGlow;
+PGraphics canvas;
 
 
 void setup()
@@ -29,10 +30,11 @@ void setup()
   loadPixels(); 
   mInputs = new MultipleInputs(new String[] { "Lux 1.mp3", "Lux 2.mp3", "Lux 3.mp3", "Lux 4.mp3"});
   myRaindrop = new Raindrop[raindrops];
-  myRaindrop[0] = new Raindrop(0.1*width);
-  myRaindrop[1] = new Raindrop(0.4*width);
-  myRaindrop[2] = new Raindrop(0.9*width);
+  myRaindrop[0] = new Raindrop(50);
+  myRaindrop[1] = new Raindrop(240);
+  myRaindrop[2] = new Raindrop(420);
   myGlow = new Glow();
+  canvas = createGraphics(480,357,JAVA2D);
 }
 
 void draw(){
@@ -40,26 +42,29 @@ void draw(){
   myInput2 = mInputs.get(1);
   myInput3 = mInputs.get(2);
   myInput4 = mInputs.get(3);
-  if (myInput2.getAmplitude() > 0.01){
-    myRaindrop[0].fall();
-  }
-  if (myInput2.getAmplitude() < 0.01){
-    myRaindrop[0].resetYDrop();
-  }
-  if (myInput3.getAmplitude() > 0.01){
-    myRaindrop[1].fall();
-  }
-  if (myInput2.getAmplitude() < 0.01){
-    myRaindrop[1].resetYDrop();
-  }
-  if (myInput4.getAmplitude() > 0.01){
-    myRaindrop[2].fall();
-  }
-  if (myInput4.getAmplitude() < 0.01){
-    myRaindrop[2].resetYDrop();
-  }
-  lightfall();
-  myGlow.shine();
+  canvas.beginDraw();
+    if (myInput2.getAmplitude() > 0.01){
+      myRaindrop[0].fall();
+    }
+    if (myInput2.getAmplitude() < 0.01){
+      myRaindrop[0].resetYDrop();
+    }
+    if (myInput3.getAmplitude() > 0.01){
+      myRaindrop[1].fall();
+    }
+    if (myInput2.getAmplitude() < 0.01){
+      myRaindrop[1].resetYDrop();
+    }
+    if (myInput4.getAmplitude() > 0.01){
+      myRaindrop[2].fall();
+    }
+    if (myInput4.getAmplitude() < 0.01){
+      myRaindrop[2].resetYDrop();
+    }
+    lightfall();
+    myGlow.shine();
+  canvas.endDraw();
+  image(canvas, 0, 0, width, height);
 }//draw
 
 
@@ -71,16 +76,16 @@ class Raindrop {
 //Constructor with input variable
   Raindrop(float inputXDrop){
     xDrop = inputXDrop;
-    yDrop = -height/10;
+    yDrop = -10;
     speed = 0;
-    gravity = 5;
+    gravity = 0.05;
   }
 //What it can do - fall
   void fall() {
     yDrop = yDrop + speed;
     speed = speed + gravity;
-    if (yDrop>height+(height/10)){
-      speed = speed * -0.3;
+    if (yDrop>height+10){
+      speed = speed * -0.5;
       yDrop = height+10;
     }
   }//void fall
@@ -91,7 +96,7 @@ class Raindrop {
     return yDrop;
   }
   void resetYDrop(){
-    yDrop = -height/10;
+    yDrop = -10;
   }
 }//class Raindrop
 
@@ -110,28 +115,28 @@ class Glow {
    scene = 1;
  }
  void shine (){
-   size = myInput1.getAmplitude()*width;
+   size = myInput1.getAmplitude()*500;
    curFreq = myInput1.getAdjustedFundAsHz();
    if (keyPressed){
      scene ++;
    }
    if (scene == 1){
      if ((curFreq > 250) && (curFreq < 300)){
-       xGlow = 0.114*width;
-       yGlow = 0.310*height;
+       xGlow = 55;
+       yGlow = 120;
      }
      if ((curFreq > 300) && (curFreq < 350)){
-       xGlow = 0.813*width;
-       yGlow = 0.388*height;
+       xGlow = 390;
+       yGlow = 150;
      }
      if (curFreq > 350){
-       xGlow = 0.520*width;
-       yGlow = 0.129*height;
+       xGlow = 250;
+       yGlow = 50;
      }
    }//scene 1
    if (scene == 2){
-     xGlow = 0.5*width;
-     yGlow = 0.517*height;
+     xGlow = 240;
+     yGlow = 200;
    }//scene 2
  }//void shine
  float getXGlow(){
@@ -166,7 +171,7 @@ void lightfall() {
       for (int i = 0; i < myRaindrop.length; i++){
         xPos = myRaindrop[i].getXDrop();
         yPos = myRaindrop[i].getYDrop();
-        float maxdist = 0.03*width;//dist(0,0,width,height);
+        float maxdist = 15;//dist(0,0,width,height);
         float d = dist(x, y, xPos, yPos);
 //the below if statement makes it so that only the pixels near the location of the raindrop are adjusted
 // (otherwise it "neutralizes" the color, getting rid of the picture)
