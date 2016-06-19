@@ -14,6 +14,7 @@ void setup (){
 }
 
 void draw() {
+ 
   InputPitch tenor;
   tenor = a.get(0);
   
