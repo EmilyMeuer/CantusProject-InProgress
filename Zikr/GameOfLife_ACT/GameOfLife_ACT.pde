@@ -70,6 +70,11 @@ void draw()
       {
         int deadCount = getDeadCount(i, j);
         int liveCount = getAliveCount(i, j);
+        
+        if(i==width/2 && j==height/2)
+        {
+          println("dead is "+deadCount+" and alive is "+liveCount);
+        }
 
         if (get(i+5, j+5)==deadColor)  //dealing with the dead :o
         {
