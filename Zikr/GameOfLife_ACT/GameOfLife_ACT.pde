@@ -5,6 +5,13 @@
  * 6/19/2016
  * translation from JavaScript to Processing
  *
+ * right now I think the main problem is that it makes changes
+ * and responds to those changes before looping through again
+ * (ie. a dead square becomes alive for round 2, but its neighbors
+ * already take it to be alive)
+ * what if I make deadCount and aliveCount store arrays
+ * and then every instance of a "1" for each means they change color
+ * and that won't happen until we're outside the for loop
  
  ***REFERENCES***
  liveColor (181, 0, 232)
@@ -31,7 +38,7 @@ void setup()
   {
     for (j=0; j<height; j=j+10)
     {
-      if (i==width/2 && (j>=height/2-10) &&j<=height/2+10)
+      if (i==width/2 && (j>=height/2-10) &&(j<=height/2+10))
       {
         stroke(0);
         fill(liveColor);
@@ -59,10 +66,10 @@ void setup()
 void draw()
 {
   //int timer = millis();
+  //if (timer%1000==0)
   if (mousePressed)
   {
-    //int[][] board = new int[width/10][height/10]; //I feel that this
-    //may be of use
+    int[][] board = new int[width][height];
     int i, j;
     for (i=0; i<width; i=i+10)
     {
@@ -80,40 +87,57 @@ void draw()
         {
           if (deadCount==3)
           {
-            stroke(0);
-            fill(liveColor);
-            rect(i, j, 10, 10);
+            board[i][j] = 1;
+            //stroke(0);
+            //fill(liveColor);
+            //rect(i, j, 10, 10);
           }//if dead
           else
           {
-            stroke(0);
-            fill(deadColor);
-            rect(i, j, 10, 10);
+            board[i][j] = 0;
+            //stroke(0);
+            //fill(deadColor);
+            //rect(i, j, 10, 10);
           }//else dead
         }//if get
 
         else if (get(i+5, j+5) == liveColor)  //dealing with the living
         {
-          if (liveCount<2)
+          if (liveCount<2 || liveCount>3)
           {
-            stroke(0);
-            fill(deadColor);
-            rect(i, j, 10, 10);
-          } else if (liveCount>2 && liveCount<4)
+            board[i][j] = 0;
+            //stroke(0);
+            //fill(deadColor);
+            //rect(i, j, 10, 10);
+          } else if (liveCount>=2 && liveCount<4)
           {
-            stroke(0);
-            fill(liveColor);
-            rect(i, j, 10, 10);
-          } else if (liveCount>3)
-          {
-            stroke(0);
-            fill(deadColor);
-            rect(i, j, 10, 10);
+            board[i][j] = 1;
+            //stroke(0);
+            //fill(liveColor);
+            //rect(i, j, 10, 10);
           }
         }//else if alive
       }//for j
     }//for i
-  }
+    for(i=0;i<width;i=i+10)
+    {
+      for(j=0;j<width;j=j+10)
+      {
+        if(board[i][j]==0)
+        {
+           stroke(0);
+           fill(deadColor);
+           rect(i,j,10,10);
+        }
+        else
+        {
+          stroke(0);
+          fill(liveColor);
+          rect(i,j,10,10);
+        }
+      }
+    }
+  }//if mouse/timer
 }//end of draw loop
 
 int getDeadCount(int i, int j)
