@@ -120,11 +120,11 @@ int getDeadCount(int i, int j)
 {
   int dead=0;
   int neigh, bors;
-  for (neigh=i-10; neigh<i+10; neigh=neigh+10)
+  for (neigh=i-10; neigh<(i+20); neigh=neigh+10)
   {
-    for (bors=j-10; bors<j+10; bors=bors+10)
+    for (bors=j-10; bors<(j+20); bors=bors+10)
     {
-      if (get(neigh+5, bors+5) == deadColor)
+      if ((get(neigh+5, bors+5) == deadColor) && neigh!=i && bors!=j)
       {
         dead++;
       }
@@ -137,11 +137,11 @@ int getAliveCount(int i, int j)
 {
   int alive=0;
   int neigh, bors;
-  for (neigh=i-10; neigh<(i+10); neigh=neigh+10)
+  for (neigh=i-10; neigh<(i+20); neigh=neigh+10)
   {
-    for (bors=j-10; bors<(j+10); bors=bors+10)
+    for (bors=j-10; bors<(j+20); bors=bors+10)
     {
-      if (get(neigh+5, bors+5) == liveColor)
+      if ((get(neigh+5, bors+5) == liveColor) && neigh!=i && bors!=j)
       {
         alive++;
       }
