@@ -1,5 +1,6 @@
 /////////
 (
+s.boot;
 SynthDef("rand_osc4", {
 
 arg pick, freq, trig;

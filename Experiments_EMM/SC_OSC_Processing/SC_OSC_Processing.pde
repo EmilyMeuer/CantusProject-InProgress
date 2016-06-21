@@ -1,6 +1,7 @@
 ///////// just a little sample of a circle drag  ////
 
 //import osc.*;
+import netP5.*;
 import oscP5.*;
 
 
@@ -52,7 +53,7 @@ void Setup_Nodes(int num, int startin) {
    oscMsg.add(1);
    // send the osc message
    // via the oscP5 bundle
-   oscP5.send(oscMsg);
+   oscP5.send(oscMsg, new NetAddress("127.0.0.1", 12000));
  }
 } 
 
@@ -71,7 +72,7 @@ void initOsc() {
  host = "127.0.0.1";  //change to whatever the IP want to recieve
  oscP5event = "oscEvent";  
 // oscP5 = new OscP5(this, host, sendToPort, receiveAtPort, oscP5event);
-  oscP5 = new OscP5(this, receiveAtPort);
+  oscP5 = new OscP5(this, host, receiveAtPort, 0);
 }
 
 void draw()  
