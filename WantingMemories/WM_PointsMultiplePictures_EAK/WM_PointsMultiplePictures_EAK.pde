@@ -91,8 +91,17 @@ void setup()
   sevenBlur.resize(width/4, height/4); 
   eightBlur.resize(width/2, height/4); 
   nineBlur.resize(width/4, height/4);
+/*
+  Input[] tracks = new Input[5];
+  tracks[0] = new Input("WMTenor.m4a");
+  tracks[1] = new Input("WMBass.m4a");
+  tracks[2] = new Input("WMAlto.m4a");
+  tracks[3] = new Input("WMMelody.m4a");
+  tracks[4] = new Input("WMSoprano.m4a");
+  */
+//  allInputs = new MultipleInputs(tracks);
 
-  allInputs = new MultipleInputs(new String[] {"WMTenor.m4a", "WMBass.m4a", "WMAlto.m4a", "WMMelody.m4a", "WMSoprano.m4a" } ); //inserting all mp3 files here ... hopefully live inputs in the future
+  allInputs = new MultipleInputs(new String[] {"WMTenor.mp3", "WMBass.mp3", "WMAlto.mp3", "WMMelody.mp3", "WMSoprano.mp3" } ); //inserting all mp3 files here ... hopefully live inputs in the future
 }
 
 void draw()
