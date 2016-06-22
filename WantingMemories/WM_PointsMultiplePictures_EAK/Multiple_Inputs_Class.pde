@@ -28,6 +28,7 @@ class MultipleInputs
     if (inputNames == null) {  
       throw new IllegalArgumentException("MultipleInputsClass.constructor(String[]): String[] parameter " + inputNames + " is null.");
     }
+    println("length = " + inputNames.length);
     this.multipleInputs  = new ArrayList<Input>();
 
     for (int i = 0; i < inputNames.length; i++)
