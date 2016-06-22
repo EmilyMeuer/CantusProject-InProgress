@@ -1,3 +1,15 @@
+/*
+  Erin Kern
+  Emily Meuer
+  06/21/2016
+  
+  Moved the pointillism to start in the correct location for each pic.
+  
+  Arrays:
+    - put everything that has a name into an array
+    (now it might not need the name; instead of "one" it can be images[0]).
+ */
+
 PImage      one;
 PImage      two;
 PImage      three;
@@ -35,7 +47,6 @@ int smallPoint;
 int largePoint;
 
 
-
 void setup()
 {
   fullScreen();
@@ -48,6 +59,19 @@ void setup()
   noStroke();
   frameRate(10);
 
+// Store all names so that the images can be loaded ina loop:
+  String[]  imageNames = { "one.jpeg",
+                            "two.jpeg",
+                            "three.jpeg",
+                            "four.jpeg",
+                            "five.jpeg",
+                            "six.jpeg",
+                            "seven.jpeg",
+                            "eight.jpeg",
+                            "nine.jpeg"
+  }; // imageNames
+
+/*
   one  = loadImage("one.jpeg");
   two  = loadImage("two.jpg");
   three = loadImage("three.jpg");
@@ -57,7 +81,18 @@ void setup()
   seven = loadImage("seven.jpg");
   eight = loadImage("eight.jpg");
   nine = loadImage("nine.jpg");
+*/
 
+  // Create an array of PImages and fill it with the images
+  // whose names are in the String[] of image names.
+  PImage[]  images = new PImage[9];
+  for (int i = 0; i < imageNames.length; i++)
+  {
+    images[i] = loadImage(imageNames[i]);
+  } // for
+  
+  // Change the following code so that the blurred images are in another PImage[].
+  
   oneBlur  = loadImage("oneBlur.jpg");
   twoBlur  = loadImage("twoBlur.jpg");
   threeBlur = loadImage("threeBlur.jpg");
@@ -68,6 +103,8 @@ void setup()
   eightBlur = loadImage("eightBlur.jpg");
   nineBlur = loadImage("nineBlur.jpg");
 
+  // Optional: To do the following in a loop will take a little math, possibly with mod and an 
+  // array of options (see my getImageXandY() and queryArray() for ideas).
   one.resize(width/4, height/4); 
   two.resize(width/2, height/4); 
   three.resize(width/4, height/4); 
@@ -77,7 +114,7 @@ void setup()
   seven.resize(width/4, height/4); 
   eight.resize(width/2, height/4); 
   nine.resize(width/4, height/4);
-
+  
   oneBlur.resize(width/4, height/4); 
   twoBlur.resize(width/2, height/4); 
   threeBlur.resize(width/4, height/4); 
@@ -87,15 +124,6 @@ void setup()
   sevenBlur.resize(width/4, height/4); 
   eightBlur.resize(width/2, height/4); 
   nineBlur.resize(width/4, height/4);
-  /*
-  Input[] tracks = new Input[5];
-   tracks[0] = new Input("WMTenor.m4a");
-   tracks[1] = new Input("WMBass.m4a");
-   tracks[2] = new Input("WMAlto.m4a");
-   tracks[3] = new Input("WMMelody.m4a");
-   tracks[4] = new Input("WMSoprano.m4a");
-   */
-  //  allInputs = new MultipleInputs(tracks);
 
   allInputs = new MultipleInputs(new String[] {"WMTenor.mp3", "WMBass.mp3", "WMAlto.mp3", "WMMelody.mp3", "WMSoprano.mp3" } ); //inserting all mp3 files here ... hopefully live inputs in the future
 
@@ -115,6 +143,7 @@ void draw()
 {
 
   //Drawing blurred images over background
+  // (Optional - Use queryArray() and do this in a loop)
   image (oneBlur, 0, 0);
   image (twoBlur, width/4, 0);
   image (threeBlur, (3*(width/4)), 0);
@@ -163,7 +192,8 @@ void draw()
    
    */
 
-
+  // This is the most important thing to do in a loop!!
+  
   float pointillizeOne = map((30-(Math.min(oneLevel, 30))), 0, 30, smallPoint, largePoint);
   int randPixelNum = (int)(random(one.pixels.length));
   int randPixel = one.pixels[randPixelNum];
