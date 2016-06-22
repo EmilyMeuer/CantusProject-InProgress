@@ -1,21 +1,40 @@
 float l = 50;
-float rad = 60;
-float n = 6;
-float angle1 = radians(180-(180*(n-2))/n);
-float angle2 = radians(-108);
 
 void setup(){
   background(0);
   size(600,600);
   strokeWeight(3);
-  stroke(s);
 }
 
 void draw() {
-  translate(width/2, height/2);
+  translate(50,50);
+  rosette();
+  translate(0,l*6);
+  rosette();
+  translate(0,l*6);
+  rosette();
+  translate(l*5.2,0);
+  rosette();
+  translate(0,-l*6);
+  rosette();
+  translate(0,-l*6);
+  rosette();
+  translate(l*5.2,0);
+  rosette();
+  translate(0,l*6);
+  rosette();
+  translate(0,l*6);
+  rosette();
+}
+
+void rosette() {
+  float n = 6;
+  float angle1 = radians(180-(180*(n-2))/n);
+  float angle2 = radians(240);
+  int b = 50;
   for (int j = 0; j < n; j++){
     rotate(angle2);
-//    translate(0,l);
+    stroke(150,0,b);
     for (int i = 0; i < n; i++){ //draws one hexagon
       line(0,0,0,l);
       translate(0,l);
@@ -27,5 +46,6 @@ void draw() {
       }
     }//one hexagon
     popMatrix();
+    b += 30;
   }
 }
