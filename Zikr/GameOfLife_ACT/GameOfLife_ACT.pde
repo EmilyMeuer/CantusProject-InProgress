@@ -12,8 +12,11 @@
  * what if I make deadCount and aliveCount store arrays
  * and then every instance of a "1" for each means they change color
  * and that won't happen until we're outside the for loop
+<<<<<<< HEAD
  * I tried fixing this with an array but it still runs 4 times
  * and it always reaches an end iteration where it stops changing
+=======
+>>>>>>> revert-5-revert-8-master
  
  ***REFERENCES***
  liveColor (181, 0, 232)
@@ -31,9 +34,12 @@
 
 color liveColor = color(181, 0, 232);
 color deadColor = color(255);
+// <<<<<<< HEAD
 int[][] board = new int[width][height];
 int i=0;
 int j=0;
+// =======
+// >>>>>>> revert-5-revert-8-master
 
 void setup()
 {
@@ -70,11 +76,68 @@ void setup()
 
 void draw()
 {
+// <<<<<<< HEAD
   int timer = millis();
   //if (timer%1000==0)
   //if (mousePressed)
   //{
-    mouseClicked();
+//    mouseClicked();
+// =======
+  //int timer = millis();
+  //if (timer%1000==0)
+  if (mousePressed)
+  {
+    int[][] board = new int[width][height];
+    int i, j;
+    for (i=0; i<width; i=i+10)
+    {
+      for (j=0; j<height; j=j+10)
+      {
+        int deadCount = getDeadCount(i, j);
+        int liveCount = getAliveCount(i, j);
+        
+        if(i==width/2 && j==height/2)
+        {
+          println("dead is "+deadCount+" and alive is "+liveCount);
+        }
+
+        if (get(i+5, j+5)==deadColor)  //dealing with the dead :o
+        {
+          if (deadCount==3)
+          {
+            board[i][j] = 1;
+            //stroke(0);
+            //fill(liveColor);
+            //rect(i, j, 10, 10);
+          }//if dead
+          else
+          {
+            board[i][j] = 0;
+            //stroke(0);
+            //fill(deadColor);
+            //rect(i, j, 10, 10);
+          }//else dead
+        }//if get
+
+        else if (get(i+5, j+5) == liveColor)  //dealing with the living
+        {
+          if (liveCount<2 || liveCount>3)
+          {
+            board[i][j] = 0;
+            //stroke(0);
+            //fill(deadColor);
+            //rect(i, j, 10, 10);
+          } else if (liveCount>=2 && liveCount<4)
+          {
+            board[i][j] = 1;
+            //stroke(0);
+            //fill(liveColor);
+            //rect(i, j, 10, 10);
+          }
+        }//else if alive
+      }//for j
+    }//for i
+//>>>>>>> revert-5-revert-8-master
     for(i=0;i<width;i=i+10)
     {
       for(j=0;j<width;j=j+10)
@@ -93,7 +156,11 @@ void draw()
         }
       }
     }
+//<<<<<<< HEAD
   //}//if mouse/timer
+//=======
+  }//if mouse/timer
+//>>>>>>> revert-5-revert-8-master
 }//end of draw loop
 
 int getDeadCount(int i, int j)
@@ -128,13 +195,14 @@ int getAliveCount(int i, int j)
     }
   }
   return alive;
+//<<<<<<< HEAD
 }//live count
 
 void mouseClicked()
 {
-    for (i=0; i<width; i=i+10)
+    for (i=0; i<width - 10; i=i+10)
     {
-      for (j=0; j<height; j=j+10)
+      for (j=0; j<height - 10; j=j+10)
       {
         int deadCount = getDeadCount(i, j);
         int liveCount = getAliveCount(i, j);
@@ -168,4 +236,7 @@ void mouseClicked()
         }//else if alive
       }//for j
     }//for i
-}
+} // mouseClicked()
+//=======
+//}//live count
+//>>>>>>> revert-5-revert-8-master
