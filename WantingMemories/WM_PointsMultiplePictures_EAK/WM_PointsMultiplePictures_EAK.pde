@@ -153,7 +153,7 @@ void draw()
   tint(255, (Math.min(fourLevel, 255)));
   image(nine, (3*(width/4)), (3*(height/4)), width/4, height/4);
 
-/*
+
 
 
   float pointillizeOne = map((30-(Math.min(oneLevel, 30))), 0, 30, smallPoint, largePoint);
@@ -217,7 +217,7 @@ void draw()
   int yNine = int(random(nine.height));
   color pixNine = nine.get(xNine, yNine);
   fill(pixNine, 128);
-  ellipse(xNine, yNine, pointillizeNine, pointillizeNine);*/
+  ellipse(xNine, yNine, pointillizeNine, pointillizeNine);
 
 
 }
