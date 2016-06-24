@@ -57,7 +57,7 @@ class Input
       " (this minim initialized in settings()).");
     }
     this.fft          = new FFT(player.bufferSize(), player.sampleRate());
-    this.player.loop(); 
+//    this.player.loop(); 
 
     this.sensitivity  = 0.01;
     this.source = this.player;
