@@ -16,13 +16,13 @@ MultipleInputs  mInputs;
 PImage  img;
 Raindrop myRaindrop[];
 int raindrops = 3;
-int arrayPos = 0;
-Glow myGlow;
+//int arrayPos = 0;
+Glow myGlow[];
+int orbs = 1;
 int scene = 1;
 
 void setup()
 {
-//  size(480, 357);
   img = loadImage("NativityTriptych.jpg");
   img.resize(width, height);
   img.loadPixels();
@@ -32,7 +32,8 @@ void setup()
   myRaindrop[0] = new Raindrop(0.1*width);
   myRaindrop[1] = new Raindrop(0.4*width);
   myRaindrop[2] = new Raindrop(0.9*width);
-  myGlow = new Glow();
+  myGlow = new Glow[orbs];
+  myGlow[0] = new Glow();
 }
 
 void draw(){
@@ -41,9 +42,11 @@ void draw(){
   myInput2 = mInputs.get(1);
   myInput3 = mInputs.get(2);
   myInput4 = mInputs.get(3);
+  lightfall();
   if (keyPressed){
      scene ++;
-     delay(50);
+     delay(500);
+     println(scene);
    }
   if (scene == 1){
     if (myInput2.getAmplitude() > 0.01){
@@ -64,86 +67,15 @@ void draw(){
     if (myInput4.getAmplitude() < 0.01){
       myRaindrop[2].resetYDrop();
     }
-    lightfall();
-    myGlow.shine();
+    myGlow[0].angels(myInput1.getAdjustedFundAsHz(), myInput1.getAmplitude());
   }//scene 1
   if (scene == 2) {
-    
+    myRaindrop[0].hover(myInput2.getAdjustedFundAsHz(), myInput2.getAmplitude());
+    myRaindrop[1].hover(myInput3.getAdjustedFundAsHz(), myInput3.getAmplitude());
+    myRaindrop[2].hover(myInput4.getAdjustedFundAsHz(), myInput4.getAmplitude());
+    myGlow[0].nativity(myInput1.getAmplitude());
   }//scene 2
 }//draw
-
-
-class Raindrop {
-  float xDrop;
-  float yDrop;
-  float speed;
-  float gravity;
-//Constructor with input variable
-  Raindrop(float inputXDrop){
-    xDrop = inputXDrop;
-    yDrop = -height/10;
-    speed = 0;
-    gravity = 5;
-  }
-//What it can do - fall
-  void fall() {
-    yDrop = yDrop + speed;
-    speed = speed + gravity;
-    if (yDrop>height+(height/10)){
-      speed = speed * -0.3;
-      yDrop = height+10;
-    }
-  }//void fall
-  float getXDrop(){
-    return xDrop;
-  }
-  float getYDrop(){
-    return yDrop;
-  }
-  void resetYDrop(){
-    yDrop = -height/10;
-  }
-}//class Raindrop
-
-
-
-class Glow {
-  float xGlow;
-  float yGlow;
-  float size;
-  float curFreq;
- //Constructor with input variable
- Glow(){
-   xGlow = 0;
-   yGlow = 0;
-   scene = 1;
- }
- void shine (){
-   size = myInput1.getAmplitude()*width;
-   curFreq = myInput1.getAdjustedFundAsHz();
-   if ((curFreq > 250) && (curFreq < 300)){
-     xGlow = 0.114*width;
-     yGlow = 0.310*height;
-   }
-   if ((curFreq > 300) && (curFreq < 350)){
-     xGlow = 0.813*width;
-     yGlow = 0.388*height;
-   }
-   if (curFreq > 350){
-     xGlow = 0.520*width;
-     yGlow = 0.129*height;
-   }
- }//void shine
- float getXGlow(){
-   return xGlow;
- }
- float getYGlow(){
-   return yGlow;
- }
- float getSize(){
- return size;
- }
-}//class Shine
 
 
 void lightfall() {
@@ -157,22 +89,17 @@ void lightfall() {
       r = red (img.pixels[loc]);
       g = green (img.pixels[loc]);
       b = blue (img.pixels[loc]);
-//the below "hides" the color of each pixel so that they appear black unless brightened
-      r = 0.01*r;
+      r = 0.01*r; //"hiding" the color of each pixel so that they appear black unless brightened
       g = 0.01*g;
       b = 0.01*b;
-//GLOWING ORBS - uses position of raindrops to determine location of glow
-//the below for loop gets the position of each of the raindrops, and adjusts the pixels near it
-      for (int i = 0; i < myRaindrop.length; i++){
+//uses position of raindrops to determine location of glow
+      for (int i = 0; i < myRaindrop.length; i++){  //gets the position of each of the raindrops, and adjusts the pixels near it
         xPos = myRaindrop[i].getXDrop();
         yPos = myRaindrop[i].getYDrop();
-        float maxdist = 0.03*width;//dist(0,0,width,height);
+        float maxdist = myRaindrop[i].getSize();//dist(0,0,width,height);
         float d = dist(x, y, xPos, yPos);
-//the below if statement makes it so that only the pixels near the location of the raindrop are adjusted
-// (otherwise it "neutralizes" the color, getting rid of the picture)
-        if (d <= 2*maxdist) {
-//"unhiding" the color of the pixels
-          r = 100*r;
+        if (d <= 2*maxdist) {//the below if statement makes it so that only the pixels near the location of the raindrop are adjusted (otherwise it would "neutralizes" the color, getting rid of the picture)
+          r = 100*r;  //"unhiding" the color of the pixels
           g = 100*g;
           b = 100*b;
           float adjustbrightness = 255*(maxdist-d)/maxdist;
@@ -184,10 +111,11 @@ void lightfall() {
           constrain(b, 0, 255);
         }//if pixels are near the raindrop location
       }//for raindrop array
-//doing the same thing for the solo glowing orb
-        xPos = myGlow.getXGlow();
-        yPos = myGlow.getYGlow();
-        float maxdist = myGlow.getSize();//dist(0,0,width,height);
+//doing the same thing for the glowing orbs
+      for (int i = 0; i < myGlow.length; i++){
+        xPos = myGlow[i].getXGlow();
+        yPos = myGlow[i].getYGlow();
+        float maxdist = myGlow[i].getSize();//dist(0,0,width,height);
         float d = dist(x, y, xPos, yPos);
         if (d <= 2.5*maxdist) {
           r = 100*r;
@@ -201,6 +129,7 @@ void lightfall() {
           constrain(g, 0, 255);
           constrain(b, 0, 255);
         }
+      }//for glowing orb array
 // Make a new color and set pixel in the window; the 0.7*g and 0.3*b give it a golden tint
       color c = color(r, 0.7*g, 0.3*b);
       pixels[y*width + x] = c;
