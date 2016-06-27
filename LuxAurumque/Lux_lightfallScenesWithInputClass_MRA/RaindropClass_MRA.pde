@@ -5,8 +5,8 @@ class Raindrop {
   float speed;
   float gravity;
 //Constructor with input variable
-  Raindrop(float inputXDrop){
-    xDrop = inputXDrop;
+    Raindrop () {
+    xDrop = random(width);
     yDrop = -height/10;
     speed = 0;
     gravity = 5;
@@ -23,10 +23,14 @@ class Raindrop {
   }//void fall
   
   void hover(float inFreq, float inAmp) {
-    yDrop = height - inFreq*3;
+    yDrop = height - inFreq*2;
     size = inAmp*width/2;
     constrain(yDrop,0,height);
   }//void hover
+  void resetYDrop(){
+    yDrop = -height/10;
+    xDrop = random(width);
+  }
   
   float getXDrop(){
     return xDrop;
@@ -37,7 +41,13 @@ class Raindrop {
   float getSize(){
     return size;
   }
-  void resetYDrop(){
-    yDrop = -height/10;
+  float getRTint(){
+    return 100;
+  }
+  float getGTint(){
+    return 85;
+  }
+  float getBTint(){
+    return 50;
   }
 }//class Raindrop

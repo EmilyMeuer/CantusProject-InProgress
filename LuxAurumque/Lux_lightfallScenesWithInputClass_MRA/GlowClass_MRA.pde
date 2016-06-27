@@ -39,4 +39,13 @@ class Glow {
  float getSize(){
  return size;
  }
+ float getRTint(){
+    return 90;
+ }
+ float getGTint(){
+    return 90;
+ }
+ float getBTint(){
+    return 100;
+ }
 }//class Shine

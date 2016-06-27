@@ -15,7 +15,7 @@ Input  myInput4;
 MultipleInputs  mInputs;
 PImage  img;
 Raindrop myRaindrop[];
-int raindrops = 3;
+int raindrops = 6;
 //int arrayPos = 0;
 Glow myGlow[];
 int orbs = 1;
@@ -29,9 +29,12 @@ void setup()
   loadPixels(); 
   mInputs = new MultipleInputs(new String[] { "Lux 1.mp3", "Lux 2.mp3", "Lux 3.mp3", "Lux 4.mp3"});
   myRaindrop = new Raindrop[raindrops];
-  myRaindrop[0] = new Raindrop(0.1*width);
-  myRaindrop[1] = new Raindrop(0.4*width);
-  myRaindrop[2] = new Raindrop(0.9*width);
+  myRaindrop[0] = new Raindrop();
+  myRaindrop[1] = new Raindrop();
+  myRaindrop[2] = new Raindrop();
+  myRaindrop[3] = new Raindrop();
+  myRaindrop[4] = new Raindrop();
+  myRaindrop[5] = new Raindrop();
   myGlow = new Glow[orbs];
   myGlow[0] = new Glow();
 }
@@ -51,28 +54,37 @@ void draw(){
   if (scene == 1){
     if (myInput2.getAmplitude() > 0.01){
       myRaindrop[0].fall();
+      myRaindrop[3].fall();
     }
     if (myInput2.getAmplitude() < 0.01){
       myRaindrop[0].resetYDrop();
+      myRaindrop[3].resetYDrop();
     }
     if (myInput3.getAmplitude() > 0.01){
       myRaindrop[1].fall();
+      myRaindrop[4].fall();
     }
     if (myInput2.getAmplitude() < 0.01){
       myRaindrop[1].resetYDrop();
+      myRaindrop[4].resetYDrop();
     }
     if (myInput4.getAmplitude() > 0.01){
       myRaindrop[2].fall();
+      myRaindrop[5].fall();
     }
     if (myInput4.getAmplitude() < 0.01){
       myRaindrop[2].resetYDrop();
+      myRaindrop[5].resetYDrop();
     }
     myGlow[0].angels(myInput1.getAdjustedFundAsHz(), myInput1.getAmplitude());
   }//scene 1
   if (scene == 2) {
     myRaindrop[0].hover(myInput2.getAdjustedFundAsHz(), myInput2.getAmplitude());
+    myRaindrop[3].hover(myInput2.getAdjustedFundAsHz(), myInput2.getAmplitude());
     myRaindrop[1].hover(myInput3.getAdjustedFundAsHz(), myInput3.getAmplitude());
+    myRaindrop[4].hover(myInput3.getAdjustedFundAsHz(), myInput3.getAmplitude());
     myRaindrop[2].hover(myInput4.getAdjustedFundAsHz(), myInput4.getAmplitude());
+    myRaindrop[5].hover(myInput4.getAdjustedFundAsHz(), myInput4.getAmplitude());
     myGlow[0].nativity(myInput1.getAmplitude());
   }//scene 2
 }//draw
@@ -96,42 +108,46 @@ void lightfall() {
       for (int i = 0; i < myRaindrop.length; i++){  //gets the position of each of the raindrops, and adjusts the pixels near it
         xPos = myRaindrop[i].getXDrop();
         yPos = myRaindrop[i].getYDrop();
-        float maxdist = myRaindrop[i].getSize();//dist(0,0,width,height);
+        float maxdist = myRaindrop[i].getSize()/1.5;//dist(0,0,width,height);
         float d = dist(x, y, xPos, yPos);
         if (d <= 2*maxdist) {//the below if statement makes it so that only the pixels near the location of the raindrop are adjusted (otherwise it would "neutralizes" the color, getting rid of the picture)
-          r = 100*r;  //"unhiding" the color of the pixels
-          g = 100*g;
-          b = 100*b;
-          float adjustbrightness = 255*(maxdist-d)/maxdist;
-          r += adjustbrightness;
-          g += adjustbrightness;
-          b += adjustbrightness;
-          constrain(r, 0, 255);
-          constrain(g, 0, 255);
-          constrain(b, 0, 255);
+          if (r < 5 && g < 5 && b < 5){ //temporary fix for raindrops on top of each other
+            r = myRaindrop[i].getRTint()*r;  //"unhiding" the color of the pixels
+            g = myRaindrop[i].getGTint()*g;
+            b = myRaindrop[i].getBTint()*b;
+            float adjustbrightness = 255*(maxdist-d)/maxdist;
+            r += adjustbrightness;
+            g += adjustbrightness;
+            b += adjustbrightness;
+            constrain(r, 0, 255);
+            constrain(g, 0, 255);
+            constrain(b, 0, 255);
+          }
         }//if pixels are near the raindrop location
       }//for raindrop array
 //doing the same thing for the glowing orbs
       for (int i = 0; i < myGlow.length; i++){
         xPos = myGlow[i].getXGlow();
         yPos = myGlow[i].getYGlow();
-        float maxdist = myGlow[i].getSize();//dist(0,0,width,height);
+        float maxdist = myGlow[i].getSize()*1.5;//dist(0,0,width,height);
         float d = dist(x, y, xPos, yPos);
         if (d <= 2.5*maxdist) {
-          r = 100*r;
-          g = 120*g;
-          b = 250*b;
-          float adjustbrightness = 255*(maxdist-d)/maxdist;
-          r += adjustbrightness;
-          g += adjustbrightness;
-          b += adjustbrightness;
-          constrain(r, 0, 255);
-          constrain(g, 0, 255);
-          constrain(b, 0, 255);
+          if (r < 5 && g < 5 && b < 5){
+            r = myGlow[i].getRTint()*r;
+            g = myGlow[i].getGTint()*g;
+            b = myGlow[i].getBTint()*b;
+            float adjustbrightness = 255*(maxdist-d)/maxdist;
+            r += adjustbrightness;
+            g += adjustbrightness;
+            b += adjustbrightness;
+            constrain(r, 0, 255);
+            constrain(g, 0, 255);
+            constrain(b, 0, 255);
+          }
         }
       }//for glowing orb array
 // Make a new color and set pixel in the window; the 0.7*g and 0.3*b give it a golden tint
-      color c = color(r, 0.7*g, 0.3*b);
+      color c = color(r, g, b);
       pixels[y*width + x] = c;
     }//for y
   }//for x
