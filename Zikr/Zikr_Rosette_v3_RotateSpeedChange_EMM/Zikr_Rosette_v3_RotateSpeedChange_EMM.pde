@@ -2,9 +2,6 @@
   Emily Meuer
   06/25/2016
   
-  Modified Zikr_Rosette_v3_MRA:
-  added more rosettes, which appear at greater amplitudes.
-  
   06/22/2016
   Michaela Andrews
   - making one large geometric design
@@ -31,44 +28,42 @@ float radius6;
 float x1, x2, y1, y2;
 Input  input;
 
+float rotateBy;
+
 void setup() {
   background(0);
   input = new Input();
   
-  radius1 = 40;
-  radius2 = 100;
-  radius3 = 270;
-  radius4 = radius3 * 1.4;
-  radius5 = 500;
-  radius6 = 725;
+  radius1 = 80;
+  radius2 = 220;
+  radius3 = 330;
+  
+  rotateBy = 0;
 }
 
 void draw() {
   background(0);
   translate(width/2,height/2);
-
-  float amp = input.getAmplitude() * 100;
   
-  println("amp = " + amp);
+//  println("input.getAdjustedFundAsHz() = " + input.getAdjustedFundAsHz());
+//  println("rotateBy = " + rotateBy);
   
-  if(amp > 1) {
-    rosettePartThree(radius1);
-  }
-  if(amp > 2) {
-    rosettePartThree(radius2);
-  }
-  if(amp > 4) {
-    rosettePartTwo(radius3);
-  }
-  if(amp > 7) {
-    rosettePartTwo(radius4);
-  }
-  if(amp > 11) {
-    rosettePartOne(radius5);
-  }
-  if(amp > 15) {
-    rosettePartOne(radius6);
-  }
+  pushMatrix();
+  rotate(radians(rotateBy));
+  rosettePartThree(radius1);
+  popMatrix();
+  
+  pushMatrix();
+  rotate(radians(-rotateBy));
+  rosettePartTwo(radius2);
+  popMatrix();
+  
+  pushMatrix();
+  rotate(radians(rotateBy));
+  rosettePartOne(radius3);
+  popMatrix();
+  
+  rotateBy = (rotateBy + (input.getAdjustedFundAsHz() / 400)) % 360;
 }
 
 void rosettePartOne(float radius) {

@@ -28,6 +28,8 @@ float radius6;
 float x1, x2, y1, y2;
 Input  input;
 
+float rotateBy;
+
 void setup() {
   background(0);
   input = new Input();
@@ -38,6 +40,8 @@ void setup() {
   radius4 = radius3 * 1.4;
   radius5 = 500;
   radius6 = 725;
+  
+  rotateBy = 0;
 }
 
 void draw() {
