@@ -16,9 +16,9 @@ class Raindrop {
   void fall() {
     yDrop = yDrop + speed;
     speed = speed + gravity;
-    if (yDrop>height+(height/10)){
+    if (yDrop>height+(height/50)){
       speed = speed * -0.3;
-      yDrop = height+10;
+      yDrop = height+height/50;
     }
   }//void fall
   
@@ -27,6 +27,7 @@ class Raindrop {
     size = inAmp*width/2;
     constrain(yDrop,0,height);
   }//void hover
+  
   void resetYDrop(){
     yDrop = -height/10;
     xDrop = random(width);
