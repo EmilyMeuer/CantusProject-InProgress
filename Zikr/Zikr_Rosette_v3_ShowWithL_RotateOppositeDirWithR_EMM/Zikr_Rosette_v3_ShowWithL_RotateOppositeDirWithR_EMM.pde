@@ -1,9 +1,10 @@
 /*
   Emily Meuer
- 06/25/2016
+ 06/28/2016
  
  Modified Zikr_Rosette_v3_MRA:
- added more rosettes, which appear at greater pitches.
+ added more rosettes, which appear at higher pitches in the left input,
+ and added rotation, controlled by the right input.
  
  06/22/2016
  Michaela Andrews
@@ -13,13 +14,6 @@
  - use i % 2 to switch between radii every other point for more desings?
  */
 
-/*
-//  Original values:
- float radius1 = 300;
- float radius2 = 220;
- float radius3 = 80;
- float radius4 = 460;
- */
 
 float radius1;
 float radius2;
@@ -29,11 +23,15 @@ float radius5;
 float radius6;
 
 float x1, x2, y1, y2;
-Input  input;
+Input  leftInput;
+Input  rightInput;
+
+float  rotateBy;
 
 void setup() {
   background(0);
-  input = new Input();
+  leftInput = new Input(true, false);
+  rightInput  = new Input(false, true);
 
   radius1 = 40;
   radius2 = 100;
@@ -41,33 +39,57 @@ void setup() {
   radius4 = radius3 * 1.4;
   radius5 = 500;
   radius6 = 725;
+  
+  rotateBy  = 0;
 }
 
 void draw() {
   background(0);
   translate(width/2, height/2);
 
-  float pitch = input.getAdjustedFundAsHz();
+  float pitch = leftInput.getAdjustedFundAsHz();
 
-  println("pitch = " + pitch);
+//  println("pitch = " + pitch);
 
   if (pitch > 50) {
+    pushMatrix();
+    rotate(radians(rotateBy));
     rosettePartThree(radius1);
+    popMatrix();
   }
   if (pitch > 100) {
+    pushMatrix();
+    rotate(radians(-rotateBy));
     rosettePartThree(radius2);
+    popMatrix();
   }
   if (pitch > 150) {
+    pushMatrix();
+    rotate(radians(rotateBy));
     rosettePartTwo(radius3);
+    popMatrix();
   }
   if (pitch > 200) {
+    pushMatrix();
+    rotate(radians(-rotateBy));
     rosettePartTwo(radius4);
+    popMatrix();
   }
   if (pitch > 300) {
+    pushMatrix();
+    rotate(radians(rotateBy));
     rosettePartOne(radius5);
+    popMatrix();
   }
   if (pitch > 400) {
+    pushMatrix();
+    rotate(radians(-rotateBy));
     rosettePartOne(radius6);
+    popMatrix();
+  }
+  
+  if(rightInput.getAmplitude() > 0.1) {
+    rotateBy = (rotateBy + (rightInput.getAdjustedFundAsHz() / 400)) % 360;
   }
 }
 

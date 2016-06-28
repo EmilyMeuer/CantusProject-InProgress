@@ -2,9 +2,6 @@
   Emily Meuer
  06/25/2016
  
- Modified Zikr_Rosette_v3_MRA:
- added more rosettes, which appear at greater pitches.
- 
  06/22/2016
  Michaela Andrews
  - making one large geometric design
@@ -31,6 +28,8 @@ float radius6;
 float x1, x2, y1, y2;
 Input  input;
 
+float rotateBy;
+
 void setup() {
   background(0);
   input = new Input();
@@ -41,35 +40,65 @@ void setup() {
   radius4 = radius3 * 1.4;
   radius5 = 500;
   radius6 = 725;
+
+  rotateBy = 0;
+  
+
 }
 
 void draw() {
-  background(0);
+//  background(0);
   translate(width/2, height/2);
 
-  float pitch = input.getAdjustedFundAsHz();
+// do this for loop in setup()?
 
-  println("pitch = " + pitch);
+  for(int i = 0; i < 16; i ++) {
+    while(millis() % 100 != 0)  {  }
+    
+    drawRosetteThree(radius5, i);
+  } // for
+  
+  println("finished the for.");
+  
+} // draw()
 
-  if (pitch > 50) {
-    rosettePartThree(radius1);
+void drawRosetteThree(float radius, int whichStroke) {
+  if (whichStroke > 15) {
+    throw new IllegalArgumentException("Zikr_Rosette_v3_Draw_EMM.drawRosetteThree: int parameter " + whichStroke + " is greater than the number of lines in the rosette.");
   }
-  if (pitch > 100) {
-    rosettePartThree(radius2);
+
+  x1 = radius*cos(PI/4*3*whichStroke);
+  x2 = radius*cos(PI/4*3*(whichStroke+1));
+  y1 = radius*sin(PI/4*3*whichStroke);
+  y2 = radius*sin(PI/4*3*(whichStroke+1));
+  strokeWeight(3);
+  stroke(220);
+  line(x1, y1, x2, y2);
+  strokeWeight(2.5);
+  stroke(200, 50, 50);
+  line(x1, y1, x2, y2);
+} // drawRosetteThree
+
+void rosettePartThree(float radius) {
+  for (int i = 0; i < 16; i++) {
+    /*
+    println("cos(PI/4*3* " + i + ") = " + cos(PI/4*3*i));
+     println("radius*cos(PI/4*3*(" + i + "+1)) = " + radius*cos(PI/4*3*(i+1)));
+     println("radius*sin(PI/4*3*" + i + ") = " + radius*sin(PI/4*3*i));
+     println("radius*sin(PI/4*3*(" + i + "+1)) = " + radius*sin(PI/4*3*(i+1)));
+     */
+    x1 = radius*cos(PI/4*3*i);
+    x2 = radius*cos(PI/4*3*(i+1));
+    y1 = radius*sin(PI/4*3*i);
+    y2 = radius*sin(PI/4*3*(i+1));
+    strokeWeight(1);
+    stroke(220);
+    line(x1, y1, x2, y2);
+    strokeWeight(.5);
+    stroke(200, 50, 50);
+    line(x1, y1, x2, y2);
   }
-  if (pitch > 150) {
-    rosettePartTwo(radius3);
-  }
-  if (pitch > 200) {
-    rosettePartTwo(radius4);
-  }
-  if (pitch > 300) {
-    rosettePartOne(radius5);
-  }
-  if (pitch > 400) {
-    rosettePartOne(radius6);
-  }
-}
+} // rosettePartThree(float)
 
 void rosettePartOne(float radius) {
   for (int i = 0; i < 4; i++) {
@@ -111,25 +140,4 @@ void rosettePartTwo(float radius) {
     stroke(50, 200, 50);
     line(x1, y1, x2, y2);
   }
-}
-
-void rosettePartThree(float radius) {
-  for (int i = 0; i < 16; i++) {
-    /*
-    println("cos(PI/4*3* " + i + ") = " + cos(PI/4*3*i));
-     println("radius*cos(PI/4*3*(" + i + "+1)) = " + radius*cos(PI/4*3*(i+1)));
-     println("radius*sin(PI/4*3*" + i + ") = " + radius*sin(PI/4*3*i));
-     println("radius*sin(PI/4*3*(" + i + "+1)) = " + radius*sin(PI/4*3*(i+1)));
-     */
-    x1 = radius*cos(PI/4*3*i);
-    x2 = radius*cos(PI/4*3*(i+1));
-    y1 = radius*sin(PI/4*3*i);
-    y2 = radius*sin(PI/4*3*(i+1));
-    strokeWeight(1);
-    stroke(220);
-    line(x1, y1, x2, y2);
-    strokeWeight(.5);
-    stroke(200, 50, 50);
-    line(x1, y1, x2, y2);
-  }
-}
+} // rosettePartTwo
