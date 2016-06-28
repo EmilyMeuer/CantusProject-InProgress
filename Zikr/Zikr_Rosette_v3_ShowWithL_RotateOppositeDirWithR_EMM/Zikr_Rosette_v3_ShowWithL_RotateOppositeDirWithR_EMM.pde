@@ -49,39 +49,49 @@ void draw() {
 
   float pitch = leftInput.getAdjustedFundAsHz();
 
-//  println("pitch = " + pitch);
+/*
+   Frequencies:
+   Eb 3      -  155.56
+   Fb (E) 3  -  164.81
+   G 3       -  196.00
+   Ab 3      -  207.65
+   Bb 3      -  233.08
+   C 4       -  261.63
+   Fb (E) 4  -  329.63
+*/
 
-  if (pitch > 50) {
+//  println("pitch = " + pitch);
+  if (pitch > 160) {
     pushMatrix();
     rotate(radians(rotateBy));
     rosettePartThree(radius1);
     popMatrix();
   }
-  if (pitch > 100) {
+  if (pitch > 190) {
     pushMatrix();
     rotate(radians(-rotateBy));
     rosettePartThree(radius2);
     popMatrix();
   }
-  if (pitch > 150) {
+  if (pitch > 200) {
     pushMatrix();
     rotate(radians(rotateBy));
     rosettePartTwo(radius3);
     popMatrix();
   }
-  if (pitch > 200) {
+  if (pitch > 225) {
     pushMatrix();
     rotate(radians(-rotateBy));
     rosettePartTwo(radius4);
     popMatrix();
   }
-  if (pitch > 300) {
+  if (pitch > 255) {
     pushMatrix();
     rotate(radians(rotateBy));
     rosettePartOne(radius5);
     popMatrix();
   }
-  if (pitch > 400) {
+  if (pitch > 325) {
     pushMatrix();
     rotate(radians(-rotateBy));
     rosettePartOne(radius6);
