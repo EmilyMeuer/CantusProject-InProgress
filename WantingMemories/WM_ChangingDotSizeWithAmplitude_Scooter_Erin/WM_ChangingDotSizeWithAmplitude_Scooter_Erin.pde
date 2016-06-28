@@ -26,9 +26,9 @@ void setup() {
 
 void draw() { 
 
- // fill(255,10); // semi-transparent white
-  //rect(0, 0, width, height);
- // fill(random(255));
+fill(255,10); // semi-transparent white
+rect(0, 0, width, height);
+fill(random(255));
   //above part is for fading out
 
   //println(name.getAmplitude());
