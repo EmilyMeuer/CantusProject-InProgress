@@ -79,8 +79,8 @@ void setup()
     println(i + " = " + mixerInfo[i].getName());
   }
   
-  testInput.getLineFromMixer(6);
-  testInput2.getLineFromMixer(7);
+  testInput.getLineFromMixer(5);
+  testInput2.getLineFromMixer(6);
 /*
   mixer1  = AudioSystem.getMixer(mixerInfo[4]);
   Line.Info[] tli1 = mixer1.getTargetLineInfo();
@@ -129,7 +129,7 @@ void setup()
 void draw()
 {
   testInput.fillBuffer();
-  println("amplitude: " + testInput2.getAmplitude());
+  println("level: " + testInput.line.getLevel());
   background(testInput.getAmplitude() * 1000, 0, testInput2.getAmplitude() * 1000);
   /*
   background(200);

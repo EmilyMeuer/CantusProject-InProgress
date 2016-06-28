@@ -18,7 +18,7 @@ Raindrop myRaindrop[];
 int raindrops = 3;
 int arrayPos = 0;
 Glow myGlow;
-
+int scene = 1;
 
 void setup()
 {
@@ -36,30 +36,40 @@ void setup()
 }
 
 void draw(){
+  background(0);
   myInput1 = mInputs.get(0);
   myInput2 = mInputs.get(1);
   myInput3 = mInputs.get(2);
   myInput4 = mInputs.get(3);
-  if (myInput2.getAmplitude() > 0.01){
-    myRaindrop[0].fall();
-  }
-  if (myInput2.getAmplitude() < 0.01){
-    myRaindrop[0].resetYDrop();
-  }
-  if (myInput3.getAmplitude() > 0.01){
-    myRaindrop[1].fall();
-  }
-  if (myInput2.getAmplitude() < 0.01){
-    myRaindrop[1].resetYDrop();
-  }
-  if (myInput4.getAmplitude() > 0.01){
-    myRaindrop[2].fall();
-  }
-  if (myInput4.getAmplitude() < 0.01){
-    myRaindrop[2].resetYDrop();
-  }
-  lightfall();
-  myGlow.shine();
+  if (keyPressed){
+     scene ++;
+     delay(50);
+   }
+  if (scene == 1){
+    if (myInput2.getAmplitude() > 0.01){
+      myRaindrop[0].fall();
+    }
+    if (myInput2.getAmplitude() < 0.01){
+      myRaindrop[0].resetYDrop();
+    }
+    if (myInput3.getAmplitude() > 0.01){
+      myRaindrop[1].fall();
+    }
+    if (myInput2.getAmplitude() < 0.01){
+      myRaindrop[1].resetYDrop();
+    }
+    if (myInput4.getAmplitude() > 0.01){
+      myRaindrop[2].fall();
+    }
+    if (myInput4.getAmplitude() < 0.01){
+      myRaindrop[2].resetYDrop();
+    }
+    lightfall();
+    myGlow.shine();
+  }//scene 1
+  if (scene == 2) {
+    
+  }//scene 2
 }//draw
 
 
@@ -102,7 +112,6 @@ class Glow {
   float yGlow;
   float size;
   float curFreq;
-  int scene;
  //Constructor with input variable
  Glow(){
    xGlow = 0;
@@ -112,27 +121,18 @@ class Glow {
  void shine (){
    size = myInput1.getAmplitude()*width;
    curFreq = myInput1.getAdjustedFundAsHz();
-   if (keyPressed){
-     scene ++;
+   if ((curFreq > 250) && (curFreq < 300)){
+     xGlow = 0.114*width;
+     yGlow = 0.310*height;
    }
-   if (scene == 1){
-     if ((curFreq > 250) && (curFreq < 300)){
-       xGlow = 0.114*width;
-       yGlow = 0.310*height;
-     }
-     if ((curFreq > 300) && (curFreq < 350)){
-       xGlow = 0.813*width;
-       yGlow = 0.388*height;
-     }
-     if (curFreq > 350){
-       xGlow = 0.520*width;
-       yGlow = 0.129*height;
-     }
-   }//scene 1
-   if (scene == 2){
-     xGlow = 0.5*width;
-     yGlow = 0.517*height;
-   }//scene 2
+   if ((curFreq > 300) && (curFreq < 350)){
+     xGlow = 0.813*width;
+     yGlow = 0.388*height;
+   }
+   if (curFreq > 350){
+     xGlow = 0.520*width;
+     yGlow = 0.129*height;
+   }
  }//void shine
  float getXGlow(){
    return xGlow;

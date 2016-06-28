@@ -35,6 +35,7 @@ var oscBundle;
 oscBundle = SoundIn.asOSCArgBundle;
 send("192.168.0.42",s, 0, 0);
 )
+
 // Now all that I need to do is send that oscBundle ^ to Processing.  (Will I be able to get my float[] right away, or will I have to put that into the bundle separately?
 
 // Examples from the tutorial: "http://doc.sccode.org/Tutorials/Getting-Started/11-Busses.html"

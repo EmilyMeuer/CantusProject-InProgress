@@ -30,6 +30,7 @@ PImage      eightBlur;
 PImage      nineBlur;
 
 PImage      collage;
+PImage[]  images;
 
 MultipleInputs allInputs;
 
@@ -61,17 +62,17 @@ void setup()
 
 // Store all names so that the images can be loaded ina loop:
   String[]  imageNames = { "one.jpeg",
-                            "two.jpeg",
-                            "three.jpeg",
-                            "four.jpeg",
-                            "five.jpeg",
-                            "six.jpeg",
-                            "seven.jpeg",
-                            "eight.jpeg",
-                            "nine.jpeg"
+                            "two.jpg",
+                            "three.jpg",
+                            "four.jpg",
+                            "five.jpg",
+                            "six.jpg",
+                            "seven.jpg",
+                            "eight.jpg",
+                            "nine.jpg"
   }; // imageNames
 
-/*
+
   one  = loadImage("one.jpeg");
   two  = loadImage("two.jpg");
   three = loadImage("three.jpg");
@@ -81,12 +82,17 @@ void setup()
   seven = loadImage("seven.jpg");
   eight = loadImage("eight.jpg");
   nine = loadImage("nine.jpg");
-*/
+
 
   // Create an array of PImages and fill it with the images
   // whose names are in the String[] of image names.
-  PImage[]  images = new PImage[9];
+<<<<<<< HEAD
+  PImage[]  images = new PImage[10];
+  for (int i = 1; i < imageNames.length; i++)
+=======
+  images = new PImage[9];
   for (int i = 0; i < imageNames.length; i++)
+>>>>>>> origin/master
   {
     images[i] = loadImage(imageNames[i]);
   } // for
@@ -105,7 +111,8 @@ void setup()
 
   // Optional: To do the following in a loop will take a little math, possibly with mod and an 
   // array of options (see my getImageXandY() and queryArray() for ideas).
-  one.resize(width/4, height/4); 
+<<<<<<< HEAD
+  images[1].resize(width/4, height/4); 
   two.resize(width/2, height/4); 
   three.resize(width/4, height/4); 
   four.resize(width/4, height/2); 
@@ -114,6 +121,17 @@ void setup()
   seven.resize(width/4, height/4); 
   eight.resize(width/2, height/4); 
   nine.resize(width/4, height/4);
+=======
+  images[0].resize(width/4, height/4); 
+  images[1].resize(width/2, height/4); 
+  images[2].resize(width/4, height/4); 
+  images[3].resize(width/4, height/2); 
+  images[4].resize(width/2, height/2); 
+  images[5].resize(width/4, height/2); 
+  images[6].resize(width/4, height/4); 
+  images[7].resize(width/2, height/4); 
+  images[8].resize(width/4, height/4);
+>>>>>>> origin/master
   
   oneBlur.resize(width/4, height/4); 
   twoBlur.resize(width/2, height/4); 
@@ -127,6 +145,23 @@ void setup()
 
   allInputs = new MultipleInputs(new String[] {"WMTenor.mp3", "WMBass.mp3", "WMAlto.mp3", "WMMelody.mp3", "WMSoprano.mp3" } ); //inserting all mp3 files here ... hopefully live inputs in the future
 
+  AudioPlayer playerOne  = allInputs.get(0).player;
+  AudioPlayer playerTwo  = allInputs.get(1).player;
+  AudioPlayer playerThree  = allInputs.get(2).player;
+  AudioPlayer playerFour  = allInputs.get(3).player;
+  AudioPlayer playerFive  = allInputs.get(4).player;
+
+  playerTwo.play();
+  playerOne.play();
+  playerThree.play();
+  playerFour.play();
+  playerFive.play();
+  /*
+  for(int i = 1; i < allInputs.size(); i++)
+  {
+    allInputs.get(i).player.play();
+  } // for
+*/
   for (int i = 0; i < 9; i++)
   {
     println(i + ": ");
@@ -137,6 +172,7 @@ void setup()
     } // for - j
     println();
   } // for - i
+  
 }
 
 void draw()
@@ -195,11 +231,11 @@ void draw()
   // This is the most important thing to do in a loop!!
   
   float pointillizeOne = map((30-(Math.min(oneLevel, 30))), 0, 30, smallPoint, largePoint);
-  int randPixelNum = (int)(random(one.pixels.length));
-  int randPixel = one.pixels[randPixelNum];
-  int xOne = randPixelNum%one.width;
-  int yOne = randPixelNum/one.width;
-  color pixOne = one.get(xOne, yOne);
+  int randPixelNum = (int)(random(images[0].pixels.length));
+  int randPixel = images[0].pixels[randPixelNum];
+  int xOne = randPixelNum%images[0].width;
+  int yOne = randPixelNum/images[0].width;
+  color pixOne = images[0].get(xOne, yOne);
   int[] cornerXY = getImageXandY(0);
 /*  for(int i = 0; i < cornerXY.length; i++)
   {
@@ -208,15 +244,22 @@ void draw()
   fill(pixOne, 128);
   ellipse(xOne + cornerXY[0], yOne + cornerXY[1], pointillizeOne, pointillizeOne);
 
-  // if I give it two.pixels[0], can it give me a location in the sketch?
-
   float pointillizeTwo = map((Math.min(twoLevel, 30)), 0, 30, smallPoint, largePoint);
+<<<<<<< HEAD
   randPixelNum = (int)(random(two.pixels.length));
   randPixel = two.pixels[randPixelNum];
   int xTwo = randPixelNum%two.width;
   int yTwo = randPixelNum/two.width;
   color pixTwo = two.get(xTwo, yTwo);
+  cornerXY = getImageXandY(1);//1 for two etc.
+=======
+  randPixelNum = (int)(random(images[1].pixels.length));
+  randPixel = images[1].pixels[randPixelNum];
+  int xTwo = randPixelNum%images[1].width;
+  int yTwo = randPixelNum/images[1].width;
+  color pixTwo = images[1].get(xTwo, yTwo);
   cornerXY = getImageXandY(1);
+>>>>>>> origin/master
   for(int i = 0; i < cornerXY.length; i++)
   {
     println("2: xTwo + cornerXY[0] = " + (xTwo + cornerXY[0]));
@@ -225,11 +268,11 @@ void draw()
   ellipse(xTwo + cornerXY[0], yTwo + cornerXY[1], pointillizeTwo, pointillizeTwo);
   
   float pointillizeFive = map((Math.min(fiveLevel, 30)), 0, 30, smallPoint, largePoint);
-  randPixelNum = (int)(random(five.pixels.length));
-  randPixel = five.pixels[randPixelNum];
-  int xFive = randPixelNum%five.width;
-  int yFive = randPixelNum/five.width;
-  color pixFive = five.get(xFive, yFive);
+  randPixelNum = (int)(random(images[4].pixels.length));
+  randPixel = images[4].pixels[randPixelNum];
+  int xFive = randPixelNum%images[4].width;
+  int yFive = randPixelNum/images[4].width;
+  color pixFive = images[4].get(xFive, yFive);
   cornerXY = getImageXandY(4);
   for(int i = 0; i < cornerXY.length; i++)
   {
