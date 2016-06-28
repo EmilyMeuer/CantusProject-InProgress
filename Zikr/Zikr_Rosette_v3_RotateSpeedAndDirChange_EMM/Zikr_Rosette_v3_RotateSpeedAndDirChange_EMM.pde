@@ -70,7 +70,7 @@ void draw() {
   changeInRotateRate = input.getAdjustedFundAsHz() - input.getAdjustedPrevFundAsHz();
   println("rotateRate = " + rotateRate);
 //  changeInRotateRate = input.getAdjustedFundAsHz() - 400;
-  rotateRate = rotateRate * (changeInRotateRate + 1);
+  rotateRate = rotateRate * (changeInRotateRate + 0.5);
   rotateBy = (rotateBy + rotateRate) % 360;
   println("changeInRotateRate = " + changeInRotateRate + ";  rotateRate = " + rotateRate + ";  rotateBy = " + rotateBy);
 }

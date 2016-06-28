@@ -7,11 +7,10 @@ Minim  minimForAll;
 
 void settings()
 {
-  size(500, 200);
+  size(1000, 1000);
   // minim must be initialized outside of Input in order to pass the correct value of "this" to its constructor.
   minimForAll = new Minim(this);
 }
-
 
 class Input
 {
@@ -233,6 +232,7 @@ class Input
     return this.buffer.level();
   }
   
+
   AudioBuffer getBuffer() {
     return this.buffer;
   } // getBuffer()

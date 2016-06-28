@@ -88,9 +88,13 @@ void draw() {
     popMatrix();
   }
   
-  if(rightInput.getAmplitude() > 0.1) {
+  if(rightInput.getAmplitude() > 0.001) {
     rotateBy = (rotateBy + (rightInput.getAdjustedFundAsHz() / 400)) % 360;
   }
+  
+  
+  
+  println("rightInput.getAmplitude() = " + rightInput.getAmplitude());
 }
 
 void rosettePartOne(float radius) {
