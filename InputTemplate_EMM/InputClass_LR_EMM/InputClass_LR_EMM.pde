@@ -17,8 +17,14 @@ class Input
 {
   /*
     Emily Meuer
-   06/07/2016
    
+   TODO: clean up constructors -- add an interface or abstract superclass?
+   
+   Updated 06/27/2016:
+   Replaced AudioSource with an AudioBuffer, allowing right and left channels of the 
+   same input to be treated as separate entities and possibly cheat the mono-input system.
+   
+   Created 06/07/2016:
    Class to detect the pitch (that is, fundamental frequency)
    of an AudioPlayer or AudioInput; works best with monophonic input.
    */
@@ -36,7 +42,8 @@ class Input
   AudioPlayer player;
   float      sensitivity;  // amplitude below which adjustedFreq will not be reset
   AudioSource source;
-  
+  AudioBuffer  buffer;
+
   /**
    * Constructor for creating an Input object from an audio file.
    *
@@ -55,13 +62,14 @@ class Input
     } 
     catch (NullPointerException npe) {
       throw new IllegalArgumentException("Input.constructor(String): there was an error loading the file \"" + filename + "\" with the Minim " + minimForAll + 
-      " (this minim initialized in settings()).");
+        " (this minim initialized in settings()).");
     }
     this.fft          = new FFT(player.bufferSize(), player.sampleRate());
     this.player.loop(); 
 
     this.sensitivity  = 0.01;
     this.source = this.player;
+    this.buffer = this.player.mix;
     this.setFund();
   } // constructor(String)
 
@@ -70,14 +78,33 @@ class Input
    */
   Input()
   {
-
     this.findFund     = 120;
     this.input        = minimForAll.getLineIn();     
     this.fft          = new FFT(input.bufferSize(), input.sampleRate());
     this.sensitivity  = 3;
     this.source = this.input;
+    this.buffer       = this.input.mix;
     this.setFund();
   } // constructor()
+
+  Input(boolean left, boolean right)
+  {
+    this.findFund     = 120;
+    this.input        = minimForAll.getLineIn();     
+    this.fft          = new FFT(input.bufferSize(), input.sampleRate());
+    this.sensitivity  = 3;
+    this.source       = this.input;
+
+    if (left) {
+      this.buffer = this.input.left;
+    } else if (right) {
+      this.buffer = this.input.right;
+    } else {
+      this.buffer = this.input.mix;
+    }
+
+    this.setFund();
+  } // Input(boolean, boolean)
 
   /**
    * The following comments from InputClassFreq; this no longer uses averages:
@@ -94,7 +121,8 @@ class Input
    */
   void setFund()
   { 
-    this.fft.forward(this.source.mix);
+//    this.source = this.input;
+    this.fft.forward(this.buffer);
 
     for (int i = 4; i < fft.specSize(); i++)
     {
@@ -202,7 +230,7 @@ class Input
    */
   float getAmplitude() {
     this.setFund();
-    return this.source.mix.level();
+    return this.buffer.level();
   }
 
   void setSensitivity(float newSensitivity)

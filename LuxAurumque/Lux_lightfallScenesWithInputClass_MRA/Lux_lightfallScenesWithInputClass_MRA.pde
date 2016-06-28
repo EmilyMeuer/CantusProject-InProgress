@@ -131,7 +131,7 @@ void lightfall() {
         yPos = myGlow[i].getYGlow();
         float maxdist = myGlow[i].getSize()*1.5;//dist(0,0,width,height);
         float d = dist(x, y, xPos, yPos);
-        if (d <= 2.5*maxdist) {
+        if (d <= 2*maxdist) {
           if (r < 5 && g < 5 && b < 5){
             r = myGlow[i].getRTint()*r;
             g = myGlow[i].getGTint()*g;

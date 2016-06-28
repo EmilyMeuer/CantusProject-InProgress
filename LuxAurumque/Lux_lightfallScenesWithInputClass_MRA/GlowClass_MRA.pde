@@ -25,11 +25,13 @@ class Glow {
      yGlow = 0.129*height;
    }
  }//void angels
+ 
  void nativity(float inAmp) {
    size = inAmp*width;
    xGlow = 0.50*width;
    yGlow = 0.60*height;
  }
+ 
  float getXGlow(){
    return xGlow;
  }

@@ -10,13 +10,15 @@ import processing.serial.*;
   - try using Beads instead of Minim (does Beads have FFT?) [ probably same problem here ]
  */
 
-Input      testInput;
+Input           leftInput;
+Input           rightInput;
 MultipleInputs  multipleInputs;
 Serial          port;
 
 void setup()
 {
-  testInput  = new Input();
+  leftInput  = new Input(true, false);
+  rightInput = new Input(false, true);
 }
 
 void draw()
@@ -25,25 +27,26 @@ void draw()
   stroke(150, 75, 150);
   fill(150, 75, 150);
 
-  AudioBuffer right = testInput.source.right;
-  AudioBuffer left  = testInput.source.left;
-  
   /*
   float[]  rightVals = right.toArray();
   float[]  leftVals  = left.toArray();
   */
   
-  testInput.fft.forward(right);
+  leftInput.fft.forward(leftInput.buffer);
   
-  for(int i = 0; i < testInput.fft.specSize() - 1; i++)
+  for(int i = 0; i < leftInput.fft.specSize() - 1; i++)
   {
-    line(i, 50+testInput.fft.getBand(i)*50, i+1, 50+testInput.fft.getBand(i)*50);
+    line(i, 50+leftInput.fft.getBand(i)*50, i+1, 50+leftInput.fft.getBand(i)*50);
   } // for - i
   
-  testInput.fft.forward(left);
+  leftInput.source.close();
   
-  for(int i = 0; i < testInput.fft.specSize() - 1; i++)
+  rightInput.fft.forward(rightInput.buffer);
+  
+  for(int i = 0; i < rightInput.fft.specSize() - 1; i++)
   {
-    line(i, 250+testInput.fft.getBand(i)*50, i+1, 250+testInput.fft.getBand(i)*50);
+    line(i, 250+rightInput.fft.getBand(i)*50, i+1, 250+rightInput.fft.getBand(i)*50);
   } // for - i
+  
+  rightInput.source.close();
 }
