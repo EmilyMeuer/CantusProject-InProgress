@@ -10,24 +10,24 @@
  - use i % 2 to switch between radii every other point for more desings?
  
  Struggling to pause during draw.  Suggestion from forum (https://processing.org/discourse/beta/num_1264463285.html):
-   boolean cont = false;
-   
-   void setup(){
-   size(256, 256);  // Stage size
-   }
-   
-   void draw(){
-   // use a condition not a loop
-   if(cont == true){
-   // I don't want this to happen yet
-   println("mouse was pressed");
-   }
-   
-   if(mousePressed){
-   cont=true;
-   }
-   
-   }
+ boolean cont = false;
+ 
+ void setup(){
+ size(256, 256);  // Stage size
+ }
+ 
+ void draw(){
+ // use a condition not a loop
+ if(cont == true){
+ // I don't want this to happen yet
+ println("mouse was pressed");
+ }
+ 
+ if(mousePressed){
+ cont=true;
+ }
+ 
+ }
  
  // the separate methods approach has some advantages
  // e.g. separates user input from draw = potentially greater 
@@ -58,6 +58,8 @@ Input  input;
 
 float rotateBy;
 float  time;
+int    i;
+float  thresholdFreq;
 
 void setup() {
   background(0);
@@ -73,46 +75,56 @@ void setup() {
   rotateBy = 0;
 
   time = 1000;
+  i    = 0;
+  thresholdFreq  = 100;
 }
 
 void draw() {
   //  background(0);
   translate(width/2, height/2);
 
-  if ( millis() > time ) {
-    time = millis() + 1000;
-
-    drawRosetteThree(radius5, 0);
-    println("i = " + 0);
-  } // if
-
-  if ( millis() > time ) {
-    time = millis() + 1000;
-
-    drawRosetteThree(radius5, 1);
-    println("i = " + 1);
-  } // if
-
-  if ( millis() > time ) {
-    time = millis() + 1000;
-
-    drawRosetteThree(radius5, 2);
-    println("i = " + 2);
-  } // if
-
-  // do this for loop in setup()?
-  /*
-  for(int i = 0; i < 16; i ++) {
-   if( millis() > time ){
-   time = millis() + 1000;
-   
-   drawRosetteThree(radius5, i);
-   println("i = " + i);
-   } // if
-   } // for
-   */
-  //  println("finished the for.");
+  drawPastThreshold(radius5, 500);
 } // draw()
+
+void drawOnDelay(float radius)
+{
+    // draws a line every second:
+   if ( millis() > time  && i < 16) {
+   drawRosetteThree(radius, i);
+   
+   println("i = " + i + "; time = " + time + "; millis() = " + millis());
+   
+   time = millis() + 1000;
+   i++;
+   } // if
+} // drawOnDelay
+
+void drawPastThreshold(float radius, float thresholdFreq)
+{
+  // Add some sort of delay?  So only draws once for each time it is crossed?
+  
+  // Draws a line each time the pitch crossed a frequency threshold:
+  if ( (input.getAdjustedFundAsHz() > thresholdFreq)  && (i < 16) ) {
+    drawRosetteThree(radius, i);
+
+    println("i = " + i + "; input.getAdjustedFundAsHz() = " + input.getAdjustedFundAsHz() + "; thresholdFreq = " + thresholdFreq);
+
+    i++;
+  } // if
+} // drawPastThreshold(float)
+
+void drawAndRaiseThreshold(float radius) 
+{
+   // Draws a line each time the pitch crosses a frequency threshold, and ups the threshold each time:
+  if ( (input.getAdjustedFundAsHz() > thresholdFreq)  && (i < 16) ) {
+    drawRosetteThree(radius, i);
+
+    println("i = " + i + "; input.getAdjustedFundAsHz() = " + input.getAdjustedFundAsHz() + "; thresholdFreq = " + thresholdFreq);
+
+    thresholdFreq += 100;
+    i++;
+  } // if
+} // drawAndRaiseThreshold(float)
 
 void drawRosetteThree(float radius, int whichStroke) {
   if (whichStroke > 15) {

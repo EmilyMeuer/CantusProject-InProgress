@@ -75,7 +75,7 @@ class Input
     this.findFund     = 120;
     this.input        = minimForAll.getLineIn();     
     this.fft          = new FFT(input.bufferSize(), input.sampleRate());
-    this.sensitivity  = 3;
+    this.sensitivity  = 0.5;
     this.source = this.input;
     this.setFund();
   } // constructor()
