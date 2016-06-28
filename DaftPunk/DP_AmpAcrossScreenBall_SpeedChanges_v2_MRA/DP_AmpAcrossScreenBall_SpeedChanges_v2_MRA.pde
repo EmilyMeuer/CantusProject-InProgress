@@ -33,7 +33,7 @@ void setup(){
 
 void draw(){
   background(0);
-  myLeadBall.move();
+  myLeadBall.move(); //<>//
 //ARRAY OBJECTS STEP 4 (for loop)
   for(int i = 0; i < myBall.length; i++) {
     myBall[i].move();
@@ -54,6 +54,7 @@ class LeadBall {
       xLead = width;
     }//if x<0
   fill(200,100,200);
+  println("xLead = " + xLead + "; yLead = " + yLead + "; speed*in.mix.level() = " + speed*in.mix.level());
   ellipse(xLead,yLead,10,10);
   }  
  float getXpos() {
@@ -82,8 +83,10 @@ class Ball{
     ellipse(x,y,10,10); 
     if (ballNumber != 0){
       x = (myLeadBall.getXpos() + ballNumber*width/balls) % width;
+//      println("  x = " + x);
         if ((x < 1) && (x > -1)) {
         y = height*0.9-in.mix.level()*amplify;
+        println("y = " + y);
         }
     }
   }//move

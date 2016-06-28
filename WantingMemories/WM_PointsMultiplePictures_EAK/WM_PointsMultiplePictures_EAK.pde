@@ -91,6 +91,10 @@ void setup()
   sevenBlur.resize(width/4, height/4); 
   eightBlur.resize(width/2, height/4); 
   nineBlur.resize(width/4, height/4);
+<<<<<<< HEAD
+
+  allInputs = new MultipleInputs(new String[] {"WM parts - Tenor.mp3", "WM parts - Bass.mp3" } ); //inserting all mp3 files here ... hopefully live inputs in the future
+=======
 /*
   Input[] tracks = new Input[5];
   tracks[0] = new Input("WMTenor.m4a");
@@ -102,6 +106,7 @@ void setup()
 //  allInputs = new MultipleInputs(tracks);
 
   allInputs = new MultipleInputs(new String[] {"WMTenor.mp3", "WMBass.mp3", "WMAlto.mp3", "WMMelody.mp3", "WMSoprano.mp3" } ); //inserting all mp3 files here ... hopefully live inputs in the future
+>>>>>>> master
 }
 
 void draw()
@@ -121,9 +126,12 @@ void draw()
   // volume of input:
   oneLevel  = (int)Math.floor(allInputs.get(0).getAmplitude() * 1000);
   twoLevel  = (int)Math.floor(allInputs.get(1).getAmplitude() * 1000);
+<<<<<<< HEAD
+=======
   threeLevel = (int)Math.floor(allInputs.get(2).getAmplitude() * 1000);
   fourLevel = (int)Math.floor(allInputs.get(3).getAmplitude() * 1000);
   fiveLevel = (int)Math.floor(allInputs.get(4).getAmplitude() * 1000);
+>>>>>>> master
 
   //showing regular images as amplitude of each part is adjusted
   tint(255, (Math.min(oneLevel, 255)));
@@ -132,6 +140,27 @@ void draw()
   tint(255, (Math.min(twoLevel, 255)));
   image(two, width/4, 0, width/2, height/4);
 
+<<<<<<< HEAD
+  tint(255, (Math.min(oneLevel, 255)));
+  image(three, (3*(width/4)), 0, width/4, height/4);
+
+  tint(255, (Math.min(twoLevel, 255)));
+  image(four, 0, height/4, width/4, height/2);
+
+  tint(255, (Math.min(oneLevel, 255)));
+  image(five, width/4, height/4, width/2, height/2);
+
+  tint(255, (Math.min(twoLevel, 255)));
+  image(six, (3*(width/4)), height/4, width/4, height/2);
+
+  tint(255, (Math.min(oneLevel, 255)));
+  image(seven, 0, (3*(height/4)), width/4, height/4);
+
+  tint(255, (Math.min(twoLevel, 255)));
+  image(eight, width/4, (3*(height/4)), width/2, height/4);
+
+  tint(255, (Math.min(oneLevel, 255)));
+=======
   tint(255, (Math.min(threeLevel, 255)));
   image(three, (3*(width/4)), 0, width/4, height/4);
 
@@ -151,6 +180,7 @@ void draw()
   image(eight, width/4, (3*(height/4)), width/2, height/4);
 
   tint(255, (Math.min(fourLevel, 255)));
+>>>>>>> master
   image(nine, (3*(width/4)), (3*(height/4)), width/4, height/4);
 
 

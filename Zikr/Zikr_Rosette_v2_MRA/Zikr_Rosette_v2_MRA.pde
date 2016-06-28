@@ -10,7 +10,7 @@ void setup(){
   background(0);
   size(600,600);
   strokeWeight(3);
-  stroke(50,50,200);
+  stroke(150,50,150);
   fill(200);
 }
 
