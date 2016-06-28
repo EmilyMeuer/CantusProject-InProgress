@@ -8,6 +8,34 @@
  - perhaps have the lower voices add the geometry and the higher voices add color??
  - or what if each singer controlled their own rosette?
  - use i % 2 to switch between radii every other point for more desings?
+ 
+ Struggling to pause during draw.  Suggestion from forum (https://processing.org/discourse/beta/num_1264463285.html):
+   boolean cont = false;
+   
+   void setup(){
+   size(256, 256);  // Stage size
+   }
+   
+   void draw(){
+   // use a condition not a loop
+   if(cont == true){
+   // I don't want this to happen yet
+   println("mouse was pressed");
+   }
+   
+   if(mousePressed){
+   cont=true;
+   }
+   
+   }
+ 
+ // the separate methods approach has some advantages
+ // e.g. separates user input from draw = potentially greater 
+ // clarity of code; and also handles more events
+ void mouseReleased() {
+ cont = false; 
+ }  
+ 
  */
 
 /*
@@ -29,6 +57,7 @@ float x1, x2, y1, y2;
 Input  input;
 
 float rotateBy;
+float  time;
 
 void setup() {
   background(0);
@@ -42,24 +71,47 @@ void setup() {
   radius6 = 725;
 
   rotateBy = 0;
-  
 
+  time = 1000;
 }
 
 void draw() {
-//  background(0);
+  //  background(0);
   translate(width/2, height/2);
 
-// do this for loop in setup()?
+  if ( millis() > time ) {
+    time = millis() + 1000;
 
+    drawRosetteThree(radius5, 0);
+    println("i = " + 0);
+  } // if
+
+  if ( millis() > time ) {
+    time = millis() + 1000;
+
+    drawRosetteThree(radius5, 1);
+    println("i = " + 1);
+  } // if
+
+  if ( millis() > time ) {
+    time = millis() + 1000;
+
+    drawRosetteThree(radius5, 2);
+    println("i = " + 2);
+  } // if
+
+  // do this for loop in setup()?
+  /*
   for(int i = 0; i < 16; i ++) {
-    while(millis() % 100 != 0)  {  }
-    
-    drawRosetteThree(radius5, i);
-  } // for
-  
-  println("finished the for.");
-  
+   if( millis() > time ){
+   time = millis() + 1000;
+   
+   drawRosetteThree(radius5, i);
+   println("i = " + i);
+   } // if
+   } // for
+   */
+  //  println("finished the for.");
 } // draw()
 
 void drawRosetteThree(float radius, int whichStroke) {
