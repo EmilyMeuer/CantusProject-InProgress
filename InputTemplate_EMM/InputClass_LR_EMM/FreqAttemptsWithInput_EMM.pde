@@ -6,6 +6,8 @@ import processing.serial.*;
  
  To try:
   - perform an FFT on each buffer separately?
+  - try on another computer -- maybe this one just has mono input
+  - try using Beads instead of Minim (does Beads have FFT?) [ probably same problem here ]
  */
 
 Input           leftInput;

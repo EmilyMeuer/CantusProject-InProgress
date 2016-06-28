@@ -7,7 +7,7 @@ Minim  minimForAll;
 
 void settings()
 {
-  size(500, 500);
+  size(500, 200);
   // minim must be initialized outside of Input in order to pass the correct value of "this" to its constructor.
   minimForAll = new Minim(this);
 }
@@ -95,12 +95,12 @@ class Input
     this.sensitivity  = 3;
     this.source       = this.input;
 
-    if (left) {
+    if (left == right) {  // i.e., either (left && right) or (!left && !right)
+      this.buffer = this.input.mix;
+    } else if (left) {
       this.buffer = this.input.left;
     } else if (right) {
       this.buffer = this.input.right;
-    } else {
-      this.buffer = this.input.mix;
     }
 
     this.setFund();
@@ -232,6 +232,10 @@ class Input
     this.setFund();
     return this.buffer.level();
   }
+  
+  AudioBuffer getBuffer() {
+    return this.buffer;
+  } // getBuffer()
 
   void setSensitivity(float newSensitivity)
   {
