@@ -9,7 +9,6 @@ Minim  minimForAll;
 
 void settings()
 {
-  size(500, 500);
   // minim must be initialized outside of Input in order to pass the correct value of "this" to its constructor.
   minimForAll = new Minim(this);
 }
