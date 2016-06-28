@@ -15,6 +15,8 @@
  * and that won't happen until we're outside the for loop
  * I tried fixing this with an array but it still runs 4 times
  * and it always reaches an end iteration where it stops changing
+ *
+ * consider doing a count to see how many times it loops
  
  ***REFERENCES***
  liveColor (181, 0, 232)
@@ -32,16 +34,19 @@
 
 color liveColor = color(181, 0, 232);
 color deadColor = color(255);
-int tileSize = width; //because apparently 1000/10 is 10 now, and also 1000=100.
-int[][] newboard = new int[tileSize][tileSize];
-int[][] oldboard = new int[tileSize][tileSize];
+int tileSize; //because apparently 1000/10 is 10 now, and also 1000=100.
+int[][] newboard;
+int[][] oldboard;
 int i=0;
 int j=0;
 
 void setup()
 {
-  println("tileSize is "+tileSize);
   size(1000, 1000);
+  tileSize = width/10;
+  println("tileSize is "+tileSize);
+  newboard = new int[tileSize][tileSize];
+  oldboard = new int[tileSize][tileSize];
   int i, j;
   //oldboard[width/2][height/2-1] = 1;
   //oldboard[width/2][height/2] = 1;
@@ -97,7 +102,7 @@ void draw()
         /*if(i==width/2 && j==height/2)
         {
           println("dead is "+deadCount+" and alive is "+liveCount);
-        }*/
+        }*/ //just checking a tile to make sure it counts properly
 
         if (get(i*10+5, j*10+5)==deadColor)  //dealing with the dead :o //<>//
         {
@@ -144,6 +149,7 @@ void draw()
         }
       }
     }
+    delay(200);
   }//if mouse/timer
 }//end of draw loop
 
