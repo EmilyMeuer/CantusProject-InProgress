@@ -1,16 +1,35 @@
+/*
+  06/27/2016
+  Emily Meuer
+  
+  Modification of Zikr_Rosette_MRA to respond to audio input.
+*/
+
 float l = 50;
 float a, b, c;
+float rotateBy;
+
+Input  leftInput;
+Input  rightInput;
 
 void setup(){
   size(600,600);
   strokeWeight(3);
-}
+  
+  rotateBy = 0.5;
+  
+  leftInput  = new Input(true, false);
+  rightInput = new Input(false, true);
+} // setup()
 
 void draw() {
   translate(height/2,width/2);
   background(0);
-  rotate(radians(360*mouseY/height));
-  mouseColor();
+//  rotate(radians(360*mouseY/height));
+  rotateBy = rotateBy + 0.25 + leftInput.getAmplitude() * 5;
+  rotate(radians(rotateBy));
+//  mouseColor();
+  pitchColor();
   rosette();
   translate(0,l*6);
   rosette();
@@ -71,3 +90,8 @@ void mouseColor() {
   a = 255*mouseX/width;
   b = 255*mouseY/width;
 }
+
+void pitchColor() {
+  a = Math.min(255 * (leftInput.getAdjustedFundAsHz() / 500), 255);
+  b = Math.min(255 * (rightInput.getAdjustedFundAsHz() / 500), 255);
+} // pitchColor
