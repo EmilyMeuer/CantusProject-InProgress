@@ -63,6 +63,9 @@ void draw(){
     }
     myGlow[0].nativity(rightInput.getAmplitude());
   }//scene 2
+  if (scene > 2){
+    scene = 1;
+  }
 }//draw
 
 

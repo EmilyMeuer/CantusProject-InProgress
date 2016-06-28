@@ -6,6 +6,7 @@
     - Raining Light - Amanda's idea
     - press a key to change to next scene (only 2 right now)
     - this is set to typical projector resolution (1024 x 768)
+    - Scene 3 is a work in progress
 */
 
 Input  myInput1;
@@ -29,12 +30,12 @@ void setup()
   loadPixels(); 
   mInputs = new MultipleInputs(new String[] { "Lux 1.mp3", "Lux 2.mp3", "Lux 3.mp3", "Lux 4.mp3"});
   myRaindrop = new Raindrop[raindrops];
-  myRaindrop[0] = new Raindrop();
-  myRaindrop[1] = new Raindrop();
-  myRaindrop[2] = new Raindrop();
-  myRaindrop[3] = new Raindrop();
-  myRaindrop[4] = new Raindrop();
-  myRaindrop[5] = new Raindrop();
+  myRaindrop[0] = new Raindrop(random(360));
+  myRaindrop[1] = new Raindrop(random(360));
+  myRaindrop[2] = new Raindrop(random(360));
+  myRaindrop[3] = new Raindrop(random(360));
+  myRaindrop[4] = new Raindrop(random(360));
+  myRaindrop[5] = new Raindrop(random(360));
   myGlow = new Glow[orbs];
   myGlow[0] = new Glow();
 }
@@ -87,6 +88,18 @@ void draw(){
     myRaindrop[5].hover(myInput4.getAdjustedFundAsHz(), myInput4.getAmplitude());
     myGlow[0].nativity(myInput1.getAmplitude());
   }//scene 2
+  if (scene == 3) {
+    pushMatrix();
+    translate(width/2, height/2);
+    ellipse(0,0,20,20);
+    myRaindrop[0].circle(myInput2.getAmplitude());
+    myRaindrop[1].circle(myInput2.getAmplitude());
+    myRaindrop[2].circle(myInput3.getAmplitude());
+    myRaindrop[3].circle(myInput3.getAmplitude());
+    myRaindrop[4].circle(myInput4.getAmplitude());
+    myRaindrop[5].circle(myInput4.getAmplitude());   
+    popMatrix();
+  }
 }//draw
 
 

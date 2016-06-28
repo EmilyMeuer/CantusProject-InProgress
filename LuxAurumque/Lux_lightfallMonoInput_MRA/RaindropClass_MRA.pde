@@ -4,10 +4,9 @@ class Raindrop {
   float size;
   float speed;
   float gravity;
-  float deg;
+  float sizeAdjust = 0.25;
 //Constructor with input variable
-    Raindrop (float inDeg) {
-    deg = inDeg;
+    Raindrop () {
     xDrop = random(width);
     yDrop = -height/10;
     speed = 0;
@@ -31,15 +30,20 @@ class Raindrop {
   
   void hover(float inFreq, float inAmp) {
     yDrop = height - inFreq*2;
-    size = inAmp*width/2;
+    size = inAmp*width*sizeAdjust;
     constrain(yDrop,0,height);
   }//void hover
   
   void circle(float inAmp) {
+    float deg;
     float rad = 100;
+//    pushMatrix();
+    translate(width/2, height/2);
+    deg = random(360);
     xDrop = cos(deg)*rad;
     yDrop = sin(deg)*rad;
     size = inAmp*width/2;
+//    popMatrix();
   }
   
   float getXDrop(){

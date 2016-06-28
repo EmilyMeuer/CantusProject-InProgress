@@ -6,13 +6,14 @@
     - Raining Light - Amanda's idea
     - press a key to change to next scene (only 2 right now)
     - this is set to typical projector resolution (1024 x 768)
+    - Scene 3 is a work in progress
 */
 
-Input  leftInput;
-Input  rightInput;
+Input  myInput;
 PImage  img;
 Raindrop myRaindrop[];
 int raindrops = 6;
+//int arrayPos = 0;
 Glow myGlow[];
 int orbs = 1;
 int scene = 1;
@@ -23,8 +24,7 @@ void setup()
   img.resize(width, height);
   img.loadPixels();
   loadPixels(); 
-  leftInput  = new Input(true, false);
-  rightInput = new Input(false, true);
+  myInput = new Input();
   myRaindrop = new Raindrop[raindrops];
   myRaindrop[0] = new Raindrop();
   myRaindrop[1] = new Raindrop();
@@ -45,26 +45,48 @@ void draw(){
      println(scene);
    }
   if (scene == 1){
-    if (leftInput.getAmplitude() > 0.01){
-      for (int i = 0; i < myRaindrop.length; i++){
-        myRaindrop[i].fall();
-      }
+    if (myInput.getAmplitude() > 0.01){
+      myRaindrop[0].fall();
+      myRaindrop[3].fall();
     }
-    if (leftInput.getAmplitude() < 0.01){
-      for (int i = 0; i < myRaindrop.length; i++){
-        myRaindrop[i].resetYDrop();
-      }
+    if (myInput.getAmplitude() < 0.01){
+      myRaindrop[0].resetYDrop();
+      myRaindrop[3].resetYDrop();
     }
-    myGlow[0].angels(rightInput.getAdjustedFundAsHz(), rightInput.getAmplitude());
+    if (myInput.getAmplitude() > 0.01){
+      myRaindrop[1].fall();
+      myRaindrop[4].fall();
+    }
+    if (myInput.getAmplitude() < 0.01){
+      myRaindrop[1].resetYDrop();
+      myRaindrop[4].resetYDrop();
+    }
+    if (myInput.getAmplitude() > 0.01){
+      myRaindrop[2].fall();
+      myRaindrop[5].fall();
+    }
+    if (myInput.getAmplitude() < 0.01){
+      myRaindrop[2].resetYDrop();
+      myRaindrop[5].resetYDrop();
+    }
+    myGlow[0].angels(myInput.getAdjustedFundAsHz(), myInput.getAmplitude());
   }//scene 1
   if (scene == 2) {
-    for (int i = 0; i < myRaindrop.length; i++){
-      myRaindrop[i].hover(leftInput.getAdjustedFundAsHz(), leftInput.getAmplitude());
-    }
-    myGlow[0].nativity(rightInput.getAmplitude());
+    myRaindrop[0].hover(myInput.getAdjustedFundAsHz(), myInput.getAmplitude());
+    myRaindrop[3].hover(myInput.getAdjustedFundAsHz(), myInput.getAmplitude());
+    myRaindrop[1].hover(myInput.getAdjustedFundAsHz(), myInput.getAmplitude());
+    myRaindrop[4].hover(myInput.getAdjustedFundAsHz(), myInput.getAmplitude());
+    myRaindrop[2].hover(myInput.getAdjustedFundAsHz(), myInput.getAmplitude());
+    myRaindrop[5].hover(myInput.getAdjustedFundAsHz(), myInput.getAmplitude());
+    myGlow[0].nativity(myInput.getAmplitude());
   }//scene 2
-  if (scene > 2){
-    scene = 1;
+  if (scene == 3) {
+    myRaindrop[0].circle(myInput.getAmplitude());
+    myRaindrop[1].circle(myInput.getAmplitude());
+    myRaindrop[2].circle(myInput.getAmplitude());
+    myRaindrop[3].circle(myInput.getAmplitude());
+    myRaindrop[4].circle(myInput.getAmplitude());
+    myRaindrop[5].circle(myInput.getAmplitude());   
   }
 }//draw
 
@@ -87,7 +109,7 @@ void lightfall() {
       for (int i = 0; i < myRaindrop.length; i++){  //gets the position of each of the raindrops, and adjusts the pixels near it
         xPos = myRaindrop[i].getXDrop();
         yPos = myRaindrop[i].getYDrop();
-        float maxdist = myRaindrop[i].getSize()/1.5;//dist(0,0,width,height);
+        float maxdist = myRaindrop[i].getSize();//dist(0,0,width,height);
         float d = dist(x, y, xPos, yPos);
         if (d <= 2*maxdist) {//the below if statement makes it so that only the pixels near the location of the raindrop are adjusted (otherwise it would "neutralizes" the color, getting rid of the picture)
           if (r < 5 && g < 5 && b < 5){ //temporary fix for raindrops on top of each other
@@ -108,7 +130,7 @@ void lightfall() {
       for (int i = 0; i < myGlow.length; i++){
         xPos = myGlow[i].getXGlow();
         yPos = myGlow[i].getYGlow();
-        float maxdist = myGlow[i].getSize()*1.5;//dist(0,0,width,height);
+        float maxdist = myGlow[i].getSize();//dist(0,0,width,height);
         float d = dist(x, y, xPos, yPos);
         if (d <= 2*maxdist) {
           if (r < 5 && g < 5 && b < 5){
