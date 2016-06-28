@@ -54,7 +54,7 @@ void draw() {
    frameRate(1);
    }
    */
-  frameRate(Math.min(loudness*100, 30));
+  frameRate(Math.min(loudness*400, 30));
 
   /*
   //fading out ... use if need be 
