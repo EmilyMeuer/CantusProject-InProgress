@@ -61,17 +61,17 @@ void setup()
 
 // Store all names so that the images can be loaded ina loop:
   String[]  imageNames = { "one.jpeg",
-                            "two.jpeg",
-                            "three.jpeg",
-                            "four.jpeg",
-                            "five.jpeg",
-                            "six.jpeg",
-                            "seven.jpeg",
-                            "eight.jpeg",
-                            "nine.jpeg"
+                            "two.jpg",
+                            "three.jpg",
+                            "four.jpg",
+                            "five.jpg",
+                            "six.jpg",
+                            "seven.jpg",
+                            "eight.jpg",
+                            "nine.jpg"
   }; // imageNames
 
-/*
+
   one  = loadImage("one.jpeg");
   two  = loadImage("two.jpg");
   three = loadImage("three.jpg");
@@ -81,12 +81,12 @@ void setup()
   seven = loadImage("seven.jpg");
   eight = loadImage("eight.jpg");
   nine = loadImage("nine.jpg");
-*/
+
 
   // Create an array of PImages and fill it with the images
   // whose names are in the String[] of image names.
-  PImage[]  images = new PImage[9];
-  for (int i = 0; i < imageNames.length; i++)
+  PImage[]  images = new PImage[10];
+  for (int i = 1; i < imageNames.length; i++)
   {
     images[i] = loadImage(imageNames[i]);
   } // for
@@ -105,7 +105,7 @@ void setup()
 
   // Optional: To do the following in a loop will take a little math, possibly with mod and an 
   // array of options (see my getImageXandY() and queryArray() for ideas).
-  one.resize(width/4, height/4); 
+  images[1].resize(width/4, height/4); 
   two.resize(width/2, height/4); 
   three.resize(width/4, height/4); 
   four.resize(width/4, height/2); 
@@ -208,15 +208,13 @@ void draw()
   fill(pixOne, 128);
   ellipse(xOne + cornerXY[0], yOne + cornerXY[1], pointillizeOne, pointillizeOne);
 
-  // if I give it two.pixels[0], can it give me a location in the sketch?
-
   float pointillizeTwo = map((Math.min(twoLevel, 30)), 0, 30, smallPoint, largePoint);
   randPixelNum = (int)(random(two.pixels.length));
   randPixel = two.pixels[randPixelNum];
   int xTwo = randPixelNum%two.width;
   int yTwo = randPixelNum/two.width;
   color pixTwo = two.get(xTwo, yTwo);
-  cornerXY = getImageXandY(1);
+  cornerXY = getImageXandY(1);//1 for two etc.
   for(int i = 0; i < cornerXY.length; i++)
   {
     println("2: xTwo + cornerXY[0] = " + (xTwo + cornerXY[0]));
