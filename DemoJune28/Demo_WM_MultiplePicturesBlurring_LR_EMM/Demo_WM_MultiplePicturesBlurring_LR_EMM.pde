@@ -118,8 +118,8 @@ void draw()
    tint(255,(Math.min(twoLevel,255)));
    image(four,0,height/4,width/4,height/2);
    
-   tint(255,(Math.min(oneLevel,255)));
-   image(five,width/4,height/4,width/2,height/2);
+  /* tint(255,(Math.min(oneLevel,255)));
+   image(five,width/4,height/4,width/2,height/2);*/
    
    tint(255,(Math.min(twoLevel,255)));
    image(six,(3*(width/4)),height/4,width/4,height/2);
