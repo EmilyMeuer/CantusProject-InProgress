@@ -6,7 +6,7 @@
 */
 
 float l = 50;
-float a, b, c;
+float red, green, blue;
 float rotateBy;
 
 Input  leftInput;
@@ -26,8 +26,8 @@ void draw() {
   translate(height/2,width/2);
   background(0);
 //  rotate(radians(360*mouseY/height));
-  rotateBy = rotateBy + 0.25 + leftInput.getAmplitude() * 5;
-  rotate(radians(rotateBy));
+//  rotateBy = rotateBy + 0.25 + leftInput.getAmplitude() * 5;
+//  rotate(radians(rotateBy));
 //  mouseColor();
   pitchColor();
   rosette();
@@ -67,10 +67,10 @@ void rosette() {
   float n = 6;
   float angle1 = radians(180-(180*(n-2))/n);
   float angle2 = radians(240);
-  c = 0;
+  green = 0;
   for (int j = 0; j < n; j++){
     rotate(angle2);
-    stroke(a,b,c);
+    stroke(red, green, blue);
     for (int i = 0; i < n; i++){ //draws one hexagon (if n = 6)
       line(0,0,0,l);
       translate(0,l);
@@ -82,16 +82,16 @@ void rosette() {
       }
     }//one hexagon
     popMatrix();
-    c += 30;
+    green += 30;
   }
 }
 
 void mouseColor() {
-  a = 255*mouseX/width;
-  b = 255*mouseY/width;
+  red = 255*mouseX/width;
+  blue = 255*mouseY/width;
 }
 
 void pitchColor() {
-  a = Math.min(255 * (leftInput.getAdjustedFundAsHz() / 500), 255);
-  b = Math.min(255 * (rightInput.getAdjustedFundAsHz() / 500), 255);
+  red   = Math.min(255 * (leftInput.getAdjustedFundAsHz() / 500), 255);
+  blue  = Math.min(255 * (rightInput.getAdjustedFundAsHz() / 500), 255);
 } // pitchColor

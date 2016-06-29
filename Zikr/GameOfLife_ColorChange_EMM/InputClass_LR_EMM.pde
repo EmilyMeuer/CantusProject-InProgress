@@ -2,25 +2,29 @@ import ddf.minim.*;
 import ddf.minim.analysis.*;
 import ddf.minim.effects.*;
 import ddf.minim.ugens.*;
-//import java.nio.file.*;
-//import java.io.FileInputStream;
 
 Minim  minimForAll;
 
 void settings()
 {
-  fullScreen();
+  size(1000,1000);
   // minim must be initialized outside of Input in order to pass the correct value of "this" to its constructor.
   minimForAll = new Minim(this);
 }
 
 
-public class InputPitch
+class Input
 {
   /*
     Emily Meuer
-   06/07/2016
    
+   TODO: clean up constructors -- add an interface or abstract superclass?
+   
+   Updated 06/27/2016:
+   Replaced AudioSource with an AudioBuffer, allowing right and left channels of the 
+   same input to be treated as separate entities and possibly cheat the mono-input system.
+   
+   Created 06/07/2016:
    Class to detect the pitch (that is, fundamental frequency)
    of an AudioPlayer or AudioInput; works best with monophonic input.
    */
@@ -38,95 +42,69 @@ public class InputPitch
   AudioPlayer player;
   float      sensitivity;  // amplitude below which adjustedFreq will not be reset
   AudioSource source;
-
-  //  Future: take an int that specifies the channel of this input?
-  // It will have to know from what line to get the audio, so probably yes.
+  AudioBuffer  buffer;
 
   /**
-   * Constructor for creating an InputPitch object from an audio file.
+   * Constructor for creating an Input object from an audio file.
    *
    * @param  filename  String specifying the audio file.
    */
-  InputPitch(String filename)
+  Input(String filename)
   {
-    /*
-    if (minim == null) {  
-      throw new IllegalArgumentException("InputClassPitch.constructor(Minim): Minim " + minim + " is null.");
+    if (filename == null) {
+      throw new IllegalArgumentException("InputClassPitch.constructor(String): String parameter " + filename + " is null.");
     }
-    */
 
     this.findFund     = 120;
-//    this.minim        = minimForAll;
 
     try {
       this.player  = minimForAll.loadFile(filename);
     } 
     catch (NullPointerException npe) {
-      throw new IllegalArgumentException("InputPitch.constructor(String): there was an error loading the file \"" + filename + "\" with the Minim " + minim + ".");
+      throw new IllegalArgumentException("Input.constructor(String): there was an error loading the file \"" + filename + "\" with the Minim " + minimForAll + 
+        " (this minim initialized in settings()).");
     }
     this.fft          = new FFT(player.bufferSize(), player.sampleRate());
     this.player.loop(); 
 
     this.sensitivity  = 0.01;
     this.source = this.player;
+    this.buffer = this.player.mix;
     this.setFund();
   } // constructor(String)
 
   /**
-   * Constructor for creating an InputPitch object from line in.
+   * Constructor for creating an Input object from line in.
    */
-  InputPitch()
+  Input()
   {
-    /*
-    if (minim == null) {  
-      throw new IllegalArgumentException("InputClassPitch.constructor(Minim): Minim " + minim + " is null.");
-    }
-*/
-
     this.findFund     = 120;
-//    this.minim        = minimForAll;
     this.input        = minimForAll.getLineIn();     
     this.fft          = new FFT(input.bufferSize(), input.sampleRate());
     this.sensitivity  = 3;
     this.source = this.input;
+    this.buffer       = this.input.mix;
     this.setFund();
   } // constructor()
 
-//--
-  /**
-   * Returns the absolute path of the given file by calling sketchPath on it.
-   * This method is necessary for instantiating a Minim object in this class using "this".
-   *
-   * @param  fileName  String whose absolute path is to be found.
-   */
-  /*  String sketchPath(String fileName)
-   {
-   println("sketchPath in InputPitch was called");
-   PApplet pApplet = new PApplet();
-   //    return pApplet.sketchPath(fileName);
-   
-   Path path = Paths.get(fileName);
-   println("sketchPath: path.toString() = " + path.toString());
-   return path.toString();
-   } // sketchPath(String)
-   
-  /**
-   * Creates an InputStream object from the file specified in the parameter.
-   * This method is necessary for instantiating a Minim object in this class using "this".
-   *
-   * @param  fileName  String specifying a file to be used as input for an InputStream.
-   */
-  /*  InputStream createInput(String fileName)
-   {
-   PApplet pApplet = new PApplet();
-   try {
-   return new FileInputStream(fileName);
-   } catch(Exception fnfe)  {  throw new IllegalArgumentException(fnfe.getMessage());  }
-   //    return pApplet.createInput(fileName);
-   } // createInput(String)
-   */
-// --
+  Input(boolean left, boolean right)
+  {
+    this.findFund     = 120;
+    this.input        = minimForAll.getLineIn();     
+    this.fft          = new FFT(input.bufferSize(), input.sampleRate());
+    this.sensitivity  = 3;
+    this.source       = this.input;
 
+    if (left == right) {  // i.e., either (left && right) or (!left && !right)
+      this.buffer = this.input.mix;
+    } else if (left) {
+      this.buffer = this.input.left;
+    } else if (right) {
+      this.buffer = this.input.right;
+    }
+
+    this.setFund();
+  } // Input(boolean, boolean)
 
   /**
    * The following comments from InputClassFreq; this no longer uses averages:
@@ -143,7 +121,8 @@ public class InputPitch
    */
   void setFund()
   { 
-    this.fft.forward(this.source.mix);
+//    this.source = this.input;
+    this.fft.forward(this.buffer);
 
     for (int i = 4; i < fft.specSize(); i++)
     {
@@ -251,8 +230,12 @@ public class InputPitch
    */
   float getAmplitude() {
     this.setFund();
-    return this.source.mix.level();
+    return this.buffer.level();
   }
+  
+  AudioBuffer getBuffer() {
+    return this.buffer;
+  } // getBuffer()
 
   void setSensitivity(float newSensitivity)
   {

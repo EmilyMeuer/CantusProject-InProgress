@@ -7,7 +7,8 @@ Minim  minimForAll;
 
 void settings()
 {
-  size(1000, 1000);
+  fullScreen();
+//  size(1000, 1000);
   // minim must be initialized outside of Input in order to pass the correct value of "this" to its constructor.
   minimForAll = new Minim(this);
 }
@@ -91,7 +92,7 @@ class Input
     this.findFund     = 120;
     this.input        = minimForAll.getLineIn();     
     this.fft          = new FFT(input.bufferSize(), input.sampleRate());
-    this.sensitivity  = 3;
+    this.sensitivity  = 0.01;
     this.source       = this.input;
 
     if (left == right) {  // i.e., either (left && right) or (!left && !right)

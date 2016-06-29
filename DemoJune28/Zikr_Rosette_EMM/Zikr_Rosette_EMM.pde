@@ -5,7 +5,7 @@
   Modification of Zikr_Rosette_MRA to respond to audio input.
 */
 
-float l = 50;
+float l = 100;
 float a, b, c;
 float rotateBy;
 
@@ -26,7 +26,7 @@ void draw() {
   translate(height/2,width/2);
   background(0);
 //  rotate(radians(360*mouseY/height));
-  rotateBy = rotateBy + 0.25 + leftInput.getAmplitude() * 5;
+  rotateBy = rotateBy + 0.25 + leftInput.getAmplitude() * 50;
   rotate(radians(rotateBy));
 //  mouseColor();
   pitchColor();
@@ -70,7 +70,7 @@ void rosette() {
   c = 0;
   for (int j = 0; j < n; j++){
     rotate(angle2);
-    stroke(a,b,c);
+    stroke(a,c,b);
     for (int i = 0; i < n; i++){ //draws one hexagon (if n = 6)
       line(0,0,0,l);
       translate(0,l);
