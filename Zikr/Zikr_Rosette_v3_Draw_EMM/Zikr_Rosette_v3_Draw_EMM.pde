@@ -9,32 +9,7 @@
  - or what if each singer controlled their own rosette?
  - use i % 2 to switch between radii every other point for more desings?
  
- Struggling to pause during draw.  Suggestion from forum (https://processing.org/discourse/beta/num_1264463285.html):
- boolean cont = false;
- 
- void setup(){
- size(256, 256);  // Stage size
- }
- 
- void draw(){
- // use a condition not a loop
- if(cont == true){
- // I don't want this to happen yet
- println("mouse was pressed");
- }
- 
- if(mousePressed){
- cont=true;
- }
- 
- }
- 
- // the separate methods approach has some advantages
- // e.g. separates user input from draw = potentially greater 
- // clarity of code; and also handles more events
- void mouseReleased() {
- cont = false; 
- }  
+ Struggling to pause during draw; used suggestion from forum (https://processing.org/discourse/beta/num_1264463285.html).
  
  */
 
@@ -83,7 +58,7 @@ void draw() {
   //  background(0);
   translate(width/2, height/2);
 
-  drawPastThreshold(radius5, 500);
+  drawAndRaiseThreshold(radius5);
 } // draw()
 
 void drawOnDelay(float radius)
