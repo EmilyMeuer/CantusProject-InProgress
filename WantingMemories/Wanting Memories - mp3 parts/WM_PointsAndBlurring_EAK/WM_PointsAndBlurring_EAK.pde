@@ -37,8 +37,8 @@ int eightLevel;
 int nineLevel;
 int tenLevel;
 
- int smallPoint = 4;
-  int largePoint = 4;
+int smallPoint = 4;
+int largePoint = 4;
 
 /*FFT         fft;
  AudioInput  input;
@@ -47,6 +47,7 @@ int tenLevel;
 
 void setup()
 {
+  background(0);
   /*collageTwo = loadImage("collageTwo.png");
    collageTwo.resize(width, height);
    background(collageTwo);*/
@@ -104,9 +105,20 @@ void setup()
 
   /*allInputs = new MultipleInputs("WM parts - Tenor.mp3");//one
    allInputs.add("WM parts - Bass.mp3");//two*/
-   
-   noStroke();
-}
+
+  noStroke();
+  
+  
+    for (int i = 0; i < 9; i++)
+  {
+    println(i + ": ");
+    int[] loc = getImageXandY(i);
+    for (int j = 0; j < loc.length; j++)
+    {
+      print("  " + j + ": " + loc[j]);
+    } // for - j
+    println();
+}}
 
 void draw()
 {
@@ -116,7 +128,7 @@ void draw()
   image (twoBlur, width/4, 0);
   image (threeBlur, (3*(width/4)), 0);
   image (fourBlur, 0, height/4);
- // image (fiveBlur, width/4, height/4);
+  // image (fiveBlur, width/4, height/4);
   image (sixBlur, (3*(width/4)), height/4);
   image (sevenBlur, 0, (3*(height/4)));
   image (eightBlur, width/4, (3*(height/4)));
@@ -128,7 +140,7 @@ void draw()
   twoLevel  = (int)Math.floor(right.getAmplitude() * 1000);
   threeLevel  = (int)Math.floor(left.getAmplitude() * 1500);
   fourLevel  = (int)Math.floor(right.getAmplitude() * 1500);
- // fiveLevel  = (int)Math.floor(left.getAmplitude() * 1500);
+  // fiveLevel  = (int)Math.floor(left.getAmplitude() * 1500);
   sixLevel  = (int)Math.floor(right.getAmplitude() * 1500);
   sevenLevel  = (int)Math.floor(left.getAmplitude() * 1500);
   eightLevel  = (int)Math.floor(right.getAmplitude() * 1500);
@@ -147,22 +159,20 @@ void draw()
 
   tint(255, (Math.min(fourLevel, 255)));
   image(four, 0, height/4, width/4, height/2);
-  
-  
-  
-  float pointillize = map((30-(Math.min(fiveLevel, 30))), 0, 30, smallPoint, largePoint);
-  int x = int(random(five.width)); 
-  int y = int(random(five.height));
-  color pix = five.get(x, y);
-  fill(pix, 128);
-  ellipse(x, y, pointillize, pointillize);
-  
-  
-  
-  
-  
 
-//  tint(255, (Math.min(fiveLevel, 255)));
+
+
+float pointillizeFive = map((Math.min(fiveLevel, 30)), 0, 30, smallPoint, largePoint);
+  int randPixelNum = (int)(random(five.pixels.length));
+  int randPixel = five.pixels[randPixelNum];
+  int xFive = randPixelNum%five.width;
+  int yFive = randPixelNum/five.width;
+  color pixFive = five.get(xFive, yFive);
+  int[] cornerXY = getImageXandY(4);
+  for(int i = 0; i < cornerXY.length; i++)
+
+
+  //  tint(255, (Math.min(fiveLevel, 255)));
   //image(five, width/4, height/4, width/2, height/2);
 
   tint(255, (Math.min(sixLevel, 255)));
@@ -179,4 +189,25 @@ void draw()
 
   tint(255, (Math.min(tenLevel, 255)));
   image(ten, 3*(width/4), 3*(height/4), width/4, height/4);
+}
+
+
+int[] getImageXandY(int imageNum)
+{
+  int x = queryArray(width, imageNum % 3);
+  int y = queryArray(height, imageNum / 3);
+
+  return new int[] { x, y };
+} 
+
+
+int queryArray(int x, int loc)
+{
+  int[] array = {0, x/4, 3*(x/4)  };
+
+  if (loc > array.length) {  
+    throw new IllegalArgumentException("WM_PointsMultiplePictures_EMM.queryArray: loc " + loc + " is out of bounds; should be less than array.length " + array.length);
+  }
+
+  return array[loc];
 }
