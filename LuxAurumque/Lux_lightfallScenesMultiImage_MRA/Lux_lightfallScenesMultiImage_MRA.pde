@@ -6,7 +6,6 @@
     - Raining Light - Amanda's idea
     - press a key to change to next scene (only 2 right now)
     - this is set to typical projector resolution (1024 x 768)
-    - Scene 3 is a work in progress
 */
 
 Input  myInput1;
@@ -17,25 +16,22 @@ MultipleInputs  mInputs;
 PImage  img;
 Candle myCandle[];
 int orbs = 9;
-int scene = 1;
+int scene = 0;
 
 void setup()
 {
-  img = loadImage("NativityTriptych.jpg");
-  img.resize(width, height);
-  img.loadPixels();
-  loadPixels(); 
   mInputs = new MultipleInputs(new String[] { "Lux 1.mp3", "Lux 2.mp3", "Lux 3.mp3", "Lux 4.mp3"});
   myCandle = new Candle[orbs];
-  myCandle[0] = new Candle(random(360), 120, 80, 60, width/10*1); 
-  myCandle[1] = new Candle(random(360), 110, 90, 60, width/10*2); 
-  myCandle[2] = new Candle(random(360), 80, 80, 60, width/10*3); 
-  myCandle[3] = new Candle(random(360), 80, 110, 80, width/10*4); 
-  myCandle[4] = new Candle(random(360), 80, 80, 110, width/10*5); 
-  myCandle[5] = new Candle(random(360), 100, 80, 100, width/10*6); 
-  myCandle[6] = new Candle(random(360), 100, 100, 100, width/10*7); 
-  myCandle[7] = new Candle(random(360), 100, 100, 100, width/10*8); 
-  myCandle[8] = new Candle(random(360), 100, 100, 100, width/10*9); 
+  myCandle[0] = new Candle(random(360), 100, 100, 100, width/10*9); 
+  myCandle[1] = new Candle(random(360), 120, 80, 60, width/10*1); 
+  myCandle[2] = new Candle(random(360), 110, 90, 60, width/10*2); 
+  myCandle[3] = new Candle(random(360), 80, 80, 60, width/10*3); 
+  myCandle[4] = new Candle(random(360), 80, 110, 80, width/10*4); 
+  myCandle[5] = new Candle(random(360), 80, 80, 110, width/10*5); 
+  myCandle[6] = new Candle(random(360), 100, 80, 100, width/10*6); 
+  myCandle[7] = new Candle(random(360), 100, 100, 100, width/10*7); 
+  myCandle[8] = new Candle(random(360), 100, 100, 100, width/10*8); 
+  
 }
 
 void draw(){
@@ -44,12 +40,30 @@ void draw(){
   myInput2 = mInputs.get(1);
   myInput3 = mInputs.get(2);
   myInput4 = mInputs.get(3);
+  
+// SETS THE SCENE /////////////////////////////////////////
+  
   if (keyPressed){
-     scene ++;
-     delay(500);
-     println(scene);
-   }
-  if (scene == 1){
+    scene ++;
+    if (scene == 4){
+      img = loadImage("bellPeppers.jpg");
+      img.resize(width, height);
+      img.loadPixels();
+      loadPixels();
+    }
+    if (scene == 1){
+      img = loadImage("pianoRoom.jpg");
+      img.resize(width, height);
+      img.loadPixels();
+      loadPixels();
+    }
+    delay(500);
+    println(scene);
+  }
+
+// SCENES ////////////////////////////////////////////////
+
+  if (scene == 3){
     if (myInput2.getAmplitude() > 0.01){
       myCandle[0].fall();
       myCandle[1].fall();
@@ -78,42 +92,44 @@ void draw(){
       myCandle[6].resetYDrop();
       myCandle[7].resetYDrop();
     }
-    myCandle[8].angels(myInput1.getAdjustedFundAsHz(), myInput1.getAmplitude());
+    myCandle[8].freqPoints(myInput1.getAdjustedFundAsHz(), myInput1.getAmplitude());
     grayscaleLightfall();
-  }//scene 1
-  if (scene == 2) {
-      myCandle[0].circle(myInput1.getAmplitude());
-      myCandle[1].circle(myInput1.getAmplitude());
-      myCandle[2].circle(myInput2.getAmplitude());
-      myCandle[3].circle(myInput2.getAmplitude());
-      myCandle[4].circle(myInput3.getAmplitude());
-      myCandle[5].circle(myInput3.getAmplitude());
-      myCandle[6].circle(myInput4.getAmplitude());
-      myCandle[7].circle(myInput4.getAmplitude());
-      myCandle[8].circle(myInput1.getAmplitude());
-      colorLightfall(0);
   }
-  if (scene == 3) {
-    myCandle[0].hover(myInput2.getAdjustedFundAsHz(), myInput2.getAmplitude());
+  if (scene == 1) {
+      myCandle[0].circle(myInput1.getAmplitude(), width/1.5, height/3);
+      myCandle[1].circle(myInput1.getAmplitude(), width/1.5, height/3);
+      myCandle[2].circle(myInput2.getAmplitude(), width/1.5, height/3);
+      myCandle[3].circle(myInput2.getAmplitude(), width/1.5, height/3);
+      myCandle[4].circle(myInput3.getAmplitude(), width/1.5, height/3);
+      myCandle[5].circle(myInput3.getAmplitude(), width/1.5, height/3);
+      myCandle[6].circle(myInput4.getAmplitude(), width/1.5, height/3);
+      myCandle[7].circle(myInput4.getAmplitude(), width/1.5, height/3);
+      myCandle[8].highlight(myInput1.getAmplitude(), width/1.5, height/3);
+      grayscaleLightfall();
+  }
+  if (scene == 1) {
+    myCandle[0].highlight(myInput1.getAmplitude(), width/2, height/2);
     myCandle[1].hover(myInput2.getAdjustedFundAsHz(), myInput2.getAmplitude());
-    myCandle[2].hover(myInput2.getAdjustedFundAsHz(), myInput3.getAmplitude());
-    myCandle[3].hover(myInput3.getAdjustedFundAsHz(), myInput3.getAmplitude());
-    myCandle[4].hover(myInput3.getAdjustedFundAsHz(), myInput4.getAmplitude());
+    myCandle[2].hover(myInput2.getAdjustedFundAsHz(), myInput2.getAmplitude());
+    myCandle[3].hover(myInput2.getAdjustedFundAsHz(), myInput3.getAmplitude());
+    myCandle[4].hover(myInput3.getAdjustedFundAsHz(), myInput3.getAmplitude());
     myCandle[5].hover(myInput3.getAdjustedFundAsHz(), myInput4.getAmplitude());
-    myCandle[6].hover(myInput4.getAdjustedFundAsHz(), myInput4.getAmplitude());
+    myCandle[6].hover(myInput3.getAdjustedFundAsHz(), myInput4.getAmplitude());
     myCandle[7].hover(myInput4.getAdjustedFundAsHz(), myInput4.getAmplitude());
-    myCandle[8].nativity(myInput1.getAmplitude());
-    colorLightfall(1);
-  }//scene 2
+    myCandle[8].hover(myInput4.getAdjustedFundAsHz(), myInput4.getAmplitude());
+    grayscaleLightfall();
+  }
   
-}//draw
+}// draw
+
 
 void grayscaleLightfall(){
 float xPos, yPos;
   for (int x = 0; x < img.width; x++) {
     for (int y = 0; y < img.height; y++ ) {
       int loc = x + y*img.width;
-      float b;
+      float b, tempBrightness;
+      float brightness = 0;
       b = blue (img.pixels[loc]);
       b = 0.01*b;
       for (int i = 0; i < myCandle.length; i++){
@@ -122,15 +138,15 @@ float xPos, yPos;
         float maxdist = myCandle[i].getSize();
         float d = dist(x, y, xPos, yPos);
         if (d <= 2*maxdist) {
-          if (b < 20){ 
-            b = myCandle[i].getBlueTint()*b;
-            float adjustbrightness = 255*(maxdist-d)/maxdist;
-            b += adjustbrightness;
-            constrain(b, 0, 255);
+          b = myCandle[i].getBlueTint()*b;
+          tempBrightness = 255*(maxdist-d)/maxdist;
+          if (tempBrightness > brightness) {
+            brightness = tempBrightness;
           }
-        }//if pixels are near the raindrop location
-      }//for raindrop array
-// Make a new color and set pixel in the window; the 0.7*g and 0.3*b give it a golden tint
+        }//if near (xGlow, yGlow)
+      }//for myCandle
+      b += brightness;
+      constrain(b, 0, 255);
       color c = color(b);
       pixels[y*width + x] = c;
     }//for y
