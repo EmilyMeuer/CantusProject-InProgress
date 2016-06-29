@@ -87,7 +87,7 @@ void lightfall() {
       for (int i = 0; i < myRaindrop.length; i++){  //gets the position of each of the raindrops, and adjusts the pixels near it
         xPos = myRaindrop[i].getXDrop();
         yPos = myRaindrop[i].getYDrop();
-        float maxdist = myRaindrop[i].getSize()/1.5;//dist(0,0,width,height);
+        float maxdist = myRaindrop[i].getSize();//dist(0,0,width,height);
         float d = dist(x, y, xPos, yPos);
         if (d <= 2*maxdist) {//the below if statement makes it so that only the pixels near the location of the raindrop are adjusted (otherwise it would "neutralizes" the color, getting rid of the picture)
           if (r < 5 && g < 5 && b < 5){ //temporary fix for raindrops on top of each other
@@ -108,7 +108,7 @@ void lightfall() {
       for (int i = 0; i < myGlow.length; i++){
         xPos = myGlow[i].getXGlow();
         yPos = myGlow[i].getYGlow();
-        float maxdist = myGlow[i].getSize()*1.5;//dist(0,0,width,height);
+        float maxdist = myGlow[i].getSize()*2;//dist(0,0,width,height);
         float d = dist(x, y, xPos, yPos);
         if (d <= 2*maxdist) {
           if (r < 5 && g < 5 && b < 5){

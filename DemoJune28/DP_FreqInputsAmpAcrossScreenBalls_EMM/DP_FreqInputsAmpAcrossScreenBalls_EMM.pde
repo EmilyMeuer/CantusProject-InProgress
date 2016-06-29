@@ -24,7 +24,7 @@ MultipleInputs ins;
 
 // variables for balls:
 Input  in;
-float amplify = 200;
+float amplify = 1000;
 float speed = 1;
 LeadBall myLeadBall;
 

@@ -7,7 +7,7 @@ Minim  minimForAll;
 
 void settings()
 {
-  size(1024, 768);
+  fullScreen();
   // minim must be initialized outside of Input in order to pass the correct value of "this" to its constructor.
   minimForAll = new Minim(this);
 }

@@ -21,7 +21,7 @@ void setup() {
   img = loadImage("dad.jpg");//choice of picture
   DadOutline = loadImage("DadOutline.jpg");
   DadOutline.resize(width, height);
-  background(DadOutline);
+ background(DadOutline);
   img.resize(width, height);
   smallPoint = 10; //smallest dot size
   largePoint = 10;//largest dot size

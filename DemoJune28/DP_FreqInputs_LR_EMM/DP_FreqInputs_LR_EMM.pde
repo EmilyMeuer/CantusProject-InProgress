@@ -54,16 +54,19 @@ void draw()
   left   = new Input(true, false);
   right  = new Input(false, true);
   
-  float rfvol = 100*left.getAmplitude();  //'volume' of bass1, used for columns RED and FUCHSIA
+  println("left amp = " + left.getAmplitude() + "; left pitch = " + left.getAdjustedFundAsHz());
+  println("right amp = " + right.getAmplitude() + "; right pitch = " + right.getAdjustedFundAsHz());
+  
+  float rfvol = 1000*left.getAmplitude();  //'volume' of bass1, used for columns RED and FUCHSIA
   float rfpit = left.getAdjustedFundAsHz();  //'pitch' of bass1, used for columns RED and FUCHSIA
   
-  float opvol = 100*right.getAmplitude();
+  float opvol = 1000*right.getAmplitude();
   float oppit = right.getAdjustedFundAsHz();
   
-  float yivol = 100*left.getAmplitude();
+  float yivol = 1000*left.getAmplitude();
   float yipit = left.getAdjustedFundAsHz();
   
-  float gpvol = 100*right.getAmplitude();
+  float gpvol = 1000*right.getAmplitude();
   float gppit = right.getAdjustedFundAsHz();
   
   /*the following code creates rectangles which represent
