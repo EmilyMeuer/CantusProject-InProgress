@@ -13,6 +13,8 @@ import org.jaudiolibs.audioservers.jack.JackAudioServer;
 /*
   06/22/2016
   Example copied from https://groups.google.com/forum/?hl=en&fromgroups=#!searchin/beadsproject/multiple$20inputs/beadsproject/7W-BRJnKiQA/Gben0P9XduQJ.
+
+  Jack on OS X: http://www.jackosx.com/
 */
 
 AudioContext ac; 

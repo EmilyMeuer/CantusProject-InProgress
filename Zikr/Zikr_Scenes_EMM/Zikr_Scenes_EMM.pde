@@ -10,7 +10,9 @@
 */
 
 Scene  drawRosette;
+Scene  rosetteV3Colors;
 Input  leftInput;
+Input  rightInput;
 
 int  scene;
 int  waitUntil;
@@ -19,8 +21,10 @@ void setup()
 {
   background(0);
   leftInput  = new Input(true, false);
+  rightInput = new Input(false, true);
   
   drawRosette  = new DrawRosette(leftInput);
+  rosetteV3Colors  = new RosetteV3Colors(leftInput, rightInput);
   
   scene = 0;
   waitUntil  = millis();
@@ -40,4 +44,8 @@ void draw()
   if(scene == 1) {
     drawRosette.run();
   } // scene 1
+  
+  if(scene == 2) {
+    rosetteV3Colors.run();
+  } // scene 2
 } //draw()
