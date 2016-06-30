@@ -12,6 +12,12 @@ import beads.IOAudioFormat;
 import beads.UGen;
 import beads.Gain;
 
+import beads.ShortFrameSegmenter;
+//import beads.FFT;
+import beads.PowerSpectrum;
+
+import javax.sound.sampled.AudioFormat;
+
 Minim  minimForAll;
 
 void settings()
@@ -52,6 +58,8 @@ class Input
   AudioContext  ac;
   UGen          inputsUGen;
   int           waitUntil;
+  ShortFrameSegmenter  sfs;
+  PowerSpectrum  ps;
 
   Input(int numInputs)
   {
@@ -93,15 +101,61 @@ class Input
     this.findFund     = 120;
     this.input        = minimForAll.getLineIn();     
 //    this.fft          = new FFT(input.bufferSize(), input.sampleRate());
-    this.fft          = new FFT(this.ac.getBufferSize(), this.ac.getSampleRate());
+    this.fft          = new FFT(this.ac.getBufferSize(), (int)this.ac.getSampleRate());
     this.sensitivity  = 3;
     this.source = this.input;
     
     this.ac.start();
     
     waitUntil  = millis();
-    
     this.setFund();
+  } // constructor(int)
+
+  /**
+   * Constructor for creating an Input object from line in.
+   */
+  Input()
+  {
+    IOAudioFormat jsaf = new IOAudioFormat(44100, 16, 2, 2, true, false);
+    this.ac    = new AudioContext(new beads.JavaSoundAudioIO(), 512, jsaf);
+    
+    this.inputsUGen  = ac.getAudioInput();
+    println("inputsUGen = " + inputsUGen);
+    
+    // Sonifying Processing and George P. do this:
+    Gain g = new Gain(this.ac, 1, 0.5);
+    g.addInput(inputsUGen);
+    ac.out.addInput(g);
+ 
+    sfs = new ShortFrameSegmenter(ac);
+    sfs.addInput(ac.out);
+    println("added ac.out to sfs");
+    beads.FFT fft = new beads.FFT();
+    println("fft is " + fft);
+    sfs.addListener(fft);
+    println("added fft as listener to sfs");
+    ps = new PowerSpectrum();
+    fft.addListener(ps);
+    println("added ps as listener to fft");
+    ac.out.addDependent(sfs);
+
+    this.findFund     = 120;
+    this.input        = minimForAll.getLineIn();     
+    this.fft          = new FFT(input.bufferSize(), input.sampleRate());
+    this.sensitivity  = 3;
+    this.source = this.input;
+    
+    println("this.ac.getBufferSize() = " + this.ac.getBufferSize());
+    this.buffers  = new float[1][this.ac.getBufferSize()];
+    
+    this.ac.start();
+    println("is the error after this?");
+    
+    for (int i = 0; i < this.buffers[0].length; i++)
+    {
+//      this.buffers[0][i]  = this.inputsUGen.getValue(0, i);
+    } // for - i
+//    this.setFund();
   } // constructor()
 
   /**
@@ -111,6 +165,8 @@ class Input
    */
   Input(String filename)
   {
+    // Can update to use Beads: SamplePlayer
+    
     if (filename == null) {
       throw new IllegalArgumentException("InputClassPitch.constructor(String): String parameter " + filename + " is null.");
     }
@@ -133,20 +189,6 @@ class Input
   } // constructor(String)
 
   /**
-   * Constructor for creating an Input object from line in.
-   */
-  Input()
-  {
-
-    this.findFund     = 120;
-    this.input        = minimForAll.getLineIn();     
-    this.fft          = new FFT(input.bufferSize(), input.sampleRate());
-    this.sensitivity  = 3;
-    this.source = this.input;
-    this.setFund();
-  } // constructor()
-
-  /**
    * The following comments from InputClassFreq; this no longer uses averages:
    *
    * Performs a foward transform on the AudioInput instance var,
@@ -161,6 +203,7 @@ class Input
    */
   void setFund()
   { 
+    println("in setFund()");
     if(millis() > waitUntil)
     {
       waitUntil = millis() + 100;
@@ -168,9 +211,11 @@ class Input
       println("called update - in Input class");
     } // if
     
-    for(int i = 0; i < buffers.length; i++)
+    println("buffers = " + buffers);
+    
+    for(int i = 0; i < this.buffers.length; i++)
     {
-      for(int j = 0; j < buffers[i].length; j++)
+      for(int j = 0; j < this.buffers[i].length; j++)
       {
         println("this.inputsUGen.getValue(" + i + ", " + j + ")  = " + this.inputsUGen.getValue(i, j));
       } // for - j
