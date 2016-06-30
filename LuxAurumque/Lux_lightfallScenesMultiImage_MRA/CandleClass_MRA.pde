@@ -1,7 +1,7 @@
 class Candle {
   float xGlow;
   float yGlow;
-  float xFall;
+  float xSpaced;
   float size;
   float curFreq;
   float speed;
@@ -13,22 +13,22 @@ class Candle {
   float sizeAdjust;
   
 //Constructors with input variables
- Candle(float inDeg, float inRedTint, float inGreenTint, float inBlueTint, float inXFall, float inSizeAdjust){
+ Candle(float inDeg, float inRedTint, float inGreenTint, float inBlueTint, float inXSpaced, float inSizeAdjust){
    deg = inDeg;
    redTint = inRedTint;
    greenTint = inGreenTint;
    blueTint = inBlueTint;
    sizeAdjust = inSizeAdjust;
-   xFall = inXFall;
+   xSpaced = inXSpaced;
    speed = 0;
    gravity = height/100;
  }
-  Candle(float inDeg, float inRedTint, float inGreenTint, float inBlueTint, float inXFall){
+  Candle(float inDeg, float inRedTint, float inGreenTint, float inBlueTint, float inXSpaced){
    deg = inDeg;
    redTint = inRedTint;
    greenTint = inGreenTint;
    blueTint = inBlueTint;
-   xFall = inXFall;
+   xSpaced = inXSpaced;
    speed = 0;
    gravity = height/100;
    size = 0.03*width;
@@ -37,7 +37,7 @@ class Candle {
 //methods
 
  void fall() {
-    xGlow = xFall;
+    xGlow = xSpaced;
     size = 0.02*width;
     yGlow = yGlow + speed;
     speed = speed + gravity;
@@ -52,6 +52,7 @@ class Candle {
   }
   
   void hover(float inFreq, float inAmp) {
+    xGlow = xSpaced;
     yGlow = height - inFreq*2;
     size = inAmp*width/2;
     constrain(yGlow,0,height);
