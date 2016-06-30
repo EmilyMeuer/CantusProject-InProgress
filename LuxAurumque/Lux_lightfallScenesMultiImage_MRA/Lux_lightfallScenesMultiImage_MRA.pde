@@ -1,5 +1,5 @@
 /*
-  Started: 05/31/2016
+  Started: 06/29/2016
   MRA
   Lux Aurumque
     - SceneA is raining Light - Amanda's idea
@@ -133,6 +133,7 @@ void draw(){
     colorLightfall(false, 50);
   }
 }// draw
+
 
 //graysLightfall is a simpler version of colorLightfall. See notes in colorLightfall for explanations.
 void grayLightfall(){

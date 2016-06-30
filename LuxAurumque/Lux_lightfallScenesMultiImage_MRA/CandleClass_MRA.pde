@@ -21,7 +21,7 @@ class Candle {
    xSpaced = inXSpaced;
    sizeAdjust = inSizeAdjust;
    speed = 0;
-   gravity = height/100;
+   gravity = height/200;
  }
 
 //methods
