@@ -116,8 +116,9 @@ class Input
    */
   Input()
   {
-    IOAudioFormat jsaf = new IOAudioFormat(44100, 16, 2, 2, true, false);
-    this.ac    = new AudioContext(new beads.JavaSoundAudioIO(), 512, jsaf);
+//    IOAudioFormat jsaf = new IOAudioFormat(44100, 16, 2, 2, true, false);
+//    this.ac    = new AudioContext(new beads.JavaSoundAudioIO(), 512, jsaf);
+    this.ac  = new AudioContext(new AudioServerIO.Jack());
     
     this.inputsUGen  = ac.getAudioInput();
     println("inputsUGen = " + inputsUGen);
