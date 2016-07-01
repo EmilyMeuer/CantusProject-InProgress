@@ -15,6 +15,14 @@ import beads.FFT;
 import beads.PowerSpectrum;
 import beads.ShortFrameSegmenter;
 
+import beads.Pitch;
+import beads.Frequency;
+
+import beads.TimeStamp;
+
+import beads.SpectralDifference;
+import beads.PeakDetector;
+
 /*
   George Profenza
   
@@ -52,6 +60,7 @@ public class BeadsJNA extends PApplet {
   ShortFrameSegmenter sfs2;
   PowerSpectrum ps;
   PowerSpectrum ps2;
+  Frequency    f;
   
   int  waitUntil;
   
@@ -105,6 +114,32 @@ public class BeadsJNA extends PApplet {
     ps2  = new PowerSpectrum();
     
     fft.addListener(ps);
+    
+    /*
+    Frequency f = new Frequency(ac.getSampleRate()) {
+    public void process(TimeStamp s, TimeStamp e, float[] data) {
+      super.process(s, e, data);
+      System.out.println(Pitch.ftom(features));
+      }
+    };
+    */
+    f = new Frequency(44100.0f);
+    // connect the PowerSpectrum to the Frequency object
+    ps.addListener(f);
+
+    ps.addListener(f);
+    
+  //set up spectral difference
+  SpectralDifference sd = new SpectralDifference(ac.getSampleRate());
+  // sd.setFreqWindow(80.f,1100.f);
+  sd.setFreqWindow(2000.f, 10000.f);
+  ps.addListener(sd);
+
+  // Peak Detector
+  PeakDetector pd = new PeakDetector();
+  sd.addListener(pd);    
+
+  
     fft2.addListener(ps2);
     
     // Linking the ShortFrameSegmenters back to the AudioContext,
@@ -122,7 +157,7 @@ public class BeadsJNA extends PApplet {
     // This float[] is the FFT buffer!
     // So we just need to find out what frequencies go to what place in the buffer.
     float[] features = ps.getFeatures();
-    float[] features2 = ps2.getFeatures();
+//    float[] features2 = ps2.getFeatures();
     
     stroke(255, 50, 50);
     if(features != null){
@@ -136,7 +171,8 @@ public class BeadsJNA extends PApplet {
           line(x, height, x, height - barHeight);
       } 
     } // if
- 
+
+ /*
     stroke(50, 50, 255);
     if(features2 != null){
       for(int x = 0; x < width; x++){
@@ -149,6 +185,6 @@ public class BeadsJNA extends PApplet {
           line(x, height, x, height - barHeight);
       } 
     } // if
-    
+    */
   } // draw()
 } // class
