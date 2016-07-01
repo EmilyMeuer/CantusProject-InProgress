@@ -2,8 +2,12 @@
   Started: 06/29/2016
   MRA
   Lux Aurumque
-    - SceneA is raining Light - Amanda's idea
-    - press a key to change to next scene 
+    - press space bar to change to next scene 
+    - labels for when to chance scene are in draw (text and measure number)
+  TO DO
+    - measure numbers
+    - color matching
+    - nomenclature for actual inputs
 */
 
 Input  myInput1;
@@ -22,15 +26,15 @@ void setup()
 {
   mInputs = new MultipleInputs(new String[] { "Lux 1.mp3", "Lux 2.mp3", "Lux 3.mp3", "Lux 4.mp3"});
   myCandle = new Candle[orbs];
-  myCandle[0] = new Candle(random(360), 100, 100, 100, width/10*9, 1); 
-  myCandle[1] = new Candle(random(360), 120, 80, 60, width/10*1, 1); 
-  myCandle[2] = new Candle(random(360), 110, 90, 60, width/10*2, 1); 
-  myCandle[3] = new Candle(random(360), 80, 80, 60, width/10*3, 1); 
-  myCandle[4] = new Candle(random(360), 80, 110, 80, width/10*4, 1); 
-  myCandle[5] = new Candle(random(360), 80, 80, 110, width/10*5, 1); 
-  myCandle[6] = new Candle(random(360), 100, 80, 100, width/10*6, 1); 
-  myCandle[7] = new Candle(random(360), 100, 100, 100, width/10*7, 1); 
-  myCandle[8] = new Candle(random(360), 100, 100, 100, width/10*8, 1); 
+  myCandle[0] = new Candle(255, 175, 210, width/10*9, 1); //pink
+  myCandle[1] = new Candle(255, 234, 44, width/10*1, 1); //yellow
+  myCandle[2] = new Candle(224, 36, 71, width/10*2, 1); //red
+  myCandle[3] = new Candle(255, 90, 8, width/10*3, 1);  //orange
+  myCandle[4] = new Candle(162, 211, 2, width/10*4, 1); //light green
+  myCandle[5] = new Candle(1, 100, 65, width/10*5, 1); //forest green
+  myCandle[6] = new Candle(149, 176, 250, width/10*6, 1); //periwinkle
+  myCandle[7] = new Candle(122, 73, 155, width/10*7, 1); //violet
+  myCandle[8] = new Candle(247, 3, 222, width/10*8, 1); //fuchsia
 // Candle(degrees for circle formation, redTint, greenTint, blueTint, xLocation for even spacing, sizeAdjustment);
 }
 
@@ -118,16 +122,16 @@ void draw(){
   }
   
   if (scene == 2) { //at first "calida"
-      myCandle[0].circle(myInput1.getAmplitude(), width*0.6, height*0.2);
-      myCandle[1].circle(myInput1.getAmplitude(), width*0.6, height*0.2);
-      myCandle[2].circle(myInput2.getAmplitude(), width*0.6, height*0.2);
-      myCandle[3].circle(myInput2.getAmplitude(), width*0.6, height*0.2);
-      myCandle[4].circle(myInput3.getAmplitude(), width*0.6, height*0.2);
-      myCandle[5].circle(myInput3.getAmplitude(), width*0.6, height*0.2);
-      myCandle[6].circle(myInput4.getAmplitude(), width*0.6, height*0.2);
-      myCandle[7].circle(myInput4.getAmplitude(), width*0.6, height*0.2);
+      myCandle[0].circle(myInput1.getAmplitude(), myInput1.getAdjustedFundAsHz(), width*0.6, height*0.2);
+      myCandle[1].circle(myInput1.getAmplitude(), myInput1.getAdjustedFundAsHz(), width*0.6, height*0.2);
+      myCandle[2].circle(myInput2.getAmplitude(), myInput2.getAdjustedFundAsHz(), width*0.6, height*0.2);
+      myCandle[3].circle(myInput2.getAmplitude(), myInput2.getAdjustedFundAsHz(), width*0.6, height*0.2);
+      myCandle[4].circle(myInput3.getAmplitude(), myInput3.getAdjustedFundAsHz(), width*0.6, height*0.2);
+      myCandle[5].circle(myInput3.getAmplitude(), myInput3.getAdjustedFundAsHz(), width*0.6, height*0.2);
+      myCandle[6].circle(myInput4.getAmplitude(), myInput4.getAdjustedFundAsHz(), width*0.6, height*0.2);
+      myCandle[7].circle(myInput4.getAmplitude(), myInput4.getAdjustedFundAsHz(), width*0.6, height*0.2);
       myCandle[8].highlight(myInput1.getAmplitude(), width*0.6, height*0.15); //tenor1 controlls this
-      colorLightfall(true, 75);
+      colorLightfall(false, 75);
   }
   
   if (scene == 3) { //at first "pura"
@@ -191,16 +195,16 @@ void draw(){
   }
   
   if (scene == 6) { // at "natum" of lower voices (not tenor soli)
-      myCandle[0].circle(myInput1.getAmplitude(), width*0.2, height*0.6);
-      myCandle[1].circle(myInput1.getAmplitude(), width*0.2, height*0.6);
-      myCandle[2].circle(myInput2.getAmplitude(), width*0.2, height*0.6);
-      myCandle[3].circle(myInput2.getAmplitude(), width*0.2, height*0.6);
-      myCandle[4].circle(myInput3.getAmplitude(), width*0.2, height*0.6);
-      myCandle[5].circle(myInput3.getAmplitude(), width*0.2, height*0.6);
-      myCandle[6].circle(myInput4.getAmplitude(), width*0.2, height*0.6);
+      myCandle[0].circle(myInput1.getAmplitude(), myInput1.getAdjustedFundAsHz(), width*0.2, height*0.6);
+      myCandle[1].circle(myInput1.getAmplitude(), myInput1.getAdjustedFundAsHz(), width*0.2, height*0.6);
+      myCandle[2].circle(myInput2.getAmplitude(), myInput2.getAdjustedFundAsHz(), width*0.2, height*0.6);
+      myCandle[3].circle(myInput2.getAmplitude(), myInput2.getAdjustedFundAsHz(), width*0.2, height*0.6);
+      myCandle[4].circle(myInput3.getAmplitude(), myInput3.getAdjustedFundAsHz(), width*0.2, height*0.6);
+      myCandle[5].circle(myInput3.getAmplitude(), myInput3.getAdjustedFundAsHz(), width*0.2, height*0.6);
+      myCandle[6].circle(myInput4.getAmplitude(), myInput4.getAdjustedFundAsHz(), width*0.2, height*0.6);
       myCandle[7].highlight(myInput1.getAmplitude(), width*0.15, height*0.8); //tenor soli controls this
       myCandle[8].highlight(myInput1.getAmplitude(), width*0.15, height*0.8); //tenor soli controls this
-      colorLightfall(true, 75);
+      colorLightfall(false, 75);
   }
   
 }// draw
@@ -235,6 +239,9 @@ void colorLightfall(boolean onTint, float inShowImage) {
               j++;
             }
             if (onTint == false){
+              r *= 1.0;
+              g *= 0.7;
+              b *= 0.3;
               j++;
             }
           }
