@@ -25,6 +25,7 @@ import beads.ShortFrameSegmenter;
     ac = new AudioContext();
     UGen microphoneIn = ac.getAudioInput();
   ...and comment out any other initializing of these same variables (e.g., "ac = new AudioContext(new AudioServerIO.Jack());").
+  May get errors that the line cannot be found, but its worth a try!
   
   (This is an example from a link from this tutorial: https://groups.google.com/forum/?hl=en&fromgroups=#!topic/beadsproject/dSvxUM1l9S0,
   and sent by George P. in response to SO question.)
@@ -69,7 +70,7 @@ public class BeadsJNA extends PApplet {
     
 //    UGen microphoneIn = ac.getAudioInput(new int[]{1,2,3,4});
     UGen  mic1  = ac.getAudioInput(new int[] {1} );
-    UGen  mic2  = ac.getAudioInput(new int[] {4} );
+    UGen  mic2  = ac.getAudioInput(new int[] {2} );
 //    UGen microphoneIn = ac.getAudioInput();
 
     // "Stringing" the mic to the gain and the gain to the AudioContext:
@@ -135,7 +136,7 @@ public class BeadsJNA extends PApplet {
           line(x, height, x, height - barHeight);
       } 
     } // if
- /*
+ 
     stroke(50, 50, 255);
     if(features2 != null){
       for(int x = 0; x < width; x++){
@@ -148,6 +149,6 @@ public class BeadsJNA extends PApplet {
           line(x, height, x, height - barHeight);
       } 
     } // if
-    */
+    
   } // draw()
 } // class
