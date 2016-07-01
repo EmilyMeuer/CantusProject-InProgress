@@ -92,12 +92,12 @@ class Candle {
  return size;
  }
  float getRedTint(){
-    return redTint/255;
+    return redTint/100;
  }
  float getGreenTint(){
-    return greenTint/255;
+    return greenTint/100;
  }
  float getBlueTint(){
-    return blueTint/255;
+    return blueTint/100;
  }
 }//class Shine
