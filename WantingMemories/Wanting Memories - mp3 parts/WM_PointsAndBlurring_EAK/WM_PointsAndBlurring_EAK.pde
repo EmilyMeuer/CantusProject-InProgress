@@ -40,6 +40,7 @@ int tenLevel;
 int smallPoint = 4;
 int largePoint = 4;
 
+
 /*FFT         fft;
  AudioInput  input;
  int         level;
@@ -107,9 +108,9 @@ void setup()
    allInputs.add("WM parts - Bass.mp3");//two*/
 
   noStroke();
-  
-  
-    for (int i = 0; i < 9; i++)
+
+
+  for (int i = 0; i < 9; i++)
   {
     println(i + ": ");
     int[] loc = getImageXandY(i);
@@ -118,7 +119,8 @@ void setup()
       print("  " + j + ": " + loc[j]);
     } // for - j
     println();
-}}
+  }
+}
 
 void draw()
 {
@@ -162,15 +164,18 @@ void draw()
 
 
 
-float pointillizeFive = map((Math.min(fiveLevel, 30)), 0, 30, smallPoint, largePoint);
+  float pointillizeFive = map((Math.min(fiveLevel, 30)), 0, 30, smallPoint, largePoint);
   int randPixelNum = (int)(random(five.pixels.length));
   int randPixel = five.pixels[randPixelNum];
   int xFive = randPixelNum%five.width;
   int yFive = randPixelNum/five.width;
   color pixFive = five.get(xFive, yFive);
   int[] cornerXY = getImageXandY(4);
-  for(int i = 0; i < cornerXY.length; i++)
-
+  
+  for (int i = 0; i < cornerXY.length; i++) {
+ fill(pixFive, 128);
+  ellipse(xFive + cornerXY[0], yFive + cornerXY[1], pointillizeFive, pointillizeFive);}
+  
 
   //  tint(255, (Math.min(fiveLevel, 255)));
   //image(five, width/4, height/4, width/2, height/2);
@@ -194,6 +199,7 @@ float pointillizeFive = map((Math.min(fiveLevel, 30)), 0, 30, smallPoint, largeP
 
 int[] getImageXandY(int imageNum)
 {
+
   int x = queryArray(width, imageNum % 3);
   int y = queryArray(height, imageNum / 3);
 
