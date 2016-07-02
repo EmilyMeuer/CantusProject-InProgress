@@ -1,7 +1,7 @@
 class Candle {
   float xGlow;
   float yGlow;
-  float xFall;
+  float xSpaced;
   float size;
   float curFreq;
   float speed;
@@ -13,32 +13,22 @@ class Candle {
   float sizeAdjust;
   
 //Constructors with input variables
- Candle(float inDeg, float inRedTint, float inGreenTint, float inBlueTint, float inXFall, float inSizeAdjust){
+ Candle(float inDeg, float inRedTint, float inGreenTint, float inBlueTint, float inXSpaced, float inSizeAdjust){
    deg = inDeg;
    redTint = inRedTint;
    greenTint = inGreenTint;
    blueTint = inBlueTint;
+   xSpaced = inXSpaced;
    sizeAdjust = inSizeAdjust;
-   xFall = inXFall;
    speed = 0;
-   gravity = height/100;
- }
-  Candle(float inDeg, float inRedTint, float inGreenTint, float inBlueTint, float inXFall){
-   deg = inDeg;
-   redTint = inRedTint;
-   greenTint = inGreenTint;
-   blueTint = inBlueTint;
-   xFall = inXFall;
-   speed = 0;
-   gravity = height/100;
-   size = 0.03*width;
+   gravity = height/200;
  }
 
 //methods
 
  void fall() {
-    xGlow = xFall;
-    size = 0.02*width;
+    xGlow = xSpaced;
+    size = 0.02*width*sizeAdjust;
     yGlow = yGlow + speed;
     speed = speed + gravity;
     if (yGlow>height+(height/50)){
@@ -52,8 +42,9 @@ class Candle {
   }
   
   void hover(float inFreq, float inAmp) {
+    xGlow = xSpaced;
     yGlow = height - inFreq*2;
-    size = inAmp*width/2;
+    size = inAmp*width/2*sizeAdjust;
     constrain(yGlow,0,height);
   }//void hover
   
@@ -63,14 +54,14 @@ class Candle {
     yGlow = sin(radians(deg))*rad+inYCenter;
     constrain(xGlow, 0, width);
     constrain(yGlow, 0, height);
-    size = inAmp*width/2;
+    size = inAmp*width/2*sizeAdjust;
     if (inAmp < 0.01) {
       deg = random(360);
     }
   }
  
  void freqPoints (float inFreq, float inAmp){
-   size = inAmp*width*2;
+   size = inAmp*width*2*sizeAdjust;
    curFreq = inFreq;
    if ((curFreq > 250) && (curFreq < 300)){
      xGlow = 0.114*width;
@@ -87,7 +78,7 @@ class Candle {
  }//void angels
  
  void highlight(float inAmp, float inXGlow, float inYGlow) {
-   size = inAmp*width*1.5;
+   size = inAmp*width*1.5*sizeAdjust;
    xGlow = inXGlow;
    yGlow = inYGlow;
  }
@@ -102,15 +93,12 @@ class Candle {
  return size;
  }
  float getRedTint(){
-    return redTint;
+    return redTint/100;
  }
  float getGreenTint(){
-    return greenTint;
+    return greenTint/100;
  }
  float getBlueTint(){
-    return blueTint;
- }
- float getSizeAdjust(){
-   return sizeAdjust;
+    return blueTint/100;
  }
 }//class Shine

@@ -104,7 +104,7 @@ void draw() {
   
   
   
-  println("rightInput.getAmplitude() = " + rightInput.getAmplitude());
+  println("leftInput.getAdjustedFundAsHz() = " + leftInput.getAdjustedFundAsHz());
 }
 
 void rosettePartOne(float radius) {
@@ -132,7 +132,7 @@ void rosettePartOne(float radius) {
     stroke(50, 50, 200);
     line(x1, y1, x2, y2);
   }
-}
+} // rosettePartOne
 
 void rosettePartTwo(float radius) {
   for (int i = 0; i < 8; i++) {
@@ -147,16 +147,10 @@ void rosettePartTwo(float radius) {
     stroke(50, 200, 50);
     line(x1, y1, x2, y2);
   }
-}
+} // rosettePartTwo
 
 void rosettePartThree(float radius) {
   for (int i = 0; i < 16; i++) {
-    /*
-    println("cos(PI/4*3* " + i + ") = " + cos(PI/4*3*i));
-     println("radius*cos(PI/4*3*(" + i + "+1)) = " + radius*cos(PI/4*3*(i+1)));
-     println("radius*sin(PI/4*3*" + i + ") = " + radius*sin(PI/4*3*i));
-     println("radius*sin(PI/4*3*(" + i + "+1)) = " + radius*sin(PI/4*3*(i+1)));
-     */
     x1 = radius*cos(PI/4*3*i);
     x2 = radius*cos(PI/4*3*(i+1));
     y1 = radius*sin(PI/4*3*i);
@@ -167,5 +161,5 @@ void rosettePartThree(float radius) {
     strokeWeight(.5);
     stroke(200, 50, 50);
     line(x1, y1, x2, y2);
-  }
+  } // rosettePartThree
 }

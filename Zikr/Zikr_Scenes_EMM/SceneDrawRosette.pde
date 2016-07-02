@@ -1,4 +1,4 @@
-class DrawRosette implements Scene
+public class DrawRosette extends Scene
 {
   /*
     06/29/2016
@@ -6,7 +6,7 @@ class DrawRosette implements Scene
    
    This scene draws a rosette, either on a timer or on an audio-input-triggered event.
    
-   Will need to integrate multiple inputs later.
+    ** Will need to integrate multiple inputs later.
    */
 
   Input  input;
@@ -34,7 +34,7 @@ class DrawRosette implements Scene
    Fb (E) 4  -  329.63
    */
 
-  DrawRosette(Input input)
+  public DrawRosette(Input input)
   {
     this.input  = input;
     this.stroke = 0;
@@ -92,7 +92,7 @@ class DrawRosette implements Scene
   
   void drawRosetteThree(float radius, int whichStroke) {
     if (whichStroke > 15) {
-      throw new IllegalArgumentException("Zikr_Rosette_v3_Draw_EMM.drawRosetteThree: int parameter " + whichStroke + " is greater than the number of lines in the rosette.");
+      throw new IllegalArgumentException("Zikr_Scenes_EMM.drawRosetteThree: int parameter " + whichStroke + " is greater than the number of lines in the rosette.");
     }
   
     float x1 = radius*cos(PI/4*3*whichStroke);

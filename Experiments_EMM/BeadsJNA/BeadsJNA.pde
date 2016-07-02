@@ -7,64 +7,184 @@ import beads.IOAudioFormat;
 import beads.UGen;
 import beads.Gain;
 
-// This import probably not necessary - I just did it to try it:
-//import org.jaudiolibs.jnajack.*;
+import java.util.Arrays;
+
+import org.jaudiolibs.beads.AudioServerIO;
+
+import beads.FFT;
+import beads.PowerSpectrum;
+import beads.ShortFrameSegmenter;
+
+import beads.Pitch;
+import beads.Frequency;
+
+import beads.TimeStamp;
+
+import beads.SpectralDifference;
+import beads.PeakDetector;
 
 /*
-import net.beadsproject.beads.core.AudioContext;
-import net.beadsproject.beads.core.AudioIO;
-import net.beadsproject.beads.core.UGen;
-import net.beadsproject.beads.ugens.Gain;
-import processing.core.PApplet;
-*/
-
-/*
-  Emily Meuer
+  George Profenza
+  
+  Edited by Emily Meuer
   06/21/2016
   
-  This is an example from a link from this tutorial: https://groups.google.com/forum/?hl=en&fromgroups=#!topic/beadsproject/dSvxUM1l9S0
+  To run w/out Jack, uncomment these lines in setup:
+    ac = new AudioContext();
+    UGen microphoneIn = ac.getAudioInput();
+  ...and comment out any other initializing of these same variables (e.g., "ac = new AudioContext(new AudioServerIO.Jack());").
+  May get errors that the line cannot be found, but its worth a try!
   
-  Trying to figure it all out...
+  (This is an example from a link from this tutorial: https://groups.google.com/forum/?hl=en&fromgroups=#!topic/beadsproject/dSvxUM1l9S0,
+  and sent by George P. in response to SO question.)
   
   Good discussion here:
   https://groups.google.com/forum/#!topic/beadsproject/oWEVUNHSztE/discussion
+  
+  Comments on FFT (they first begin in draw()):
+  This float[] (i.e., features) is the FFT buffer!
+  So we just need to find out what frequencies go to what place in the buffer.
+  Perhaps this Pitch class will help? I kind of doubt it... 
+    http://www.beadsproject.net/doc/net/beadsproject/beads/data/Pitch.html
+  Otherwise FFT has methods binNumber and binFrequency that look like what we want.
+    Those might not work with the PowerSpectrum?
+    If they don't, can we just call calculateReal() or calculateImaginary() and not use the PS?
 */
 
-// This is actually Java code?  No, it doesn't recognise all the pixel functions...
 public class BeadsJNA extends PApplet {
+  
+  static final long serialVersionUID = 1;
+  
+  AudioContext ac;
+  ShortFrameSegmenter sfs;
+  ShortFrameSegmenter sfs2;
+  PowerSpectrum ps;
+  PowerSpectrum ps2;
+  Frequency    f;
+  
+  int  waitUntil;
+  
+  void settings()
+  {
+    size(500, 200);
+  } // settings()
+  
+  public void setup(){
+    // Beads works primarily in "UGens" - unit generators - that it strings together in "chains."
+    
+//    ac = new AudioContext();
+      ac = new AudioContext(new AudioServerIO.Jack(),512,AudioContext.defaultAudioFormat(4,4));
+//    ac = new AudioContext(new AudioServerIO.Jack());
+    
+    
+//    UGen microphoneIn = ac.getAudioInput(new int[]{1,2,3,4});
+    UGen  mic1  = ac.getAudioInput(new int[] {1} );
+    UGen  mic2  = ac.getAudioInput(new int[] {2} );
+//    UGen microphoneIn = ac.getAudioInput();
 
-    AudioContext ac;
-    public void settings()
-    {
-      size(400,400);
-    } // settings()
-    public void setup(){
-//        ac = new AudioContext(new AudioServerIO.Jack(),512,AudioContext.defaultAudioFormat(4,2));//control number of ins(4) and outs(2)
-        ac = new AudioContext(new AudioServerIO.Jack(), 44100, new IOAudioFormat(44100, 16, 4, 4));
-        UGen microphoneIn = ac.getAudioInput();
-        Gain g = new Gain(ac, 1, 0.5f);
-        g.addInput(microphoneIn);
-        ac.out.addInput(g);
-
-        println("no. of inputs:  " + ac.getAudioInput().getOuts()); 
-
-        ac.start();
-    }
-    public void draw(){
-        loadPixels();
- //     Arrays.fill(pixels, color(0));
-
-      for(int i = 0; i < width; i++)
-      {
-        int buffIndex = i * ac.getBufferSize() / width;
-        int vOffset = (int)((1 + ac.out.getValue(0, buffIndex)) * height / 2);
-        pixels[vOffset * height + i] = color(255);
+    // "Stringing" the mic to the gain and the gain to the AudioContext:
+    Gain g = new Gain(ac, 1, 0.5f);
+//    g.addInput(microphoneIn);
+    g.addInput(mic1);
+    ac.out.addInput(g);
+    
+    Gain g2 = new Gain(ac, 1, 0.5f);
+    g2.addInput(mic2);
+    ac.out.addInput(g2);
+    // Do I really even need to add them to ac.out for this?
+    
+    println("no. of inputs:  " + ac.getAudioInput().getOuts()); 
+ 
+    // This splits up the frames for audio analysis - don't exactly understand why.
+    sfs = new ShortFrameSegmenter(ac);
+    sfs.addInput(mic1);
+    
+    sfs2 = new ShortFrameSegmenter(ac);
+    sfs2.addInput(mic2);
+    
+    FFT fft = new FFT();
+    FFT fft2 = new FFT();
+    
+    // The FFT's are added as "listeners" to the ShortFrameSegmenter - like chaining, but different.
+    sfs.addListener(fft);
+    sfs2.addListener(fft2);
+    
+    // The PowerSpectrum is what will actually perform the FFT:
+    ps = new PowerSpectrum();
+    ps2  = new PowerSpectrum();
+    
+    fft.addListener(ps);
+    
+    /*
+    Frequency f = new Frequency(ac.getSampleRate()) {
+    public void process(TimeStamp s, TimeStamp e, float[] data) {
+      super.process(s, e, data);
+      System.out.println(Pitch.ftom(features));
       }
-      updatePixels(); 
-    }
+    };
+    */
+    f = new Frequency(44100.0f);
+    // connect the PowerSpectrum to the Frequency object
+    ps.addListener(f);
 
-    public static void main(String[] args) {
-        PApplet.main(BeadsJNA.class.getSimpleName());
-    }
+    ps.addListener(f);
+    
+  //set up spectral difference
+  SpectralDifference sd = new SpectralDifference(ac.getSampleRate());
+  // sd.setFreqWindow(80.f,1100.f);
+  sd.setFreqWindow(2000.f, 10000.f);
+  ps.addListener(sd);
 
-}
+  // Peak Detector
+  PeakDetector pd = new PeakDetector();
+  sd.addListener(pd);    
+
+  
+    fft2.addListener(ps2);
+    
+    // Linking the ShortFrameSegmenters back to the AudioContext,
+    // prob. so that they will run when it is started?
+    ac.out.addDependent(sfs);
+    ac.out.addDependent(sfs2);
+ 
+    ac.start();
+  }
+  public void draw(){
+
+    background(255);
+    stroke(0);
+    
+    // This float[] is the FFT buffer!
+    // So we just need to find out what frequencies go to what place in the buffer.
+    float[] features = ps.getFeatures();
+//    float[] features2 = ps2.getFeatures();
+    
+    stroke(255, 50, 50);
+    if(features != null){
+      for(int x = 0; x < width; x++){
+          int featureIndex = (x * features.length) / width;
+          int barHeight = Math.min((int)(features[featureIndex] *
+                                            height), height - 1);
+ //         println("features[featureIndex] = " + features[featureIndex]);
+  //        barHeight = barHeight * 100;
+ //       println("barHeight = " + barHeight);
+          line(x, height, x, height - barHeight);
+      } 
+    } // if
+
+ /*
+    stroke(50, 50, 255);
+    if(features2 != null){
+      for(int x = 0; x < width; x++){
+          int featureIndex = (x * features2.length) / width;
+          int barHeight = Math.min((int)(features2[featureIndex] *
+                                            height), height - 1);
+ //         println("features2[featureIndex] = " + features2[featureIndex]);
+  //        barHeight = barHeight * 100;
+ //       println("barHeight = " + barHeight);
+          line(x, height, x, height - barHeight);
+      } 
+    } // if
+    */
+  } // draw()
+} // class

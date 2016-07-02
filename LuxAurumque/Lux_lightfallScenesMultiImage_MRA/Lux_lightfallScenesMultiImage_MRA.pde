@@ -1,11 +1,9 @@
 /*
-  Started: 05/31/2016
-  Last updated: 06/16/2016
+  Started: 06/29/2016
   MRA
   Lux Aurumque
-    - Raining Light - Amanda's idea
-    - press a key to change to next scene (only 2 right now)
-    - this is set to typical projector resolution (1024 x 768)
+    - SceneA is raining Light - Amanda's idea
+    - press a key to change to next scene 
 */
 
 Input  myInput1;
@@ -15,23 +13,29 @@ Input  myInput4;
 MultipleInputs  mInputs;
 PImage  img;
 Candle myCandle[];
-int orbs = 9;
+int orbs = 9; //number of glowing orbs
 int scene = 0;
+int waitUntil;
+
+//// SCENE ORDER ////////////////////////////////
+int sceneA = 1;
+int sceneB = 2;
+int sceneC = 3;
 
 void setup()
 {
   mInputs = new MultipleInputs(new String[] { "Lux 1.mp3", "Lux 2.mp3", "Lux 3.mp3", "Lux 4.mp3"});
   myCandle = new Candle[orbs];
-  myCandle[0] = new Candle(random(360), 100, 100, 100, width/10*9); 
-  myCandle[1] = new Candle(random(360), 120, 80, 60, width/10*1); 
-  myCandle[2] = new Candle(random(360), 110, 90, 60, width/10*2); 
-  myCandle[3] = new Candle(random(360), 80, 80, 60, width/10*3); 
-  myCandle[4] = new Candle(random(360), 80, 110, 80, width/10*4); 
-  myCandle[5] = new Candle(random(360), 80, 80, 110, width/10*5); 
-  myCandle[6] = new Candle(random(360), 100, 80, 100, width/10*6); 
-  myCandle[7] = new Candle(random(360), 100, 100, 100, width/10*7); 
-  myCandle[8] = new Candle(random(360), 100, 100, 100, width/10*8); 
-  
+  myCandle[0] = new Candle(random(360), 100, 100, 100, width/10*9, 1); 
+  myCandle[1] = new Candle(random(360), 120, 80, 60, width/10*1, 1); 
+  myCandle[2] = new Candle(random(360), 110, 90, 60, width/10*2, 1); 
+  myCandle[3] = new Candle(random(360), 80, 80, 60, width/10*3, 1); 
+  myCandle[4] = new Candle(random(360), 80, 110, 80, width/10*4, 1); 
+  myCandle[5] = new Candle(random(360), 80, 80, 110, width/10*5, 1); 
+  myCandle[6] = new Candle(random(360), 100, 80, 100, width/10*6, 1); 
+  myCandle[7] = new Candle(random(360), 100, 100, 100, width/10*7, 1); 
+  myCandle[8] = new Candle(random(360), 100, 100, 100, width/10*8, 1); 
+// Candle(degrees for circle formation, redTint, greenTint, blueTint, xLocation for even spacing, sizeAdjustment);
 }
 
 void draw(){
@@ -42,10 +46,10 @@ void draw(){
   myInput4 = mInputs.get(3);
   
 // SETS THE SCENE /////////////////////////////////////////
-  
-  if (keyPressed){
+// sets which picture goes with each scene
+  if (keyPressed && millis() > waitUntil){
     scene ++;
-    if (scene == 4){
+    if (scene == 2){
       img = loadImage("bellPeppers.jpg");
       img.resize(width, height);
       img.loadPixels();
@@ -57,13 +61,22 @@ void draw(){
       img.loadPixels();
       loadPixels();
     }
-    delay(500);
+    if (scene == 3){
+      img = loadImage("bellPepperPiano.jpg");
+      img.resize(width, height);
+      img.loadPixels();
+      loadPixels();
+    }
+    if (scene > 3){
+      scene = 1;
+    }
+    waitUntil = millis()+500;
     println(scene);
   }
 
 // SCENES ////////////////////////////////////////////////
 
-  if (scene == 3){
+  if (scene == sceneA){
     if (myInput2.getAmplitude() > 0.01){
       myCandle[0].fall();
       myCandle[1].fall();
@@ -93,9 +106,9 @@ void draw(){
       myCandle[7].resetYDrop();
     }
     myCandle[8].freqPoints(myInput1.getAdjustedFundAsHz(), myInput1.getAmplitude());
-    grayscaleLightfall();
+    colorLightfall(true, 20);
   }
-  if (scene == 1) {
+  if (scene == sceneB) {
       myCandle[0].circle(myInput1.getAmplitude(), width/1.5, height/3);
       myCandle[1].circle(myInput1.getAmplitude(), width/1.5, height/3);
       myCandle[2].circle(myInput2.getAmplitude(), width/1.5, height/3);
@@ -105,9 +118,9 @@ void draw(){
       myCandle[6].circle(myInput4.getAmplitude(), width/1.5, height/3);
       myCandle[7].circle(myInput4.getAmplitude(), width/1.5, height/3);
       myCandle[8].highlight(myInput1.getAmplitude(), width/1.5, height/3);
-      grayscaleLightfall();
+      grayLightfall();
   }
-  if (scene == 1) {
+  if (scene == sceneC) {
     myCandle[0].highlight(myInput1.getAmplitude(), width/2, height/2);
     myCandle[1].hover(myInput2.getAdjustedFundAsHz(), myInput2.getAmplitude());
     myCandle[2].hover(myInput2.getAdjustedFundAsHz(), myInput2.getAmplitude());
@@ -117,86 +130,94 @@ void draw(){
     myCandle[6].hover(myInput3.getAdjustedFundAsHz(), myInput4.getAmplitude());
     myCandle[7].hover(myInput4.getAdjustedFundAsHz(), myInput4.getAmplitude());
     myCandle[8].hover(myInput4.getAdjustedFundAsHz(), myInput4.getAmplitude());
-    grayscaleLightfall();
+    colorLightfall(false, 50);
   }
-  
 }// draw
 
 
-void grayscaleLightfall(){
+//graysLightfall is a simpler version of colorLightfall. See notes in colorLightfall for explanations.
+void grayLightfall(){
 float xPos, yPos;
   for (int x = 0; x < img.width; x++) {
     for (int y = 0; y < img.height; y++ ) {
       int loc = x + y*img.width;
-      float b, tempBrightness;
-      float brightness = 0;
-      b = blue (img.pixels[loc]);
-      b = 0.01*b;
+      int j = 0;
+      float r;
+      r = red (img.pixels[loc]);
+      float tempBrightness;
+      float brightness = -255;
       for (int i = 0; i < myCandle.length; i++){
         xPos = myCandle[i].getXGlow();
         yPos = myCandle[i].getYGlow();
         float maxdist = myCandle[i].getSize();
         float d = dist(x, y, xPos, yPos);
         if (d <= 2*maxdist) {
-          b = myCandle[i].getBlueTint()*b;
+          if (j == 0) {
+            r = myCandle[i].getRedTint()*r;
+            j++;
+          }
           tempBrightness = 255*(maxdist-d)/maxdist;
           if (tempBrightness > brightness) {
             brightness = tempBrightness;
           }
         }//if near (xGlow, yGlow)
       }//for myCandle
-      b += brightness;
-      constrain(b, 0, 255);
-      color c = color(b);
+      r += brightness;
+      constrain(r, 0, 255);
+      color c = color(r);
       pixels[y*width + x] = c;
     }//for y
   }//for x
   updatePixels();
 }
 
-void colorLightfall(float inTint) {
+// colorLightfall( tinted orbs?, percent brightness of overall image)
+void colorLightfall(boolean onTint, float inShowImage) {
   float xPos, yPos;
   for (int x = 0; x < img.width; x++) {
     for (int y = 0; y < img.height; y++ ) {
-// Calculate the 1D location from a 2D grid
-      int loc = x + y*img.width;
-// Get the R,G,B values from image
+      int loc = x + y*img.width; // Calculate the 1D location from a 2D grid
       float r,g,b;
-      r = red (img.pixels[loc]);
+      float adjustBrightness = -255; //set lowest value adjust brightness can be, then the below functions change it
+      int j = 0; //for unhiding the pixels only one time
+      r = red (img.pixels[loc]); // Get the R,G,B values from image
       g = green (img.pixels[loc]);
       b = blue (img.pixels[loc]);
-      r = 0.01*r; //"hiding" the color of each pixel so that they appear black unless brightened
-      g = 0.01*g;
-      b = 0.01*b;
 //uses position of raindrops to determine location of glow
       for (int i = 0; i < myCandle.length; i++){  //gets the position of each of the raindrops, and adjusts the pixels near it
+        float tempBrightness = -255; //compares the brightness caused by one orb to the brightness of other orbs and keeps the brighter number
+                                     //tempBrightness is the brightness of the current orb. adjustBrightness is the brightest value thus far
         xPos = myCandle[i].getXGlow();
         yPos = myCandle[i].getYGlow();
         float maxdist = myCandle[i].getSize();//dist(0,0,width,height);
         float d = dist(x, y, xPos, yPos);
-        if (d <= 2*maxdist) {//the below if statement makes it so that only the pixels near the location of the raindrop are adjusted (otherwise it would "neutralizes" the color, getting rid of the picture)
-          if (r < 20 && g < 20 && b < 20){ //temporary fix for raindrops on top of each other
-            if (inTint == 1){
-              r = myCandle[i].getRedTint()*r;  //"unhiding" the color of the pixels
+        if (d <= 2*maxdist) { //only the pixels near the location of the raindrop are adjusted 
+          if (j == 0) { //only want to tint the pixels one time (or else they get... well... very bright or dark)
+            if (onTint == true){
+              r = myCandle[i].getRedTint()*r; 
               g = myCandle[i].getGreenTint()*g;
               b = myCandle[i].getBlueTint()*b;
+              j++;
             }
-            if (inTint == 0){
-              r *= 100;
-              g *= 100;
-              b *= 100;
+            if (onTint == false){
+              j++;
             }
-            float adjustbrightness = 255*(maxdist-d)/maxdist;
-            r += adjustbrightness;
-            g += adjustbrightness;
-            b += adjustbrightness;
-            constrain(r, 0, 255);
-            constrain(g, 0, 255);
-            constrain(b, 0, 255);
+          }
+          tempBrightness = 255*(maxdist-d)/maxdist; //brightness is determined by distance from (x, y) location of orb
+          if (tempBrightness > adjustBrightness) { //keep the bigger one
+            adjustBrightness = tempBrightness;
           }
         }//if pixels are near the raindrop location
-      }//for raindrop array
-// Make a new color and set pixel in the window; the 0.7*g and 0.3*b give it a golden tint
+      }//for candle array
+      if (adjustBrightness < -220) { //this makes it so the rest of the image can be shown
+        adjustBrightness = -255+255*inShowImage/100;
+      }
+      r += adjustBrightness;
+      g += adjustBrightness;
+      b += adjustBrightness;
+      constrain(r, 0, 255);
+      constrain(g, 0, 255);
+      constrain(b, 0, 255);
       color c = color(r, g, b);
       pixels[y*width + x] = c;
     }//for y
