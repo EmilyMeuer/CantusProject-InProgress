@@ -86,16 +86,14 @@ void setup()
 
   // Create an array of PImages and fill it with the images
   // whose names are in the String[] of image names.
-<<<<<<< HEAD
-  PImage[]  images = new PImage[10];
-  for (int i = 1; i < imageNames.length; i++)
-=======
+/* 
+// This will replaces the initialization of "one", "two", etc., above.
   images = new PImage[9];
   for (int i = 0; i < imageNames.length; i++)
->>>>>>> origin/master
   {
     images[i] = loadImage(imageNames[i]);
   } // for
+  */
   
   // Change the following code so that the blurred images are in another PImage[].
   
@@ -111,8 +109,7 @@ void setup()
 
   // Optional: To do the following in a loop will take a little math, possibly with mod and an 
   // array of options (see my getImageXandY() and queryArray() for ideas).
-<<<<<<< HEAD
-  images[1].resize(width/4, height/4); 
+  one.resize(width/4, height/4); 
   two.resize(width/2, height/4); 
   three.resize(width/4, height/4); 
   four.resize(width/4, height/2); 
@@ -121,7 +118,8 @@ void setup()
   seven.resize(width/4, height/4); 
   eight.resize(width/2, height/4); 
   nine.resize(width/4, height/4);
-=======
+
+/*
   images[0].resize(width/4, height/4); 
   images[1].resize(width/2, height/4); 
   images[2].resize(width/4, height/4); 
@@ -131,8 +129,8 @@ void setup()
   images[6].resize(width/4, height/4); 
   images[7].resize(width/2, height/4); 
   images[8].resize(width/4, height/4);
->>>>>>> origin/master
-  
+ */
+ 
   oneBlur.resize(width/4, height/4); 
   twoBlur.resize(width/2, height/4); 
   threeBlur.resize(width/4, height/4); 
@@ -142,7 +140,7 @@ void setup()
   sevenBlur.resize(width/4, height/4); 
   eightBlur.resize(width/2, height/4); 
   nineBlur.resize(width/4, height/4);
-
+  
   allInputs = new MultipleInputs(new String[] {"WMTenor.mp3", "WMBass.mp3", "WMAlto.mp3", "WMMelody.mp3", "WMSoprano.mp3" } ); //inserting all mp3 files here ... hopefully live inputs in the future
 
   AudioPlayer playerOne  = allInputs.get(0).player;
@@ -231,11 +229,11 @@ void draw()
   // This is the most important thing to do in a loop!!
   
   float pointillizeOne = map((30-(Math.min(oneLevel, 30))), 0, 30, smallPoint, largePoint);
-  int randPixelNum = (int)(random(images[0].pixels.length));
-  int randPixel = images[0].pixels[randPixelNum];
-  int xOne = randPixelNum%images[0].width;
-  int yOne = randPixelNum/images[0].width;
-  color pixOne = images[0].get(xOne, yOne);
+  int randPixelNum = (int)(random(one.pixels.length));
+  int randPixel = one.pixels[randPixelNum];
+  int xOne = randPixelNum%one.width;
+  int yOne = randPixelNum/one.width;
+  color pixOne = one.get(xOne, yOne);
   int[] cornerXY = getImageXandY(0);
 /*  for(int i = 0; i < cornerXY.length; i++)
   {
@@ -245,21 +243,12 @@ void draw()
   ellipse(xOne + cornerXY[0], yOne + cornerXY[1], pointillizeOne, pointillizeOne);
 
   float pointillizeTwo = map((Math.min(twoLevel, 30)), 0, 30, smallPoint, largePoint);
-<<<<<<< HEAD
   randPixelNum = (int)(random(two.pixels.length));
   randPixel = two.pixels[randPixelNum];
   int xTwo = randPixelNum%two.width;
   int yTwo = randPixelNum/two.width;
   color pixTwo = two.get(xTwo, yTwo);
-  cornerXY = getImageXandY(1);//1 for two etc.
-=======
-  randPixelNum = (int)(random(images[1].pixels.length));
-  randPixel = images[1].pixels[randPixelNum];
-  int xTwo = randPixelNum%images[1].width;
-  int yTwo = randPixelNum/images[1].width;
-  color pixTwo = images[1].get(xTwo, yTwo);
   cornerXY = getImageXandY(1);
->>>>>>> origin/master
   for(int i = 0; i < cornerXY.length; i++)
   {
     println("2: xTwo + cornerXY[0] = " + (xTwo + cornerXY[0]));
@@ -267,18 +256,29 @@ void draw()
   fill(pixTwo, 128);
   ellipse(xTwo + cornerXY[0], yTwo + cornerXY[1], pointillizeTwo, pointillizeTwo);
   
+  // Image 5:
+  
+  // maps this input's volume ("fiveLevel") to a number between the small and largePoint values.
   float pointillizeFive = map((Math.min(fiveLevel, 30)), 0, 30, smallPoint, largePoint);
-  randPixelNum = (int)(random(images[4].pixels.length));
-  randPixel = images[4].pixels[randPixelNum];
-  int xFive = randPixelNum%images[4].width;
-  int yFive = randPixelNum/images[4].width;
-  color pixFive = images[4].get(xFive, yFive);
+  // picks a random pixel:
+  randPixelNum = (int)(random(five.pixels.length));
+  randPixel = five.pixels[randPixelNum];
+  // finds the x and y coordinates of that randome pixel:
+  int xFive = randPixelNum%five.width;
+  int yFive = randPixelNum/five.width;
+  // uses those coordinates to get the color of the pixel:
+  color pixFive = five.get(xFive, yFive);
+  // gets the x and y coordinates of the image's upper left (I think) corner:
   cornerXY = getImageXandY(4);
+  // (prints those coordinates for the edification of the developer:)
   for(int i = 0; i < cornerXY.length; i++)
   {
     println("2: xFive + cornerXY[0] = " + (xFive + cornerXY[0]));
   } // for
+  // changes the brightness/opacity ?  - i.e., fades the color of the pixel.
   fill(pixFive, 128);
+  // makes an ellipse with the faded pixel color found above
+  // and the size determined on the first line of this block (262).
   ellipse(xFive + cornerXY[0], yFive + cornerXY[1], pointillizeFive, pointillizeFive);
 
   /*
