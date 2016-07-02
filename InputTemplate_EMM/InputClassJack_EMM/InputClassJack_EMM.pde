@@ -1,5 +1,5 @@
 import ddf.minim.*;
-import ddf.minim.analysis.*;
+//import ddf.minim.analysis.*;
 import ddf.minim.effects.*;
 import ddf.minim.ugens.*;
 
@@ -13,8 +13,10 @@ import beads.UGen;
 import beads.Gain;
 
 import beads.ShortFrameSegmenter;
-//import beads.FFT;
+import beads.FFT;
 import beads.PowerSpectrum;
+import beads.Frequency;
+import beads.Pitch;
 
 import javax.sound.sampled.AudioFormat;
 
@@ -22,7 +24,7 @@ Minim  minimForAll;
 
 void settings()
 {
-  size(512, 200);
+  size(600, 600);
   // minim must be initialized outside of Input in order to pass the correct value of "this" to its constructor.
   minimForAll = new Minim(this);
 }
@@ -36,34 +38,56 @@ class Input
    
    Updating InputClass_EMM to communicate with Jack;
    based on BeadsJNA.
+   
+   TODO:  Make a folder in lib for this - can it then be imported?
    */
 
   // May delete some of these:
-  Frequency  adjustedFund;      // disregards values below a certain amplitude level
+  //  Frequency  adjustedFund;      // disregards values below a certain amplitude level
   Frequency  adjustedPrevFund;
   float      amplitude;
   FFT        fft;
   float      findFund;
-  Frequency  fundamental;
+  //  Frequency  fundamental;
   float      fundamentalAmp;
   AudioInput input;
   Minim      minim;
   Frequency  prevFund;
+
   AudioPlayer player;
+  
   float      sensitivity;  // amplitude below which adjustedFreq will not be reset
   AudioSource source;
   float[][]    buffers;
 
   // New additions:
   AudioContext  ac;
+  
   UGen          inputsUGen;
   int           waitUntil;
   ShortFrameSegmenter  sfs;
   PowerSpectrum  ps;
+  //  Frequency     frequency;
+  float         pitch;
+  float         fundamental;
+  float         adjustedFund;
+
+  FrequencyEMM  frequency;
+
+  ShortFrameSegmenter[]  sfsArray;
+  FFT[]                  fftArray;
+  PowerSpectrum[]        psArray;
+  FrequencyEMM[]         frequencyArray;
+  float[]                fundamentalArray;
+  float[]                adjustedFundArray;
+  int                    numInputs;
 
   Input(int numInputs)
   {
+    this.numInputs  = numInputs;
     this.ac = new AudioContext(new AudioServerIO.Jack(), 512, AudioContext.defaultAudioFormat(numInputs, numInputs));
+
+    println("numInputs = " + numInputs);
 
     // creates an int[] of the input channel numbers - e.g., { 1, 2, 3, 4 } for a 4 channel input.
     int[]  inputNums  = new int[numInputs];
@@ -72,275 +96,223 @@ class Input
       inputNums[i]  = i + 1;
     } // for
 
-//    this.inputsUGen = ac.getAudioInput(inputNums);
-    this.inputsUGen  = ac.getAudioInput();
-    println("inputsUGen = " + inputsUGen);
-    
+    //    this.inputsUGen = ac.getAudioInput(inputNums);
+    this.inputsUGen  = ac.getAudioInput(new int[] {1, 2});
+
+    UGen[]  uGenArray  = new UGen[numInputs];
+    for(int i = 0; i < uGenArray.length; i++)
+    {
+      uGenArray[i]  = ac.getAudioInput(new int[] {(i + 1)});
+    }
+//    uGenArray[1]  = ac.getAudioInput(new int[] {2});
+
     // Sonifying Processing and George P. do this:
     Gain g = new Gain(this.ac, 1, 0.5);
-    g.addInput(inputsUGen);
-    ac.out.addInput(g);
-
-    for (int i = 0; i < inputNums.length; i++)
+    for(int i = 0; i < this.numInputs; i++)
     {
-      println("inputNums[i] = " + inputNums[i]);
+      g.addInput(uGenArray[i]);
     } // for
-    
-//    this.inputsUGen.calculateBuffer();
-    
-    this.buffers  = new float[inputNums.length][this.ac.getBufferSize()];
-    for(int i = 0; i < buffers.length; i++)
+//    g.addInput(uGenArray[0]);
+//    g.addInput(uGenArray[1]);
+    ac.out.addInput(g); //<>//
+
+    this.sfsArray  = new ShortFrameSegmenter[numInputs];
+    for (int i = 0; i < this.sfsArray.length; i++)
     {
-      buffers[i]  = inputsUGen.getOutBuffer(i);
-      for(int j = 0; j < buffers[i].length; j++)
-      {
-        println("buffers[" + i + "][" + j + "]  = " + buffers[i][j]);
-      } // for - j
+      this.sfsArray[i] = new ShortFrameSegmenter(ac);
+      while(this.sfsArray[i] == null)  {}
+      this.sfsArray[i].addInput(uGenArray[i]); //<>//
+    }
+    //    this.sfs.addInput(0, mic1, 0);
+    //    this.sfs.addInput(1, mic2, 0);
+
+    this.fftArray  = new FFT[numInputs];
+    for (int i = 0; i < this.fftArray.length; i++)
+    {
+      this.fftArray[i] = new FFT();
+      while(this.fftArray[i] == null)  {}
+      this.sfsArray[i].addListener(this.fftArray[i]); //<>//
+      //    sfs.addListener(fft);
     } // for
 
-    this.findFund     = 120;
-    this.input        = minimForAll.getLineIn();     
-//    this.fft          = new FFT(input.bufferSize(), input.sampleRate());
-    this.fft          = new FFT(this.ac.getBufferSize(), (int)this.ac.getSampleRate());
+    // The PowerSpectrum is what will actually perform the FFT:
+    this.psArray  = new PowerSpectrum[numInputs];
+    for (int i = 0; i < this.psArray.length; i++)
+    {
+      this.psArray[i] = new PowerSpectrum();
+      while(this.psArray[i] == null)  {}
+      this.fftArray[i].addListener(psArray[i]); //<>//
+    } // for
+    //    fft.addListener(ps);
+
+    /*    
+     frequency = new Frequency(44100.0f);
+     // connect the PowerSpectrum to the Frequency object
+     ps.addListener(frequency);
+     */
+    // Using my version of the Frequency class instead to allow access to amplitude.
+    this.frequencyArray  = new FrequencyEMM[numInputs];
+    for (int i = 0; i < this.frequencyArray.length; i++)
+    {
+      this.frequencyArray[i] = new FrequencyEMM(44100);
+      while(this.frequencyArray[i] == null)  {}
+      this.psArray[i].addListener(frequencyArray[i]); //<>//
+    } // for
+    //     ps.addListener(frequency);
+
+    for (int i = 0; i < numInputs; i++)
+    {
+      ac.out.addDependent(sfsArray[i]); //<>//
+    } // for - addDependent
+
     this.sensitivity  = 3;
-    this.source = this.input;
-    
+
     this.ac.start();
     
-    waitUntil  = millis();
+    this.fundamentalArray = new float[this.numInputs];
+    this.adjustedFundArray = new float[this.numInputs];
+
     this.setFund();
   } // constructor(int)
 
   /**
-   * Constructor for creating an Input object from line in.
+   * Constructor for creating a one (or two?)-channel Input object 
+   * from the machine's default audio input device.
    */
   Input()
   {
-//    IOAudioFormat jsaf = new IOAudioFormat(44100, 16, 2, 2, true, false);
-//    this.ac    = new AudioContext(new beads.JavaSoundAudioIO(), 512, jsaf);
-    this.ac  = new AudioContext(new AudioServerIO.Jack());
-    
+
+    //    IOAudioFormat jsaf = new IOAudioFormat(44100, 16, 2, 2, true, false);
+    //    this.ac    = new AudioContext(new beads.JavaSoundAudioIO(), 512, jsaf);
+
+    //    this.ac  = new AudioContext(new AudioServerIO.Jack());
+    this.ac  = new AudioContext();
+
     this.inputsUGen  = ac.getAudioInput();
-    println("inputsUGen = " + inputsUGen);
-    
+
     // Sonifying Processing and George P. do this:
     Gain g = new Gain(this.ac, 1, 0.5);
     g.addInput(inputsUGen);
     ac.out.addInput(g);
- 
+
     sfs = new ShortFrameSegmenter(ac);
     sfs.addInput(ac.out);
-    println("added ac.out to sfs");
-    beads.FFT fft = new beads.FFT();
-    println("fft is " + fft);
+
+    this.fft = new FFT();
     sfs.addListener(fft);
-    println("added fft as listener to sfs");
+
+    // The PowerSpectrum is what will actually perform the FFT:
     ps = new PowerSpectrum();
+
     fft.addListener(ps);
-    println("added ps as listener to fft");
+
+    /*    
+     frequency = new Frequency(44100.0f);
+     // connect the PowerSpectrum to the Frequency object
+     ps.addListener(frequency);
+     */
+    // Using my version of the Frequency class instead to allow access to amplitude.
+    frequency  = new FrequencyEMM(44100);
+    ps.addListener(frequency);
+
     ac.out.addDependent(sfs);
 
-    this.findFund     = 120;
-    this.input        = minimForAll.getLineIn();     
-    this.fft          = new FFT(input.bufferSize(), input.sampleRate());
-    this.sensitivity  = 3;
-    this.source = this.input;
-    
-    println("this.ac.getBufferSize() = " + this.ac.getBufferSize());
-    this.buffers  = new float[1][this.ac.getBufferSize()];
-    
+    this.sensitivity  = 1;
+
     this.ac.start();
-    println("is the error after this?");
-    
-    for (int i = 0; i < this.buffers[0].length; i++)
-    {
-//      this.buffers[0][i]  = this.inputsUGen.getValue(0, i);
-    } // for - i
-//    this.setFund();
+
+    this.setFund();
   } // constructor()
 
   /**
+   *  TODO:  add Beads functionality
    * Constructor for creating an Input object from an audio file.
    *
    * @param  filename  String specifying the audio file.
    */
   Input(String filename)
   {
-    // Can update to use Beads: SamplePlayer
-    
-    if (filename == null) {
-      throw new IllegalArgumentException("InputClassPitch.constructor(String): String parameter " + filename + " is null.");
-    }
-
-    this.findFund     = 120;
-
-    try {
-      this.player  = minimForAll.loadFile(filename);
-    } 
-    catch (NullPointerException npe) {
-      throw new IllegalArgumentException("Input.constructor(String): there was an error loading the file \"" + filename + "\" with the Minim " + minimForAll + 
-        " (this minim initialized in settings()).");
-    }
-    this.fft          = new FFT(player.bufferSize(), player.sampleRate());
-    this.player.loop(); 
-
-    this.sensitivity  = 0.01;
-    this.source = this.player;
-    this.setFund();
+    this();
+    println("InputClassJack_EMM: the constructor Input(String) is undergoing construction.  Your Input object will take audio from the default audio device.");
   } // constructor(String)
 
   /**
-   * The following comments from InputClassFreq; this no longer uses averages:
-   *
-   * Performs a foward transform on the AudioInput instance var,
-   * uses logAverages to group near frequencies and calculate
-   * their average amplitude, determines which is the dominant frequency
-   * (by which has the highest amplitude), and sets the Frequency instance
-   * var to be equal to this dominant/loudest frequency.
-   * Also sets the amplitude instance var.
-   *
-   * (To produce correct results, this function needs to be called repeatedly,
-   * and should only be called from the constructor or in one of the getFreq functions.)
+   * 
    */
   void setFund()
   { 
-    println("in setFund()");
-    if(millis() > waitUntil)
+    for (int i = 0; i < this.numInputs; i++)
     {
-      waitUntil = millis() + 100;
-//      this.inputsUGen.update();
-      println("called update - in Input class");
-    } // if
-    
-    println("buffers = " + buffers);
-    
-    for(int i = 0; i < this.buffers.length; i++)
-    {
-      for(int j = 0; j < this.buffers[i].length; j++)
-      {
-        println("this.inputsUGen.getValue(" + i + ", " + j + ")  = " + this.inputsUGen.getValue(i, j));
-      } // for - j
-    } // for
- 
- //   this.inputsUGen.printOutBuffers();
-//    println("this.inputsUGen = " + this.inputsUGen);
-//    this.inputsUGen.calculateBuffer();
-    
-//    println("this.buffers = " + this.buffers);
-    for (float[] curBuffer : this.buffers)
-    {
-      this.fft.forward(curBuffer);
+ //     println("setFund(); this.frequencyArray[i] = " + this.frequencyArray[i].getFeatures());
+      
+      if (this.frequencyArray[i].getFeatures() != null) {
+        println("i = " + i);
+        println("setFund(); this.fundamentalArray[i] = " + this.fundamentalArray[i] + "this.frequencyArray[i].getFeatures() = " + this.frequencyArray[i].getFeatures());
+        this.fundamentalArray[i] = this.frequencyArray[i].getFeatures();
 
-      for (int i = 4; i < fft.specSize(); i++)
-      {
-        if (this.fft.getBand(i) > this.fft.getFreq(findFund))
-        {     
-          if (this.fft.indexToFreq(i) - findFund < (findFund / 2))
-          {
-            this.findFund = this.fft.indexToFreq(i);
-          } // if
-        } // if
-      } // for
-
-      // set the prevFund to be equal to the current fundamental,
-      // unless the current fundamental has not been set,
-      // in which case, set it to be the newly-found fundamental.
-      if (this.fundamental == null) {  
-        this.prevFund = Frequency.ofHertz(findFund);
-      } else {  
-        this.prevFund = this.fundamental;
-      }
-
-      // take the same precautions with setting adjustPrevFreq as when setting prevFreq
-      if (this.adjustedFund == null) {  
-        this.adjustedPrevFund = Frequency.ofHertz(findFund);
-      } else {  
-        this.adjustedPrevFund = this.adjustedFund;
-      }
-
-      this.fundamental = Frequency.ofHertz(findFund);
-      // if adjustedFreq has not yet been initialized, set it to the
-      // loudest frequency regardless of its amlitude and sensitivity.
-      if (this.adjustedFund == null)
-      {
-        this.adjustedFund  = Frequency.ofHertz(findFund);
-      }
-      // in all other cases, only reset adjustedFreq to frequencies higher than the sensitivity:
-      if (this.fft.getFreq(findFund) > this.sensitivity)    
-      {  
-        this.adjustedFund = Frequency.ofHertz(findFund);
-      }
-
-      this.amplitude  = this.fft.getFreq(findFund);
-    } // for - buffers
+        if (this.frequencyArray[i].getAmplitude() > this.sensitivity) {
+          this.adjustedFundArray[i]  = this.fundamentalArray[i];
+        } // if: amp > sensitivity
+      } // if: features() != null
+    } // if: > numInputs
   } // setFund
 
   /**
-   * Calls setFund(), then returns the freq Frequency instance var.
+   *  @return  pitch of the Input, adjusted to ignore frequencies below a certain volume.
    */
-  Frequency getFund()
-  {
-    this.setFund();
-    return this.fundamental;
-  } // getFund()
+  float  getAdjustedFund(int inputNum) {
+    setFund();
+    return this.adjustedFundArray[inputNum];
+  } // getAdjustedFund()
 
   /**
-   * Calls setFund(), then returns the fundamental Frequency instance var in hertz.
+   *  @return  pitch of the Input, adjusted to ignore frequencies below a certain volume.
    */
-  float getFundAsHz()  
-  {
-    this.setFund();
-    return this.fundamental.asHz();
+  float  getAdjustedFundAsHz(int inputNum) {
+    return this.adjustedFundArray[inputNum];
+  } // getAdjustedFund()
+
+  /**
+   *  @return  pitch of the Input as a MIDI note, 
+   * adjusted to ignore sounds below a certain volume.
+   */
+  float  getAdjustedFundAsMidiNote(int inputNum) {
+    return Pitch.ftom(this.adjustedFundArray[inputNum]);
+  } // getAdjustedFund()
+
+  /**
+   *  @return  pitch of the Input.
+   */
+  float  getFund(int inputNum) {
+    return this.fundamentalArray[inputNum];
+  } // getAdjustedFund()
+
+  /**
+   *  @return  pitch of the Input.
+   */
+  float  getFundAsHz(int inputNum) {
+    return this.fundamentalArray[inputNum];
+  } // getAdjustedFund()
+
+  /**
+   *  @return  pitch of the Input as a MIDI note.
+   */
+  float  getFundAsMidiNote(int inputNum) {
+    return Pitch.ftom(this.fundamentalArray[inputNum]);
+  } // getAdjustedFund()
+
+  /**
+   * @return  amplitude of the Frequency instance var.
+   */
+  double getAmplitude(int inputNum) {
+    return this.frequencyArray[inputNum].getAmplitude();
   }
 
   /**
-   * Calls setFund(), then returns the midi note value of the fundamental Frequency instance var.
-   */
-  float getFundAsMidiNote()  
-  {
-    this.setFund();
-    return this.fundamental.asMidiNote();
-  }
-
-  /**
-   * Calls setFund(), then returns the adjustedFund Frequency instance var.
-   */
-  Frequency getAdjustedFund()
-  {
-    this.setFund();
-    return this.adjustedFund;
-  } // getFund()
-
-  /**
-   * Calls setFund(), then returns the adjustedFund Frequency instance var in hertz.
-   */
-  float getAdjustedFundAsHz()  
-  {
-    this.setFund();
-    return this.adjustedFund.asHz();
-  }
-
-  /**
-   * Calls setFund(), then returns the midi note value of the adjustedFund Frequency instance var.
-   */
-  float getAdjustedFundAsMidiNote()  
-  {
-    this.setFund();
-    return this.adjustedFund.asMidiNote();
-  }
-
-  /**
-   * Calls setFund() before returning the amplitude ("level()") of the AudioInput instance var.
-   * If you want only the amplitude of the particular frequency in quesion,
-   * access the float instance var "amplitude" directly.
+   *  Setter for sensitivity float instance var.
    *
-   * @return  amplitude of the AudioInput instance var.
+   *  @param  newSensitivity  float with the value to which sensitivity is to be set.
    */
-  float getAmplitude() {
-    this.setFund();
-    return this.source.mix.level();
-  }
-
   void setSensitivity(float newSensitivity)
   {
     this.sensitivity = newSensitivity;

@@ -9,7 +9,7 @@
  *  can cut out some background noise.
  */
 
-//package net.beadsproject.beads.analysis.featureextractors;
+package net.beadsproject.beads.analysis.featureextractors;
 
 import beads.FeatureExtractor;
 import beads.TimeStamp;
@@ -39,7 +39,7 @@ class FrequencyEMM extends FeatureExtractor<Float, float[]> {
      *
      * @param sampleRate The sample rate of the audio context
      */
-    public Frequency(float sampleRate) {
+    public FrequencyEMM(float sampleRate) {
         bufferSize = -1;
         this.sampleRate = sampleRate;
         features = null;
