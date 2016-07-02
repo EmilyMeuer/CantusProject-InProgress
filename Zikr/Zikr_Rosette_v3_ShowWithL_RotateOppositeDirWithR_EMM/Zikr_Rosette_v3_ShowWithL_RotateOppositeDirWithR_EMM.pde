@@ -104,7 +104,7 @@ void draw() {
   
   
   
-  println("rightInput.getAmplitude() = " + rightInput.getAmplitude());
+  println("leftInput.getAdjustedFundAsHz() = " + leftInput.getAdjustedFundAsHz());
 }
 
 void rosettePartOne(float radius) {
