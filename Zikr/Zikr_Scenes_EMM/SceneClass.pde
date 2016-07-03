@@ -12,21 +12,35 @@ public abstract class Scene
   float  red;      // red and blue are set in pitchColor;
   float  green;    // green must be set to 0 and += 30 each time something is drawn.
   float  blue;
+  
+  color  strokeColor;
+  
+  color  originalOne    = color(50, 50, 200);
+  color  originalTwo    = color(50, 200, 50);
+  color  originalThree  = color(200, 50, 50);
+  // Original colors:
+  //  one:    (50, 50, 200);
+  //  two:    (50, 200, 50);
+  //  three:  (200, 50, 50);
 
   float  x1, x2, y1, y2;  // Used for drawing the lines that make up each rosette
 
   Input  leftInput;
   Input  rightInput;
+  
+  Input  input;
+  int    numInputs;
+  int    tenorCutoff;
 
   void run() {
   }
 
   void pitchColor() {
-    red   = Math.min(255 * (leftInput.getAdjustedFundAsHz() / 500), 255);
-    blue  = Math.min(255 * (rightInput.getAdjustedFundAsHz() / 500), 255);
+    red   = Math.min(255 * (input.getAverageFund(1, this.tenorCutoff - 1) / 500), 255);
+    blue  = Math.min(255 * (input.getAverageFund(this.tenorCutoff, this.numInputs) / 500), 255);
   } // pitchColor
 
-  void rosettePartOne(float radius) {
+  void rosettePartOne(float radius, color strokeColor) {
     for (int i = 0; i < 4; i++) {
       x1 = radius*cos(PI/2*i);
       x2 = radius*cos(PI/2*(i+1));
@@ -36,7 +50,7 @@ public abstract class Scene
       stroke(220);
       line(x1, y1, x2, y2);
       strokeWeight(3);
-      stroke(50, 50, 200);
+      stroke(strokeColor);
       line(x1, y1, x2, y2);
     }
     for (int i = 0; i < 4; i++) {
@@ -48,12 +62,12 @@ public abstract class Scene
       stroke(220);
       line(x1, y1, x2, y2);
       strokeWeight(3);
-      stroke(50, 50, 200);
+      stroke(strokeColor);
       line(x1, y1, x2, y2);
     }
   } // rosettePartOne
 
-  void rosettePartTwo(float radius) {
+  void rosettePartTwo(float radius, color strokeColor) {
     for (int i = 0; i < 8; i++) {
       x1 = radius*cos(PI/4*3*i+PI/8);
       x2 = radius*cos(PI/4*3*(i+1)+PI/8);
@@ -63,12 +77,12 @@ public abstract class Scene
       stroke(220);
       line(x1, y1, x2, y2);
       strokeWeight(2);
-      stroke(50, 200, 50);
+      stroke(strokeColor);
       line(x1, y1, x2, y2);
     }
   } // rosettePartTwo
 
-  void rosettePartThree(float radius) {
+  void rosettePartThree(float radius, color strokeColor) {
     for (int i = 0; i < 16; i++) {
       x1 = radius*cos(PI/4*3*i);
       x2 = radius*cos(PI/4*3*(i+1));
@@ -78,7 +92,7 @@ public abstract class Scene
       stroke(220);
       line(x1, y1, x2, y2);
       strokeWeight(.5);
-      stroke(200, 50, 50);
+      stroke(strokeColor);
       line(x1, y1, x2, y2);
     } // for
   } // rosettePartThree

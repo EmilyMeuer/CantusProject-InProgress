@@ -1,14 +1,10 @@
 import processing.serial.*;
 
 /*
-  05/30/2016
+  07/02/2016
  Emily Meuer
  
- This is another way of going about the example in FrequencyAttempts,
- but using the Input object defined in the InputClass tab
- rather than doing all the computations by hand in draw.
- 
- USB emulate serial port?
+ Driver to test InputClassJack_EMM.
  */
 
 Input      testInput;
@@ -18,32 +14,38 @@ Input      input;
 
 int        waitUntil;
 
-void setup()
+void settings()
 {
-  testInput  = new Input(2);
-  waitUntil  = millis() + 100;
+  size(600,600);
 }
 
-// The setup() function is called in the InputClass tab;
-// put all necessary setup code there.
+void setup()
+{
+  testInput  = new Input(4);
+  waitUntil  = millis() + 100;
+ 
+  println("testInput.getAverageFunds(new int[] { 1, 2}) = " + testInput.getAverageFund(new int[] { 1, 2}));
+}
 
 void draw()
 {
   background(255);
-  stroke(150, 25, 150);
-  fill(150, 25, 150);
+  stroke(250, 25, 25);
+  fill(250, 25, 25);
   
 //  println("testInput.frequencyArray[0] = " + testInput.frequencyArray[0]);
+//  println("testInput.getAverageFunds(new int[] { 1, 2}) = " + testInput.getAverageFund(new int[] { 1, 2}));
+
+  ellipse(width/4, height - testInput.getAmplitude(1), 50, 50);
   
-  ellipse(width/4, height - testInput.getAdjustedFund(0), 50, 50);
+  stroke(150, 50, 150);
+  fill(150, 50, 150);
+  ellipse(width/2, height - testInput.getAverageFund(new int[] { 1, 2}), 50, 50);
   
-  stroke(25, 150, 25);
-  fill(25, 150, 25);
-  ellipse(width - width/4, height - testInput.getAdjustedFund(1), 50, 50);
-  
-//  println("testInput.getFund(0) = " + testInput.getFund(0));
-//  println("testInput.getFund(1) = " + testInput.getFund(1));
-//  println();
+  stroke(25, 25, 250);
+  fill(25, 25, 250);
+  ellipse(width - width/4, height - testInput.getAmplitude(2), 50, 50);
+
   
   /*
 

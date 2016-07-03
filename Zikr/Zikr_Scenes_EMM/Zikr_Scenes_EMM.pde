@@ -13,18 +13,21 @@ Scene  drawRosette;
 Scene  rosetteV3Colors;
 Input  leftInput;
 Input  rightInput;
+Input  inputs;
 
 int  scene;
 int  waitUntil;
 
 void setup()
 {
+  fullScreen();
   background(0);
-  leftInput  = new Input(true, false);
-  rightInput = new Input(false, true);
+//  leftInput  = new Input(true, false);
+ // rightInput = new Input(false, true);
+  inputs     = new Input(4);
   
-  drawRosette  = new DrawRosette(leftInput);
-  rosetteV3Colors  = new RosetteV3Colors(leftInput, rightInput);
+  drawRosette  = new DrawRosette(4);
+  rosetteV3Colors  = new RosetteV3Colors(4, 3);
   
   scene = 0;
   waitUntil  = millis();
@@ -39,7 +42,7 @@ void draw()
     scene++;  
   }
 
-  println("scene = " + scene); 
+//  println("scene = " + scene); 
   
   if(scene == 1) {
     drawRosette.run();

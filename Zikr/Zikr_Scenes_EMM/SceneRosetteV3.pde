@@ -17,10 +17,13 @@ abstract class RosetteV3 extends Scene
 
   float  rotateBy;
 
-  RosetteV3(Input leftInput, Input rightInput)
+  RosetteV3(int numInputs)
   {
-    this.leftInput  = leftInput;
-    this.rightInput = rightInput;
+    println("RosetteV3.constructor(int)");
+//    this.leftInput  = leftInput;
+//    this.rightInput = rightInput;
+      this.input      = new Input(numInputs);
+      this.numInputs  = numInputs;
 
     this.rotateBy  = 0;
 
@@ -37,7 +40,9 @@ abstract class RosetteV3 extends Scene
     background(0);
     translate(width/2, height/2);
 
-    float pitch = leftInput.getAdjustedFundAsHz();
+println("RosetteV3.run(): (this.tenorCutoff - 1) = " + (this.tenorCutoff - 1));
+    float pitch = input.getAverageFund(1, this.tenorCutoff - 1);
+// Again, want to add tenors?  Autem, nisi fallor, they don't sing here.
 
     /*
      Frequencies:
@@ -53,42 +58,45 @@ abstract class RosetteV3 extends Scene
     if (pitch > 160) {
       pushMatrix();
       rotate(radians(rotateBy));
-      rosettePartThree(radius1);
+      rosettePartThree(radius1, originalThree);
       popMatrix();
     }
     if (pitch > 190) {
       pushMatrix();
       rotate(radians(-rotateBy));
-      rosettePartThree(radius2);
+      rosettePartThree(radius2, originalTwo);
       popMatrix();
     }
     if (pitch > 200) {
       pushMatrix();
       rotate(radians(rotateBy));
-      rosettePartTwo(radius3);
+      rosettePartTwo(radius3, originalTwo);
       popMatrix();
     }
     if (pitch > 225) {
       pushMatrix();
       rotate(radians(-rotateBy));
-      rosettePartTwo(radius4);
+      rosettePartTwo(radius4, originalTwo);
       popMatrix();
     }
     if (pitch > 255) {
       pushMatrix();
       rotate(radians(rotateBy));
-      rosettePartOne(radius5);
+      rosettePartOne(radius5, originalOne);
       popMatrix();
     }
     if (pitch > 325) {
       pushMatrix();
       rotate(radians(-rotateBy));
-      rosettePartOne(radius6);
+      rosettePartOne(radius6, originalOne);
       popMatrix();
     }
 
-    if (rightInput.getAmplitude() > 0.001) {
-      rotateBy = (rotateBy + (rightInput.getAdjustedFundAsHz() / 400)) % 360;
+/*
+// Do we actually want rotation here?  If so, we'll have to give it tenorCutoff.
+    if (input.getAverageFund(this.tenorCutoff, this.numInputs) > 3) {
+      this.rotateBy = (this.rotateBy + (input.getAverageFund(this.tenorCutoff, this.numInputs) / 400)) % 360;
     }
+    */
   } // run()
 }// RosetteV3 

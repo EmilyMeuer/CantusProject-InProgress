@@ -5,8 +5,6 @@ public class DrawRosette extends Scene
    Emily Meuer
    
    This scene draws a rosette, either on a timer or on an audio-input-triggered event.
-   
-    ** Will need to integrate multiple inputs later.
    */
 
   Input  input;
@@ -34,9 +32,10 @@ public class DrawRosette extends Scene
    Fb (E) 4  -  329.63
    */
 
-  public DrawRosette(Input input)
+  public DrawRosette(int numInputs)
   {
-    this.input  = input;
+    println("DrawRosette.constructor(int)");
+    this.input  = new Input(numInputs);
     this.stroke = 0;
     
     this.thresholdFreq = 100;
@@ -51,12 +50,13 @@ public class DrawRosette extends Scene
   
   void drawAndRaiseThreshold(float radius) 
   {
+    println("this.numInputs = " + this.numInputs);
     // Draws a line each time the pitch crosses a frequency threshold, and ups the threshold each time:
-    if ( (stroke < 16) && (input.getAdjustedFundAsHz() > freqThresholds[stroke/3]) && millis() > waitUntil ) {
+    if ( (stroke < 16) && (input.getAverageFund(1, this.numInputs) > freqThresholds[stroke/3]) && millis() > waitUntil ) {
       waitUntil  = millis() + 300;
-      drawRosetteThree(radius, stroke);
+      drawRosetteThree(radius, stroke, originalThree);
   
-      println("i = " + stroke + "; input.getAdjustedFundAsHz() = " + input.getAdjustedFundAsHz() + "; thresholdFreq = " + thresholdFreq);
+      println("i = " + stroke + "; input.getAdjustedFundAsHz(0) = " + input.getAdjustedFundAsHz(0) + "; thresholdFreq = " + thresholdFreq);
   
       thresholdFreq += 100;
       stroke++;
@@ -67,7 +67,7 @@ public class DrawRosette extends Scene
   {
     // draws a line every second:
     if ( millis() > time  && stroke < 16) {
-      drawRosetteThree(radius, stroke);
+      drawRosetteThree(radius, stroke, originalThree);
   
       println("stroke = " + stroke + "; time = " + time + "; millis() = " + millis());
   
@@ -78,19 +78,19 @@ public class DrawRosette extends Scene
   
   void drawPastThreshold(float radius, float thresholdFreq)
   {
-    // Add some sort of delay?  So only draws once for each time it is crossed?
-  
+    // Force the threshold to be crossed multiple times before triggering?
+    
     // Draws a line each time the pitch crossed a frequency threshold:
-    if ( (input.getAdjustedFundAsHz() > thresholdFreq)  && (stroke < 16) ) {
-      drawRosetteThree(radius, stroke);
+    if ( (input.getAverageFund(1, this.numInputs) > thresholdFreq)  && (stroke < 16) ) {
+      drawRosetteThree(radius, stroke, originalThree);
   
-      println("stroke = " + stroke + "; input.getAdjustedFundAsHz() = " + input.getAdjustedFundAsHz() + "; thresholdFreq = " + thresholdFreq);
+      println("stroke = " + stroke + "; input.getAdjustedFundAsHz() = " + input.getAdjustedFundAsHz(0) + "; thresholdFreq = " + thresholdFreq);
   
       stroke++;
     } // if
   } // drawPastThreshold(float)
   
-  void drawRosetteThree(float radius, int whichStroke) {
+  void drawRosetteThree(float radius, int whichStroke, color strokeColor) {
     if (whichStroke > 15) {
       throw new IllegalArgumentException("Zikr_Scenes_EMM.drawRosetteThree: int parameter " + whichStroke + " is greater than the number of lines in the rosette.");
     }
@@ -103,7 +103,7 @@ public class DrawRosette extends Scene
     stroke(220);
     line(x1, y1, x2, y2);
     strokeWeight(2.5);
-    stroke(200, 50, 50);
+    stroke(strokeColor);
     line(x1, y1, x2, y2);
   } // drawRosetteThree
 } // DrawRosette
