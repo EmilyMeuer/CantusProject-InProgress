@@ -4,8 +4,7 @@ abstract class RosetteV3 extends Scene
     06/29/2016
    Emily Meuer
    
-   Class that shows rosettes based on the pitch of one input
-   and rotates the rosettes based on the pitch of another input.
+   Base rosette class.
    */
 
   float radius1;
@@ -19,7 +18,6 @@ abstract class RosetteV3 extends Scene
 
   RosetteV3(Input  input)
   {
-    println("RosetteV3.constructor(int)");
 //    this.leftInput  = leftInput;
 //    this.rightInput = rightInput;
       this.input      = input;
@@ -39,7 +37,6 @@ abstract class RosetteV3 extends Scene
     background(0);
     translate(width/2, height/2);
 
-println("RosetteV3.run(): (this.tenorCutoff - 1) = " + (this.tenorCutoff - 1));
     float pitch = input.getAverageFund(1, this.tenorCutoff - 1);
 // Again, want to add tenors?  Autem, nisi fallor, they don't sing here.
 

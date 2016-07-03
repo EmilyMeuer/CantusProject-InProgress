@@ -8,6 +8,11 @@ public abstract class Scene
    
    (Could have a next and previous capability.)
    */
+   
+  // Calibrate:
+  int  highPitch  = 500;    // num by which pitches will be divided before turning into a color;
+                            // pitches above this will not be considered when changing the color,
+                            // but the lower it is, the more each change in pitch will affect the color.
 
   float  red;      // red and blue are set in pitchColor;
   float  green;    // green must be set to 0 and += 30 each time something is drawn.
@@ -29,14 +34,22 @@ public abstract class Scene
   Input  rightInput;
   
   Input  input;
-  int    tenorCutoff;
-
+  int    tenorCutoff;    // mics will be split into high and low, low mics all lines with numbers below this,
+                         // high mics this mic and all with numbers above it.
+                         // (e.g., if there are 9 mics and tenorCutoff = 5, low mics are 1 - 4, and high are 5 - 9.
+  /**
+   * All implementing subclasses must override this with their own run() functionality;
+   * it will be called repeatedly in draw().
+   */
   void run() {
   }
 
+  /**
+   * Sets the color based on low and high pitches.
+   */
   void pitchColor() {
-    red   = Math.min(255 * (input.getAverageFund(1, this.tenorCutoff - 1) / 800), 255);
-    blue  = Math.min(255 * (input.getAverageFund(this.tenorCutoff, input.numInputs) / 800), 255);
+    red   = Math.min(255 * (input.getAverageFund(1, this.tenorCutoff - 1) / highPitch), 255);
+    blue  = Math.min(255 * (input.getAverageFund(this.tenorCutoff, input.numInputs) / highPitch), 255);
   } // pitchColor
 
   void rosettePartOne(float radius, color strokeColor) {

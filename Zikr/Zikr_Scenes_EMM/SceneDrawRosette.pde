@@ -7,9 +7,8 @@ public class DrawRosette extends Scene
    This scene draws a rosette, either on a timer or on an audio-input-triggered event.
    */
 
-  Input  input;
-  int    stroke;
-  int[]  freqThresholds  = new int[] { 
+  // Calibrate:
+  int[]  freqThresholds  = new int[] {     // these are the frequencies that need to be crossed to draw a new line.
     150, 
     160, 
     190, 
@@ -17,6 +16,9 @@ public class DrawRosette extends Scene
     230, 
     255, 
     325  };
+    
+  Input  input;
+  int    stroke;
   float  thresholdFreq;
   float  time  = 100;
   int    waitUntil;
@@ -32,14 +34,14 @@ public class DrawRosette extends Scene
    Fb (E) 4  -  329.63
    */
 
-  public DrawRosette(Input input)
+  public DrawRosette(Input input, int tenorCutoff)
   {
-    println("DrawRosette.constructor(int)");
-    this.input  = input;
-    this.stroke = 0;
+    this.input         = input;
+    this.tenorCutoff   = tenorCutoff;
+    this.stroke        = 0;
     
     this.thresholdFreq = 100;
-    waitUntil  = millis();
+    waitUntil          = millis();
   } // constructor
   
   public void run()
@@ -50,12 +52,12 @@ public class DrawRosette extends Scene
   
   void drawAndRaiseThreshold(float radius) 
   {
+    println("Draw.drawAndRaiseThreshold: input.getAverageFund(1, input.numInputs) = " + input.getAverageFund(1, input.numInputs));
+    
     // Draws a line each time the pitch crosses a frequency threshold, and ups the threshold each time:
     if ( (stroke < 16) && (input.getAverageFund(1, input.numInputs) > freqThresholds[stroke/3]) && millis() > waitUntil ) {
       waitUntil  = millis() + 300;
       drawRosetteThree(radius, stroke, originalThree);
-  
-      println("i = " + stroke + "; input.getAdjustedFundAsHz(1) = " + input.getAdjustedFundAsHz(1) + "; thresholdFreq = " + thresholdFreq);
   
       thresholdFreq += 100;
       stroke++;
@@ -78,6 +80,7 @@ public class DrawRosette extends Scene
   void drawPastThreshold(float radius, float thresholdFreq)
   {
     // Force the threshold to be crossed multiple times before triggering?
+   
     
     // Draws a line each time the pitch crossed a frequency threshold:
     if ( (input.getAverageFund(1, input.numInputs) > thresholdFreq)  && (stroke < 16) ) {

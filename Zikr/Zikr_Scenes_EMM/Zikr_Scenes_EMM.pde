@@ -5,9 +5,27 @@
   Zikr Scenes: Compilation of rosettes and Game of Life, in one sketch,
   to be cycled through on (mousePressed/keyPressed).
   
-  ** Which key triggers keyPressed?
-  
+  Calibration options:
+  [ Tab                       : variableName        (controls what) ]
+    Zikr_Scenes_EMM           :  drawTenorCutoff    (controls which voices control which functionality)
+                                 colorsTenorCutoff
+                                 rotateTenorCutoff       
+    SceneClass                :  highPitch          (controls amt by which pitch affects color)
+    SceneDrawRosette          :  freqThresholds     (controls at what frequencies new rosette lines will be drawn)
+    SceneRosetteV3ColorChange :  growFrequencies    (controls at what frequencies bigger rosettes will be shown)
 */
+
+// Calibrate:
+// (tenorCutoff: mic numbers below this will be "low voices", and all mics numbered this and higher will be "high voices.")
+int  drawTenorCutoff    = 3;    // mics below this number will control the drawing;
+                                // if lines don't draw that should, make sure that this is low enough,
+                                // i.e., that the only mics numbered below this are for the voices that sing in the first low part.
+                                
+int  colorsTenorCutoff  = 3;    // mics below this will control red (high pitch = more red, low pitch = less)
+                                // and mics this number and above will control blue in the same way.
+                                
+int  rotateTenorCutoff  = 3;    // mics numbered below this control rosette growth, mics numbered this and above control rotation
+                                // (higher pitch = bigger rosettes/faster rotation, respectively)
 
 Scene  drawRosette;
 Scene  rosetteV3Colors;
@@ -25,7 +43,7 @@ void setup()
   
   inputs     = new Input(4);
   
-  drawRosette      = new DrawRosette(inputs);
+  drawRosette      = new DrawRosette(inputs, 3);
   rosetteV3Colors  = new RosetteV3Colors(inputs, 3);
   rosetteV3Rotate  = new RosetteV3Rotate(inputs, 3);
   
@@ -41,8 +59,6 @@ void draw()
     waitUntil  = millis() + 300;
     scene++;  
   }
-
-//  println("scene = " + scene); 
   
   if(scene == 1) {
     drawRosette.run();
@@ -52,7 +68,7 @@ void draw()
     rosetteV3Colors.run();
   } // scene 2
   
-  if(scene == 3) {
+  if(scene >= 3) {
     rosetteV3Rotate.run();
   } // scene 2
 } //draw()

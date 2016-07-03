@@ -6,15 +6,21 @@ class RosetteV3Colors extends RosetteV3
    
    Class that shows rosettes based on the pitch of one input
    and rotates the rosettes based on the pitch of another input.
-   
-   ** Color is being overridden; get rid of that.
    */
+   
+   // Calibrate:
+   int[]  growFrequencies = {    // a rosette is drawn each time the "low voice" avg frequency
+     160,                        // passes one of these points.
+     190,
+     200,
+     225,
+     255,
+     325
+   }; // growFrequencies
   
   RosetteV3Colors(Input input, int tenorCutoff)
   {
     super(input);
-    
-    println("RosetteV3Colors.constructor(int, int)");
     
     this.tenorCutoff = tenorCutoff;
   } // RosetteV3
