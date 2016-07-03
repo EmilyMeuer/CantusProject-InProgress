@@ -29,15 +29,14 @@ public abstract class Scene
   Input  rightInput;
   
   Input  input;
-  int    numInputs;
   int    tenorCutoff;
 
   void run() {
   }
 
   void pitchColor() {
-    red   = Math.min(255 * (input.getAverageFund(1, this.tenorCutoff - 1) / 500), 255);
-    blue  = Math.min(255 * (input.getAverageFund(this.tenorCutoff, this.numInputs) / 500), 255);
+    red   = Math.min(255 * (input.getAverageFund(1, this.tenorCutoff - 1) / 800), 255);
+    blue  = Math.min(255 * (input.getAverageFund(this.tenorCutoff, input.numInputs) / 800), 255);
   } // pitchColor
 
   void rosettePartOne(float radius, color strokeColor) {

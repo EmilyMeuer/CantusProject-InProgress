@@ -32,10 +32,10 @@ public class DrawRosette extends Scene
    Fb (E) 4  -  329.63
    */
 
-  public DrawRosette(int numInputs)
+  public DrawRosette(Input input)
   {
     println("DrawRosette.constructor(int)");
-    this.input  = new Input(numInputs);
+    this.input  = input;
     this.stroke = 0;
     
     this.thresholdFreq = 100;
@@ -50,13 +50,12 @@ public class DrawRosette extends Scene
   
   void drawAndRaiseThreshold(float radius) 
   {
-    println("this.numInputs = " + this.numInputs);
     // Draws a line each time the pitch crosses a frequency threshold, and ups the threshold each time:
-    if ( (stroke < 16) && (input.getAverageFund(1, this.numInputs) > freqThresholds[stroke/3]) && millis() > waitUntil ) {
+    if ( (stroke < 16) && (input.getAverageFund(1, input.numInputs) > freqThresholds[stroke/3]) && millis() > waitUntil ) {
       waitUntil  = millis() + 300;
       drawRosetteThree(radius, stroke, originalThree);
   
-      println("i = " + stroke + "; input.getAdjustedFundAsHz(0) = " + input.getAdjustedFundAsHz(0) + "; thresholdFreq = " + thresholdFreq);
+      println("i = " + stroke + "; input.getAdjustedFundAsHz(1) = " + input.getAdjustedFundAsHz(1) + "; thresholdFreq = " + thresholdFreq);
   
       thresholdFreq += 100;
       stroke++;
@@ -81,10 +80,10 @@ public class DrawRosette extends Scene
     // Force the threshold to be crossed multiple times before triggering?
     
     // Draws a line each time the pitch crossed a frequency threshold:
-    if ( (input.getAverageFund(1, this.numInputs) > thresholdFreq)  && (stroke < 16) ) {
+    if ( (input.getAverageFund(1, input.numInputs) > thresholdFreq)  && (stroke < 16) ) {
       drawRosetteThree(radius, stroke, originalThree);
   
-      println("stroke = " + stroke + "; input.getAdjustedFundAsHz() = " + input.getAdjustedFundAsHz(0) + "; thresholdFreq = " + thresholdFreq);
+      println("stroke = " + stroke + "; input.getAdjustedFundAsHz() = " + input.getAdjustedFundAsHz(1) + "; thresholdFreq = " + thresholdFreq);
   
       stroke++;
     } // if

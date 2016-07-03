@@ -8,9 +8,9 @@ class RosetteV3Rotate extends RosetteV3Colors
    and rotates the rosettes based on the pitch of another input.
    */
 
-  RosetteV3Rotate(int numInputs, int tenorCutoff)
+  RosetteV3Rotate(Input input, int tenorCutoff)
   {
-    super(numInputs, tenorCutoff);
+    super(input, tenorCutoff);
     
     println("RosetteV3Rotate.constructor(int, int)");
     
@@ -19,15 +19,15 @@ class RosetteV3Rotate extends RosetteV3Colors
 
   void run()
   {
-    if (input.getAverageFund(this.tenorCutoff, this.numInputs) > 3) {
-      super.rotateBy = (super.rotateBy + (input.getAverageFund(this.tenorCutoff, this.numInputs) / 400)) % 360;
+    if (input.getAverageAmp(this.tenorCutoff, input.numInputs) > 3) {
+      super.rotateBy = (super.rotateBy + (input.getAverageFund(this.tenorCutoff, input.numInputs) / 400)) % 360;
     }
     super.run();
     /*
     background(0);
     translate(width/2, height/2);
 
-    float pitch = this.input.getAverageFund(0, this.tenorCutoff - 1);
+    float pitch = this.input.getAverageFund(1, this.tenorCutoff - 1);
 
     /*
      Frequencies:

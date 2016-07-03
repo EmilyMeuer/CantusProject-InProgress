@@ -10,9 +10,9 @@ class RosetteV3Colors extends RosetteV3
    ** Color is being overridden; get rid of that.
    */
   
-  RosetteV3Colors(int numInputs, int tenorCutoff)
+  RosetteV3Colors(Input input, int tenorCutoff)
   {
-    super(numInputs);
+    super(input);
     
     println("RosetteV3Colors.constructor(int, int)");
     
@@ -24,7 +24,6 @@ class RosetteV3Colors extends RosetteV3
     background(0);
     translate(width/2, height/2);
 
-println("Colors.run(): about to call input.getAverageFund...; tenorCutoff - 1 = " + (tenorCutoff - 1));
     float pitch = input.getAverageFund(1, tenorCutoff - 1);
     // Want to add the tenor pitches to this one, too?  Since they aren't making it rotate?
     
@@ -47,36 +46,42 @@ println("Colors.run(): about to call input.getAverageFund...; tenorCutoff - 1 = 
       rotate(radians(rotateBy));
       rosettePartThree(radius1, color(red, green, blue));
       popMatrix();
+      green = (green + 50) % 255;
     }
     if (pitch > 190) {
       pushMatrix();
       rotate(radians(-rotateBy));
       rosettePartThree(radius2, color(red, green, blue));
       popMatrix();
+      green = (green + 50) % 255;
     }
     if (pitch > 200) {
       pushMatrix();
       rotate(radians(rotateBy));
       rosettePartTwo(radius3, color(red, green, blue));
       popMatrix();
+      green = (green + 50) % 255;
     }
     if (pitch > 225) {
       pushMatrix();
       rotate(radians(-rotateBy));
       rosettePartTwo(radius4, color(red, green, blue));
       popMatrix();
+      green = (green + 50) % 255;
     }
     if (pitch > 255) {
       pushMatrix();
       rotate(radians(rotateBy));
       rosettePartOne(radius5, color(red, green, blue));
       popMatrix();
+      green = (green + 50) % 255;
     }
     if (pitch > 325) {
       pushMatrix();
       rotate(radians(-rotateBy));
       rosettePartOne(radius6, color(red, green, blue));
       popMatrix();
+      green = (green + 50) % 255;
     }
   } // run()
 }// RosetteV3 

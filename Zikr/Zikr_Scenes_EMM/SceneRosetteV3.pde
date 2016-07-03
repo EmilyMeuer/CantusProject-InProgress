@@ -17,13 +17,12 @@ abstract class RosetteV3 extends Scene
 
   float  rotateBy;
 
-  RosetteV3(int numInputs)
+  RosetteV3(Input  input)
   {
     println("RosetteV3.constructor(int)");
 //    this.leftInput  = leftInput;
 //    this.rightInput = rightInput;
-      this.input      = new Input(numInputs);
-      this.numInputs  = numInputs;
+      this.input      = input;
 
     this.rotateBy  = 0;
 
@@ -94,8 +93,8 @@ println("RosetteV3.run(): (this.tenorCutoff - 1) = " + (this.tenorCutoff - 1));
 
 /*
 // Do we actually want rotation here?  If so, we'll have to give it tenorCutoff.
-    if (input.getAverageFund(this.tenorCutoff, this.numInputs) > 3) {
-      this.rotateBy = (this.rotateBy + (input.getAverageFund(this.tenorCutoff, this.numInputs) / 400)) % 360;
+    if (input.getAverageFund(this.tenorCutoff, input.numInputs) > 3) {
+      this.rotateBy = (this.rotateBy + (input.getAverageFund(this.tenorCutoff, input.numInputs) / 400)) % 360;
     }
     */
   } // run()
