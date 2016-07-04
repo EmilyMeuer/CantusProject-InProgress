@@ -89,8 +89,7 @@ void draw()
   int volb1 = round(rfvol);
   int j=0;                  //stack is from bottom to top
   int oldb1=pitchb1/(volb1+1); //have to add 1 because sometimes volume is zero
-//  for(j=0; j<volb1; j++)
-  for(j=0; j<pitchb1; j++)
+  for(j=0; j<volb1; j++)
   {
     fill(255-5*oldb1, 0, 0); //255 0 0
     //rect(width-9*refx-w,refy-(space+h)*j, width-8*refx-w-off, (refy-h)-(space+h)*j); //makes boxes!

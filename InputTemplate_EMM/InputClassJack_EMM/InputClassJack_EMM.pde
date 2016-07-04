@@ -1,4 +1,4 @@
-import org.jaudiolibs.beads.AudioServerIO; //<>// //<>// //<>// //<>// //<>// //<>//
+import org.jaudiolibs.beads.AudioServerIO;
 import org.jaudiolibs.beads.*;
 
 import beads.AudioContext;
@@ -114,14 +114,14 @@ class Input
       while (this.frequencyArray[i] == null) {
       }
       this.psArray[i].addListener(frequencyArray[i]); //<>//
-    } // for
+    } // for //<>//
 
     for (int i = 0; i < numInputs; i++)
     {
       ac.out.addDependent(sfsArray[i]); //<>//
     } // for - addDependent
 
-    this.sensitivity  = 3;
+    this.sensitivity  = 3; //<>//
 
     this.ac.start();
 
@@ -131,7 +131,7 @@ class Input
     this.setFund();
   } // constructor(int)
 
-  /**
+  /** //<>//
    * Constructor for creating a one (or two?)-channel Input object 
    * from the machine's default audio input device;
    * does not require Jack.
@@ -141,7 +141,7 @@ class Input
     // Could just call this(1) if I add a way to specify the AudioContext as well.
 
     this.ac  = new AudioContext();
-
+ //<>//
     this.inputsUGen  = ac.getAudioInput();
 
     // Sonifying Processing and George P. do this:
@@ -156,13 +156,13 @@ class Input
     sfs.addListener(fft);
 
     // The PowerSpectrum is what will actually perform the FFT:
-    ps = new PowerSpectrum();
+    ps = new PowerSpectrum(); //<>//
 
     fft.addListener(ps);
     /*
      frequency = new Frequency(44100.0f);
      // connect the PowerSpectrum to the Frequency object
-     ps.addListener(frequency);
+     ps.addListener(frequency); //<>//
      */
     // Using my version of the Frequency class instead to allow access to amplitude.
 
@@ -172,6 +172,8 @@ class Input
     ac.out.addDependent(sfs);
 
     this.sensitivity  = 1;
+    
+    this.numInputs    = 1;
 
     this.ac.start();
 
@@ -215,7 +217,7 @@ class Input
    *  @return  pitch of the Input, adjusted to ignore frequencies below a certain volume.
    */
   float  getAdjustedFund(int inputNum) {
-    inputNumErrorCheck(inputNum);
+    inputNumErrorCheck(inputNum, "getAdjustedFund(int)");
 
     setFund();
     return this.adjustedFundArray[inputNum - 1];
@@ -225,7 +227,7 @@ class Input
    *  @return  pitch of the Input, adjusted to ignore frequencies below a certain volume.
    */
   float  getAdjustedFundAsHz(int inputNum) {
-    inputNumErrorCheck(inputNum);
+    inputNumErrorCheck(inputNum, "getAdjustedFundAsHz(int)");
 
     setFund();
     return this.adjustedFundArray[inputNum - 1];
@@ -236,7 +238,7 @@ class Input
    * adjusted to ignore sounds below a certain volume.
    */
   float  getAdjustedFundAsMidiNote(int inputNum) {
-    inputNumErrorCheck(inputNum);
+    inputNumErrorCheck(inputNum, "getAdjustedFundAsMidiNote(int)");
 
     setFund();
     return Pitch.ftom(this.adjustedFundArray[inputNum - 1]);
@@ -246,7 +248,7 @@ class Input
    *  @return  pitch of the Input.
    */
   float  getFund(int inputNum) {
-    inputNumErrorCheck(inputNum);
+    inputNumErrorCheck(inputNum, "getFund(int)");
 
     setFund();
     return this.fundamentalArray[inputNum - 1];
@@ -256,7 +258,7 @@ class Input
    *  @return  pitch of the Input.
    */
   float getFundAsHz(int inputNum) {
-    inputNumErrorCheck(inputNum);
+    inputNumErrorCheck(inputNum, "getFundAsHz(int)");
 
     setFund();
     return this.fundamentalArray[inputNum - 1];
@@ -266,7 +268,7 @@ class Input
    *  @return  pitch of the Input as a MIDI note.
    */
   float  getFundAsMidiNote(int inputNum) {
-    inputNumErrorCheck(inputNum);
+    inputNumErrorCheck(inputNum, "getFundAsMidiNote(int)");
 
     setFund();
     return Pitch.ftom(this.fundamentalArray[inputNum - 1]);
@@ -286,11 +288,32 @@ class Input
 
     float  result  = 0;
 
-    for (int i : inputsToAverage) {
-      result  += this.getAdjustedFund(i);
+    for (int i = 0; i < inputsToAverage.length; i++)
+    {
+      result  += this.getAdjustedFund(inputsToAverage[i]);
     } // for
 
     return result/inputsToAverage.length;
+  } // getAverageFund(int[])
+  
+  float getAverageFund(int firstInput, int lastInput)
+  {
+    inputNumErrorCheck(firstInput, "getAverageFund(int, int) - first int");
+    inputNumErrorCheck(lastInput, "getAverageFund(int, int) - second int");
+    if(!(lastInput > firstInput))  {  
+      throw new IllegalArgumentException("InputClassJack.getAverageFund():  lastInput param " + lastInput + " is not greater than firstInput param " + firstInput);
+    } // error checking
+    
+    int  curInput  = firstInput;
+    
+    int[]  inputsToAverage  = new int[lastInput - firstInput + 1];
+    for(int i = 0; i < inputsToAverage.length; i++)
+    {
+      inputsToAverage[i]  = curInput;
+      curInput++;
+    } // for
+    
+    return getAverageFund(inputsToAverage);
   } // getAverageFund
   
   /**
@@ -313,23 +336,45 @@ class Input
 
     return result/inputsToAverage.length;
   } // getAverageAmp
+  
+  float getAverageAmp(int firstInput, int lastInput)
+  {
+    inputNumErrorCheck(firstInput, "getAverageFund(int, int) - first int");
+    inputNumErrorCheck(lastInput, "getAverageFund(int, int) - second int");
+    if(!(lastInput > firstInput))  {  
+      throw new IllegalArgumentException("InputClassJack.getAverageFund():  lastInput param " + lastInput + " is not greater than firstInput param " + firstInput);
+    } // error checking
+    
+    int  curInput  = firstInput;
+    
+    int[]  inputsToAverage  = new int[lastInput - firstInput + 1];
+    for(int i = 0; i < inputsToAverage.length; i++)
+    {
+      inputsToAverage[i]  = curInput;
+      curInput++;
+    } // for
+    
+    return getAverageAmp(inputsToAverage);
+  } // getAverageAmp
 
   /**
    * @return  amplitude of the Frequency instance var.
    */
   float getAmplitude(int inputNum) {
-    inputNumErrorCheck(inputNum);
+    inputNumErrorCheck(inputNum, "getAmplitude(int)");
 
     return this.frequencyArray[inputNum - 1].getAmplitude();
   } // getAmplitude
 
-  private void inputNumErrorCheck(int inputNum) {
+  private void inputNumErrorCheck(int inputNum, String method) {
     if (inputNum > this.numInputs) {
-      throw new IllegalArgumentException("InputClass_Jack.getAdjustedFund(int): int parameter " + inputNum + " is greater than " + this.numInputs + ", the number of inputs.");
+      IllegalArgumentException iae = new IllegalArgumentException("InputClass_Jack.inputNumErrorCheck(int), from " + method + ": int parameter " + inputNum + " is greater than " + this.numInputs + ", the number of inputs.");
+      iae.printStackTrace();
     }
     if (inputNum < 1) {
-      throw new IllegalArgumentException("InputClass_Jack.getAdjustedFund(int): int parameter is " + inputNum + "; must be 1 or greater.");
-    }
+      IllegalArgumentException iae = new IllegalArgumentException("InputClass_Jack.inputNumErrorCheck(int), from " + method + ": int parameter is " + inputNum + "; must be 1 or greater.");
+      iae.printStackTrace();  
+  }
   } // inputNumErrorCheck
 
   /**
