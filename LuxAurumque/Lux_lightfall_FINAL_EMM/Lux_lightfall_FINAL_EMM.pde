@@ -1,28 +1,43 @@
-/*
+/* //<>//
   Started: 06/29/2016
-  MRA
-  Lux Aurumque
-    - press space bar to change to next scene 
-    - labels for when to change scene are in draw (text and measure number)
-    P.S. I know I could use loops, but am not using them for now in case they don't play nicely with the live input class
-    
-  Edit 07/02/2016 by Emily Meuer:
-    - adjusting calibration for new Input class.
-*/
+ MRA
+ Lux Aurumque
+ - press space bar to change to next scene 
+ - labels for when to change scene are in draw (text and measure number)
+ P.S. I know I could use loops, but am not using them for now in case they don't play nicely with the live input class
+ 
+ Edit 07/02/2016 by Emily Meuer:
+ - adjusting calibration for new Input class.
+ */
+
+
+// Calibrate:
+// Original calibration values made w/analog volume knobs at 75%.
+
+int  adjustTenorSoloAmp = 400;  // number by which tenor amplitude will be divided
+// before sending it to freqPoints, where it controls light size.
+float fallThreshold = 3;    // candles go back to the top when their line's amp is lower than this.
+
+int    sceneOneTenorAmpAdjust     = 400;
+int    sceneTwoTenorAmpAdjust     = 1;
+float  sceneThreeTenorAmpAdjust   = 0.05;
+int    sceneFiveTenorAmpAdjust    = 1000;
+int    sceneSixTenorAmpAdjust     = 1;
+int    sceneSixAllFundAdjust      = 5000; // multiply by this number.
 
 Input  myInput;
 PImage  img;
 Candle myCandle[];
 int orbs = 9; //number of glowing orbs
 int scene = 0;
+//int scene = -1;
 int waitUntil;
 // changed fallThreshold from 0.01 to 10
-float fallThreshold = 5;    // candle goes back to the top when amp is lower than this.
 
 void setup()
 {
   fullScreen();
-  
+
   myInput = new Input(9);
   myCandle = new Candle[orbs];
   myCandle[0] = new Candle(100, 70, 30, width/10*9, 1); //yellow/gold
@@ -34,214 +49,135 @@ void setup()
   myCandle[6] = new Candle(20, 40, 100, width/10*6, 1); //periwinkle
   myCandle[7] = new Candle(80, 50, 80, width/10*7, 1); //violet
   myCandle[8] = new Candle(100, 20, 90, width/10*8, 1); //fuchsia
-// Candle(redTint, greenTint, blueTint, xLocation for even spacing, sizeAdjustment);
+  // Candle(redTint, greenTint, blueTint, xLocation for even spacing, sizeAdjustment);
 }
 
-void draw(){
+void draw() {
   background(0);
-  
-// SETS THE SCENE /////////////////////////////////////////
-// sets which picture goes with each scene
-  if (keyPressed && millis() > waitUntil){
+
+  // SETS THE SCENE /////////////////////////////////////////
+  // sets which picture goes with each scene
+  if (keyPressed && millis() > waitUntil) {
     scene ++;
-    if (scene == 1 || scene ==2){
+    //    scene = ((scene + 1) % 6) + 1;
+
+    println("scene = " + scene);
+
+    if (scene == 1 || scene == 2) {
       img = loadImage("starryNight.jpg");
       img.resize(width, height);
       img.loadPixels();
       loadPixels();
     }
-    if (scene == 3){
+    if (scene == 3) {
       img = loadImage("angels.jpg");
       img.resize(width, height);
       img.loadPixels();
       loadPixels();
     }
-    if (scene == 4){
+    if (scene == 4) {
       img = loadImage("angel1.jpg");
       img.resize(width, height);
       img.loadPixels();
       loadPixels();
     }
-    if (scene == 5){
+    if (scene == 5) {
       img = loadImage("angel2.jpg");
       img.resize(width, height);
       img.loadPixels();
       loadPixels();
     }
-    if (scene == 6){
+    if (scene == 6) {
       img = loadImage("holyFamily.jpg");
       img.resize(width, height);
       img.loadPixels();
       loadPixels();
     }
-    if (scene > 6){
+
+    if (scene > 6) {
       scene = 1;
     }
+
     waitUntil = millis()+500;
-    println(scene);
-  }
+    //    println(scene);
+  } // if (keyPressed)
 
-// SCENES ////////////////////////////////////////////////
+  // SCENES ////////////////////////////////////////////////
 
-  if (scene == 1){ //start of piece, measure 1
-    myCandle[0].freqPoints(myInput.getAdjustedFundAsHz(1), myInput.getAmplitude(1)); //tenor solo controlls this
-    if (myInput.getAmplitude(2) > fallThreshold){
-      myCandle[1].fall();
-    }
-    if (myInput.getAmplitude(2) < fallThreshold){
-      myCandle[1].resetYDrop();
-    }
-    if (myInput.getAmplitude(3) > fallThreshold){
-      myCandle[2].fall();
-    }
-    if (myInput.getAmplitude(3) < fallThreshold){
-      myCandle[2].resetYDrop();
-    }
-    if (myInput.getAmplitude(4) > fallThreshold){
-      myCandle[3].fall();
-    }
-    if (myInput.getAmplitude(4) < fallThreshold){
-      myCandle[3].resetYDrop();
-    }
-    if (myInput.getAmplitude(5) > fallThreshold){
-      myCandle[4].fall();
-    }
-    if (myInput.getAmplitude(5) < fallThreshold){
-      myCandle[4].resetYDrop();
-    }
-    if (myInput.getAmplitude(6) > fallThreshold){
-      myCandle[5].fall();
-    }
-    if (myInput.getAmplitude(6) < fallThreshold){
-      myCandle[5].resetYDrop();
-    }
-    if (myInput.getAmplitude(7) > fallThreshold){
-      myCandle[6].fall();
-    }
-    if (myInput.getAmplitude(7) < fallThreshold){
-      myCandle[6].resetYDrop();
-    }
-    if (myInput.getAmplitude(8) > fallThreshold){
-      myCandle[7].fall();
-    }
-    if (myInput.getAmplitude(8) < fallThreshold){
-      myCandle[7].resetYDrop();
-    }
-    if (myInput.getAmplitude(9) > fallThreshold){
-      myCandle[8].fall();
-    }
-    if (myInput.getAmplitude(9) < fallThreshold){
-      myCandle[8].resetYDrop();
-    }
+  if (scene == 1) { //start of piece, measure 1
+    myCandle[0].freqPoints(myInput.getAdjustedFundAsHz(1), myInput.getAmplitude(1) / sceneOneTenorAmpAdjust); //tenor solo controlls this
+
+    for (int i = 1; i < 9; i++)
+    {
+      if (myInput.getAmplitude(i + 1) > fallThreshold) {
+        myCandle[i].fall();
+      }
+      if (myInput.getAmplitude(i + 1) < fallThreshold) {
+        myCandle[i].resetYDrop();
+      }
+    } // for
+
     colorLightfall(true, 60);
   }
-  
+
   if (scene == 2) { //at first "calida", measure 9
-      myCandle[0].highlight(myInput.getAmplitude(1), width*0.6, height*0.15); //tenor1 controlls this
-      myCandle[1].circle(myInput.getAmplitude(2), myInput.getAdjustedFundAsHz(2), width*0.6, height*0.2);
-      myCandle[2].circle(myInput.getAmplitude(3), myInput.getAdjustedFundAsHz(3), width*0.6, height*0.2);
-      myCandle[3].circle(myInput.getAmplitude(4), myInput.getAdjustedFundAsHz(4), width*0.6, height*0.2);
-      myCandle[4].circle(myInput.getAmplitude(5), myInput.getAdjustedFundAsHz(5), width*0.6, height*0.2);
-      myCandle[5].circle(myInput.getAmplitude(6), myInput.getAdjustedFundAsHz(6), width*0.6, height*0.2);
-      myCandle[6].circle(myInput.getAmplitude(7), myInput.getAdjustedFundAsHz(7), width*0.6, height*0.2);
-      myCandle[7].circle(myInput.getAmplitude(8), myInput.getAdjustedFundAsHz(8), width*0.6, height*0.2);
-      myCandle[8].circle(myInput.getAmplitude(9), myInput.getAdjustedFundAsHz(9), width*0.6, height*0.2);
-      
-      colorLightfall(false, 60);
+    myCandle[0].highlight(myInput.getAmplitude(1) / sceneTwoTenorAmpAdjust, width*0.6, height*0.15); //tenor1 controls this
+
+    for (int i = 1; i < 9; i++)
+    {
+      myCandle[i].circle(myInput.getAmplitude(i + 1), myInput.getAdjustedFundAsHz(i + 1), width*0.6, height*0.2);
+    } // for
+
+    colorLightfall(false, 60);
   }
-  
+
   if (scene == 3) { //at first "pura", measure 17
-      myCandle[0].highlight(myInput.getAmplitude(1), width*0.45, height*0.3); //tenor1 still controls this
-      myCandle[1].hover(myInput.getAdjustedFundAsHz(2), myInput.getAmplitude(2));
-      myCandle[2].hover(myInput.getAdjustedFundAsHz(3), myInput.getAmplitude(3));
-      myCandle[3].hover(myInput.getAdjustedFundAsHz(4), myInput.getAmplitude(4));
-      myCandle[4].hover(myInput.getAdjustedFundAsHz(5), myInput.getAmplitude(5));
-      myCandle[5].hover(myInput.getAdjustedFundAsHz(6), myInput.getAmplitude(6));
-      myCandle[6].hover(myInput.getAdjustedFundAsHz(7), myInput.getAmplitude(7));
-      myCandle[7].hover(myInput.getAdjustedFundAsHz(8), myInput.getAmplitude(8));
-      myCandle[8].hover(myInput.getAdjustedFundAsHz(9), myInput.getAmplitude(9));
-      colorLightfall(true, 50);
+    myCandle[0].highlight(myInput.getAmplitude(1) / sceneThreeTenorAmpAdjust, width*0.45, height*0.3); //tenor1 still controls this
+
+    for (int i = 1; i < 9; i++)
+    {
+      myCandle[i].hover(myInput.getAdjustedFundAsHz(i + 1), myInput.getAmplitude(i + 1));
+    } // for
+
+    colorLightfall(true, 50);
   }
-  
+
   if (scene == 4) { //at first "canunt", measure 24
-    myCandle[0].hover(myInput.getAdjustedFundAsHz(1), myInput.getAmplitude(1));
-    myCandle[1].hover(myInput.getAdjustedFundAsHz(2), myInput.getAmplitude(2));
-    myCandle[2].hover(myInput.getAdjustedFundAsHz(3), myInput.getAmplitude(3));
-    myCandle[3].hover(myInput.getAdjustedFundAsHz(4), myInput.getAmplitude(4));
-    myCandle[4].hover(myInput.getAdjustedFundAsHz(5), myInput.getAmplitude(5));
-    myCandle[5].hover(myInput.getAdjustedFundAsHz(6), myInput.getAmplitude(6));
-    myCandle[6].hover(myInput.getAdjustedFundAsHz(7), myInput.getAmplitude(7));
-    myCandle[7].hover(myInput.getAdjustedFundAsHz(8), myInput.getAmplitude(8));
-    myCandle[8].hover(myInput.getAdjustedFundAsHz(9), myInput.getAmplitude(9));
+    for (int i = 0; i < 9; i++)
+    {
+      myCandle[i].hover(myInput.getAdjustedFundAsHz(i + 1), myInput.getAmplitude(i + 1));
+    } // for
+
     colorLightfall(true, 50);
   }
-  
-  if (scene == 5){ //right after the grand pause after "angeli", measure 30
-    myCandle[0].freqPoints(myInput.getAdjustedFundAsHz(1), myInput.getAmplitude(1)); //tenor solo controls this
-    if (myInput.getAmplitude(2) > fallThreshold){
-      myCandle[1].fall();
-    }
-    if (myInput.getAmplitude(2) < fallThreshold){
-      myCandle[1].resetYDrop();
-    }
-    if (myInput.getAmplitude(3) > fallThreshold){
-      myCandle[2].fall();
-    }
-    if (myInput.getAmplitude(3) < fallThreshold){
-      myCandle[2].resetYDrop();
-    }
-    if (myInput.getAmplitude(4) > fallThreshold){
-      myCandle[3].fall();
-    }
-    if (myInput.getAmplitude(4) < fallThreshold){
-      myCandle[3].resetYDrop();
-    }
-    if (myInput.getAmplitude(5) > fallThreshold){
-      myCandle[4].fall();
-    }
-    if (myInput.getAmplitude(5) < fallThreshold){
-      myCandle[4].resetYDrop();
-    }
-    if (myInput.getAmplitude(6) > fallThreshold){
-      myCandle[5].fall();
-    }
-    if (myInput.getAmplitude(6) < fallThreshold){
-      myCandle[5].resetYDrop();
-    }
-    if (myInput.getAmplitude(7) > fallThreshold){
-      myCandle[6].fall();
-    }
-    if (myInput.getAmplitude(7) < fallThreshold){
-      myCandle[6].resetYDrop();
-    }
-    if (myInput.getAmplitude(8) > fallThreshold){
-      myCandle[7].fall();
-    }
-    if (myInput.getAmplitude(8) < fallThreshold){
-      myCandle[7].resetYDrop();
-    }
-    if (myInput.getAmplitude(9) > fallThreshold){
-      myCandle[8].fall();
-    }
-    if (myInput.getAmplitude(9) < fallThreshold){
-      myCandle[8].resetYDrop();
-    }
+
+  if (scene == 5) { //right after the grand pause after "angeli", measure 30
+    myCandle[0].freqPoints(myInput.getAdjustedFundAsHz(1), myInput.getAmplitude(1) / sceneFiveTenorAmpAdjust); //tenor solo controls this
+
+    for (int i = 1; i < 9; i++)
+    {
+      if (myInput.getAmplitude(i + 1) > fallThreshold) {
+        myCandle[i].fall();
+      }
+      if (myInput.getAmplitude(i + 1) < fallThreshold) {
+        myCandle[i].resetYDrop();
+      }
+    } // for
+
     colorLightfall(true, 50);
   }
-  
+
   if (scene == 6) { // at "natum" of lower voices (not tenor soli), measure 38
-      myCandle[0].highlight(myInput.getAmplitude(1), width*0.15, height*0.8); //tenor soli controls this
-      myCandle[1].highlight(myInput.getAmplitude(2), width*0.15, height*0.8); //tenor soli controls this
-      myCandle[2].circle(myInput.getAmplitude(3), myInput.getAdjustedFundAsHz(3), width*0.2, height*0.6);
-      myCandle[3].circle(myInput.getAmplitude(4), myInput.getAdjustedFundAsHz(4), width*0.2, height*0.6);
-      myCandle[4].circle(myInput.getAmplitude(5), myInput.getAdjustedFundAsHz(5), width*0.2, height*0.6);
-      myCandle[5].circle(myInput.getAmplitude(6), myInput.getAdjustedFundAsHz(6), width*0.2, height*0.6);
-      myCandle[6].circle(myInput.getAmplitude(7), myInput.getAdjustedFundAsHz(7), width*0.2, height*0.6);
-      myCandle[7].circle(myInput.getAmplitude(8), myInput.getAdjustedFundAsHz(8), width*0.2, height*0.6);
-      myCandle[8].circle(myInput.getAmplitude(9), myInput.getAdjustedFundAsHz(9), width*0.2, height*0.6);
-      colorLightfall(false, 60);
+    myCandle[0].highlight(myInput.getAmplitude(1) / sceneSixTenorAmpAdjust, width*0.15, height*0.8); //tenor soli control this
+    myCandle[1].highlight(myInput.getAmplitude(2) / sceneSixTenorAmpAdjust, width*0.15, height*0.8); //tenor soli control this
+
+    for (int i = 2; i < 9; i++)
+    {
+      myCandle[i].circle(myInput.getAmplitude(i + 1), myInput.getAdjustedFundAsHz(i + 1), width*0.2, height*0.6);
+    } // for
+
+    colorLightfall(false, 60);
   }
-  
 }// draw
 
 
@@ -251,32 +187,33 @@ void colorLightfall(boolean onTint, float inShowImage) {
   for (int x = 0; x < img.width; x++) {
     for (int y = 0; y < img.height; y++ ) {
       int loc = x + y*img.width; // Calculate the 1D location from a 2D grid
-      float r,g,b;
+      float r, g, b;
       float adjustBrightness = -255; //set lowest value adjust brightness can be, then the below functions change it
       int j = 0; //for unhiding the pixels only one time
       int k = 0;
       r = red (img.pixels[loc]); // Get the R,G,B values from image
       g = green (img.pixels[loc]);
       b = blue (img.pixels[loc]);
-//uses position of raindrops to determine location of glow
-      for (int i = 0; i < myCandle.length; i++){  //gets the position of each of the raindrops, and adjusts the pixels near it
+      //uses position of raindrops to determine location of glow
+      for (int i = 0; i < myCandle.length; i++) {  //gets the position of each of the raindrops, and adjusts the pixels near it
         float tempBrightness = -255; //compares the brightness caused by one orb to the brightness of other orbs and keeps the brighter number
-                                     //tempBrightness is the brightness of the current orb. adjustBrightness is the brightest value thus far
+        //tempBrightness is the brightness of the current orb. adjustBrightness is the brightest value thus far
         xPos = myCandle[i].getXGlow();
         yPos = myCandle[i].getYGlow();
         float maxdist = myCandle[i].getSize();//dist(0,0,width,height);
+        //        println("maxdist = " + maxdist);
         float d = dist(x, y, xPos, yPos);
         if (d <= 1.4*maxdist) { //only the pixels near the location of the raindrop are adjusted 
-                                //the number maxdist is multiplied by has to be balanced with the "if (adjustBrightness <..." before the pixels are constrained
-                                //if this isn't balanced, the tint will exceed the bubble
+          //the number maxdist is multiplied by has to be balanced with the "if (adjustBrightness <..." before the pixels are constrained
+          //if this isn't balanced, the tint will exceed the bubble
           if (j == 0) { //only want to tint the pixels one time (or else they get... well... very bright or dark)
-            if (onTint == true){
+            if (onTint == true) {
               r = myCandle[i].getRedTint()*r; 
               g = myCandle[i].getGreenTint()*g;
               b = myCandle[i].getBlueTint()*b;
               j++;
             }
-            if (onTint == false){
+            if (onTint == false) {
               r *= 1.0;
               g *= 0.7;
               b *= 0.3;
