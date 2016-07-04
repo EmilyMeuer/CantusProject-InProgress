@@ -110,27 +110,32 @@ void draw()
   
 //  Input bass1 = ins.get(0);
   //Input bass1 = myIns.get(1);
+  float rpvol = b1VolAdjust*myIns.getAmplitude(1);  //'volume' of bass1, used for columns RED and PINK
   float rpvol = b1VolAdjust*myIns.getAmplitude(1) / 200;  //'volume' of bass1, used for columns RED and PINK
   float rppit = myIns.getAdjustedFundAsHz(1);  //'pitch' of bass1, used for columns RED and PINK
   
 //  Input bass2 = ins.get(1);
   //Input bass2 = myIns.get(2);
+  float ofvol = b2VolAdjust*myIns.getAmplitude(2);
   float ofvol = b2VolAdjust*myIns.getAmplitude(2) / 200;
   float ofpit = myIns.getAdjustedFundAsHz(2);
   
 //  Input tenor1 = ins.get(2);
   //Input tenor1 = myIns.get(3);
+  float ypvol = t1VolAdjust*myIns.getAmplitude(3);
   float ypvol = t1VolAdjust*myIns.getAmplitude(3) / 200;
   float yppit = myIns.getAdjustedFundAsHz(3);
   
 //  Input tenor2 = ins.get(3);
   //Input tenor2 = myIns.get(4);
+  float ggpvol = t2VolAdjust*myIns.getAmplitude(4);
   float ggpvol = t2VolAdjust*myIns.getAmplitude(4) / 200;
   float ggppit = myIns.getAdjustedFundAsHz(4);
   
-  //realistically there will be nine of these
+  //realistically there will be ten of these
   //and I'm thinking about naming them after
   //the singers once we have their standing order
+  //and then there will be one for the drum
   
   //RED
   stroke(255);
