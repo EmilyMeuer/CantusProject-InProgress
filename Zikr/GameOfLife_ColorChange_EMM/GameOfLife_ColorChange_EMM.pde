@@ -1,4 +1,4 @@
-/*
+/* //<>// //<>//
  * Amanda Tenhoff
  * Emily Meuer
  * Game of Life
@@ -50,27 +50,26 @@ void setup()
 {
   // size set in Input class tab, settings()
   tileSize = width/10;
-  
+
   newboard = new int[tileSize][tileSize];
   oldboard = new int[tileSize][tileSize];
   println("oldboard.length is "+oldboard.length);
-  
+
   leftInput  = new Input(true, false);
   rightInput = new Input(false, true);
-  
-  seedRing();  
+
+  seedRing();
 }
 
 void draw()
 {
-  if(keyPressed)
+  if (keyPressed)
   {
     nextGeneration();
     delay(100);  //may want to shorten delay; seems laggy
   } // keyPressed
-   //<>//
+
   ;
-   //<>//
 }//end of draw loop
 
 void setLiveColor()
@@ -81,70 +80,74 @@ void setLiveColor()
   liveColor  = color(red, green, blue);
 } // setLiveColor
 
-color getLiveColor()  {  return liveColor;  }
+color getLiveColor() {  
+  return liveColor;
+}
 
 void nextGeneration()
 {
+  setLiveColor();
+  
   for (i=0; i<oldboard.length; i++)
+  {
+    for (j=0; j<oldboard.length; j++)
     {
-      for (j=0; j<oldboard.length; j++)
-      {
-        int deadCount = getDeadCount(i, j);
-        int liveCount = getAliveCount(i, j);
-/*
+      int deadCount = getDeadCount(i, j);
+      int liveCount = getAliveCount(i, j);
+      /*
         if(i==(oldboard.length)/2 && j==(oldboard.length)/2)
-        {
-          println("dead is "+deadCount+" and alive is "+liveCount);
-        }
-*/
-        if (get(i*10+5, j*10+5)==deadColor)  //dealing with the dead :o
-        {
-          if (deadCount==3)
-          {
-            newboard[i][j] = 1;
-          }//if dead
-          else
-          {
-            newboard[i][j] = 0;
-            //println("i is "+i+" and j is "+j);
-          }//else dead
-        }//if get
-
-        else if (get(i*10+5, j*10+5) != deadColor)  //dealing with the living
-        {
-          if (liveCount<2 || liveCount>3)
-          {
-            newboard[i][j] = 0;
-          } else if (liveCount>=2 && liveCount<4)
-          {
-            newboard[i][j] = 1;
-          }
-        }//else if alive
-      }//for j
-    }//for i
-    for(i=0;i<oldboard.length;i++)
-    {
-      for(j=0;j<oldboard.length;j++)
+       {
+       println("dead is "+deadCount+" and alive is "+liveCount);
+       }
+       */
+      //        if (get(i*10+5, j*10+5)==deadColor)  //dealing with the dead :o
+      if (oldboard[i][j] == 0)
       {
-        setLiveColor();
-        color curLiveColor  = getLiveColor();
-        
-        if(newboard[i][j]==0)
+        if (deadCount==3)
         {
-          oldboard[i][j]=0;
-           stroke(0);
-           fill(deadColor);
-           rect(i*10,j*10,10,10);
-        }
+          newboard[i][j] = 1;
+        }//if dead
         else
         {
-          oldboard[i][j]=1;
-          stroke(0);
-          fill(curLiveColor);
-          rect(i*10,j*10,10,10);
+          newboard[i][j] = 0;
+          //println("i is "+i+" and j is "+j);
+        }//else dead
+      }//if get
+
+      else if (get(i*10+5, j*10+5) != deadColor)  //dealing with the living
+      {
+        if (liveCount<2 || liveCount>3)
+        {
+          newboard[i][j] = 0;
+        } else if (liveCount>=2 && liveCount<4)
+        {
+          newboard[i][j] = 1;
         }
+      }//else if alive
+    }//for j
+  }//for i
+  for (i=0; i<oldboard.length; i++)
+  {
+    for (j=0; j<oldboard.length; j++)
+    {
+//      setLiveColor();
+      color curLiveColor  = getLiveColor();
+
+      if (newboard[i][j]==0)
+      {
+        oldboard[i][j]=0;
+        stroke(0);
+        fill(deadColor);
+        rect(i*10, j*10, 10, 10);
+      } else
+      {
+        oldboard[i][j]=1;
+        stroke(0);
+        fill(curLiveColor);
+        rect(i*10, j*10, 10, 10);
       }
     }
+  }
 } // nextGeneration()
 
 void seedSquare()
@@ -242,7 +245,9 @@ int getDeadCount(int i, int j)
   {
     for (bors=j-1; bors<j+2; bors++)
     {
-      if ((get(neigh*10+5, bors*10+5) == deadColor) && neigh!=i && bors!=j && neigh>=0 && bors>=0)
+      if ( neigh>=0 && bors>=0 && 
+          neigh < oldboard.length && bors < oldboard[neigh].length &&
+        (oldboard[neigh][bors] == 0) && neigh!=i && bors!=j)
       {
         dead++;
       }
@@ -259,7 +264,9 @@ int getAliveCount(int i, int j)
   {
     for (bors=j-1; bors<j+2; bors++)
     {
-      if ((get(neigh*10+5, bors*10+5) == liveColor) && neigh!=i && bors!=j && neigh>=0 && bors>=0)
+      if ( neigh>=0 && bors>=0 && 
+          neigh < oldboard.length && bors < oldboard[neigh].length &&
+        (oldboard[neigh][bors] == 0) && neigh!=i && bors!=j)
       {
         alive++;
       }

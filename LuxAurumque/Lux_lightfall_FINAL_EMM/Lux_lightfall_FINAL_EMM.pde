@@ -3,7 +3,7 @@
   MRA
   Lux Aurumque
     - press space bar to change to next scene 
-    - labels for when to chance scene are in draw (text and measure number)
+    - labels for when to change scene are in draw (text and measure number)
     P.S. I know I could use loops, but am not using them for now in case they don't play nicely with the live input class
     
   Edit 07/02/2016 by Emily Meuer:
@@ -17,10 +17,12 @@ int orbs = 9; //number of glowing orbs
 int scene = 0;
 int waitUntil;
 // changed fallThreshold from 0.01 to 10
-float fallThreshold = 10;
+float fallThreshold = 5;    // candle goes back to the top when amp is lower than this.
 
 void setup()
 {
+  fullScreen();
+  
   myInput = new Input(9);
   myCandle = new Candle[orbs];
   myCandle[0] = new Candle(100, 70, 30, width/10*9, 1); //yellow/gold
@@ -175,7 +177,7 @@ void draw(){
   }
   
   if (scene == 5){ //right after the grand pause after "angeli", measure 30
-    myCandle[0].freqPoints(myInput.getAdjustedFundAsHz(1), myInput.getAmplitude(1)); //tenor solo controlls this
+    myCandle[0].freqPoints(myInput.getAdjustedFundAsHz(1), myInput.getAmplitude(1)); //tenor solo controls this
     if (myInput.getAmplitude(2) > fallThreshold){
       myCandle[1].fall();
     }
