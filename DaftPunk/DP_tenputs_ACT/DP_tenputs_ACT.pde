@@ -40,7 +40,7 @@ Ball[] myBall;
 int balls = 30;
 
 //calibration constants:
-float amplify = 1000;
+float amplify = 1000;    // multiplied against amplitude to get a ball move speed.
 float speed = 1;
 
 int b1VolAdjust = 100;
@@ -80,14 +80,15 @@ void setup()
 void draw()
 {
   background(0);
-  
+
   // drawing the balls in the background:
   myLeadBall.move();
 //ARRAY OBJECTS STEP 4 (for loop)
   for(int i = 0; i < myBall.length; i++) {
     myBall[i].move();
   }//for
-  
+
+
   int refy = round(3*height/4);
   //println("refy is "+refy);
   int refx = round(width/11);
@@ -263,13 +264,12 @@ class LeadBall {
     yLead = height*0.9;
   }
   void move (){
-    xLead = xLead - speed*myIns.getAmplitude(1)*amplify;
+    xLead = xLead - speed*myIns.getAmplitude(1);
 //    xLead = xLead - in.getAdjustedFundAsHz()/10;
 //    println("xLead = " + xLead + "; yLead = " + yLead);
   if (xLead < 0){
 //      yLead = height*0.9-in.getAdjustedFundAsHz();
       yLead = (height * 0.9) - myIns.getAdjustedFundAsHz(1);
-      println("  set yLead to " + yLead);
       xLead = width;
     }//if x<0
   fill(200,100,200);
@@ -300,9 +300,9 @@ class Ball{
     if (ballNumber != 0){
       x = (myLeadBall.getXpos() + ballNumber*width/balls) % width;
         if ((x < 1) && (x > -1)) {
-//        y = height*0.9-in.getAdjustedFundAsHz();
           y = myIns.getAdjustedFundAsHz(1);
-        println("  y = " + y);
+// Could use the following line instead to get y vals and adjust the 500 to an expected high pitch cutoff.
+//          y = map(myIns.getAdjustedFundAsHz(1), 0, 500, height * 0.9, 0);
         }
     }
   }//move
