@@ -144,6 +144,7 @@ void setup()
   three = loadImage("three.jpg");
   four = loadImage("four.jpg");
   five = loadImage("five.jpg");
+  //five = loadImage("five.jpg");
   six = loadImage("six.jpg");
   seven = loadImage("seven.jpg");
   eight = loadImage("eight.jpg");
@@ -159,7 +160,7 @@ void setup()
   eightB = loadImage("eightB.jpg");
   nineB = loadImage("nineB.jpg");
   tenB = loadImage("tenB.jpg");
-  
+
   oneC = loadImage("oneC.jpg");
   twoC = loadImage("twoC.jpg");
   threeC = loadImage("threeC.jpg");
@@ -191,7 +192,7 @@ void setup()
   eightBblur = loadImage("eightBblur.jpg");
   nineBblur = loadImage("nineBblur.jpg");
   tenBblur = loadImage("tenBblur.jpg");
-  
+
   oneCblur  = loadImage("oneCblur.jpg");
   twoCblur  = loadImage("twoCblur.jpg");
   threeCblur = loadImage("threeCblur.jpg");
@@ -222,7 +223,7 @@ void setup()
   eightB.resize(width/4, height/4); 
   nineB.resize(width/4, height/4);
   tenB.resize(width/4, height/4);
-  
+
   oneC.resize(width/4, height/4); 
   twoC.resize(width/2, height/4); 
   threeC.resize(width/4, height/4); 
@@ -254,7 +255,7 @@ void setup()
   eightBblur.resize(width/4, height/4); 
   nineBblur.resize(width/4, height/4);
   tenBblur.resize(width/4, height/4);
-  
+
   oneCblur.resize(width/4, height/4); 
   twoCblur.resize(width/2, height/4); 
   threeCblur.resize(width/4, height/4); 

@@ -24,7 +24,7 @@ import beads.SpectralDifference;
 import beads.PeakDetector;
 
 /*
-  George Profenza
+  Original version by George Profenza
   
   Edited by Emily Meuer
   06/21/2016
@@ -49,6 +49,7 @@ import beads.PeakDetector;
   Otherwise FFT has methods binNumber and binFrequency that look like what we want.
     Those might not work with the PowerSpectrum?
     If they don't, can we just call calculateReal() or calculateImaginary() and not use the PS?
+      ^ Don't do this!  Not necessary!  Turns out that the wheel has been invented already.
 */
 
 public class BeadsJNA extends PApplet {
@@ -72,8 +73,8 @@ public class BeadsJNA extends PApplet {
   public void setup(){
     // Beads works primarily in "UGens" - unit generators - that it strings together in "chains."
     
-//    ac = new AudioContext();
-      ac = new AudioContext(new AudioServerIO.Jack(),512,AudioContext.defaultAudioFormat(4,4));
+    ac = new AudioContext();
+//      ac = new AudioContext(new AudioServerIO.Jack(),512,AudioContext.defaultAudioFormat(4,4));
 //    ac = new AudioContext(new AudioServerIO.Jack());
     
     
@@ -91,7 +92,6 @@ public class BeadsJNA extends PApplet {
     Gain g2 = new Gain(ac, 1, 0.5f);
     g2.addInput(mic2);
     ac.out.addInput(g2);
-    // Do I really even need to add them to ac.out for this?
     
     println("no. of inputs:  " + ac.getAudioInput().getOuts()); 
  
@@ -127,7 +127,6 @@ public class BeadsJNA extends PApplet {
     // connect the PowerSpectrum to the Frequency object
     ps.addListener(f);
 
-    ps.addListener(f);
     
   //set up spectral difference
   SpectralDifference sd = new SpectralDifference(ac.getSampleRate());
@@ -171,6 +170,8 @@ public class BeadsJNA extends PApplet {
           line(x, height, x, height - barHeight);
       } 
     } // if
+    
+    println("f = " + f.getFeatures());
 
  /*
     stroke(50, 50, 255);
