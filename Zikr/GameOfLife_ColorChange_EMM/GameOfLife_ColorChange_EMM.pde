@@ -1,4 +1,8 @@
 /* //<>// //<>//
+  07/03/2016
+ * Emily Meuer
+ *  Colors change each generation, based on LR inputs.
+ *
  * Amanda Tenhoff
  * Emily Meuer
  * Game of Life
