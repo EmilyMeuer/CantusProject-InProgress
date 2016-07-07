@@ -1,75 +1,48 @@
-import processing.serial.*;
-
 /*
-  07/02/2016
- Emily Meuer
- 
- Driver to test InputClassJack_EMM.
- */
+  07/06/2016
+  Emily Meuer
+  
+  Sketch to test which mic routes to which input line.
+*/
 
-Input      testInput;
-MultipleInputs  multipleInputs;
-Serial          port;
-Input      input;
-
-int        waitUntil;
+Input  input;
+int    wide;
+int    high;
 
 void settings()
 {
-  size(600,600);
-}
+  size(400,400);
+} // settings()
 
 void setup()
 {
-  testInput  = new Input(4);
-  waitUntil  = millis() + 100;
- 
-  println("testInput.getAverageFunds(new int[] { 1, 2}) = " + testInput.getAverageFund(new int[] { 1, 2}));
-}
+  size(400, 400);
+  
+  input  = new Input(12);
+  wide   = 4;
+  high   = 4;
+} // setup()
 
 void draw()
 {
-  background(255);
-  stroke(250, 25, 25);
-  fill(250, 25, 25);
+  background(100);
+  color  curColor;
   
-//  println("testInput.frequencyArray[0] = " + testInput.frequencyArray[0]);
-//  println("testInput.getAverageFunds(new int[] { 1, 2}) = " + testInput.getAverageFund(new int[] { 1, 2}));
-
-  ellipse(width/4, height - testInput.getAmplitude(1), 50, 50);
-  
-  stroke(150, 50, 150);
-  fill(150, 50, 150);
-  ellipse(width/2, height - testInput.getAverageFund(new int[] { 1, 2}), 50, 50);
-  
-  stroke(25, 25, 250);
-  fill(25, 25, 250);
-  ellipse(width - width/4, height - testInput.getAmplitude(2), 50, 50);
-
-  
-  /*
-
-  float[] features = testInput.psArray[0].getFeatures();
-    if(features != null){
-      for(int x = 0; x < width; x++){
-          int featureIndex = (x * features.length) / width;
-          int barHeight = Math.min((int)(features[featureIndex] *
-                                            height), height - 1);
-          line(x, height, x, height - barHeight);
-      } // for
-    } // if
+  for(int i = 1; i < input.getNumInputs(); i++)
+  {
+    curColor  = color(i * 18, i * 10, i * 18);
+    fill(curColor);
     
-    stroke(25, 150, 25);
-    float[] features2 = testInput.psArray[1].getFeatures();
-    if(features != null){
-      for(int x = 0; x < width; x++){
-          int featureIndex = (x * features2.length) / width;
-          int barHeight = Math.min((int)(features2[featureIndex] *
-                                            height), height - 1);
-          line(x, height, x, height - barHeight);
-      } // for
-    } // if
-    */
-  
-//    println("testInput.getAmplitude() = " + testInput.getAmplitude());
-}
+//    println("input.getAmplitude(" + i + ") = " + input.getAmplitude(i));
+    if(input.getAmplitude(i) > 3.5)
+    {
+      int x  = ((i-1) % wide) * (width / wide);
+      int y  = ((i-1) / wide) * (height / high);
+      rect(x, y, 100, 100);
+      
+      textSize(32);
+      fill(255);
+      text(i, (x+25), (y+50));
+    } // if - amplitude
+  } // for
+} // draw()
