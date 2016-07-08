@@ -76,11 +76,9 @@ class Input
     this.inputsUGen = ac.getAudioInput(inputNums);
 
     UGen[]  uGenArray  = new UGen[this.numInputs];
-    println("this.numInputs = " + this.numInputs + "; uGenArray.length = " + uGenArray.length);
     for (int i = 0; i < uGenArray.length; i++)
     {
       uGenArray[i]  = ac.getAudioInput(new int[] {(i + 1)});
-      println("uGenArray[" + i + "] = " + uGenArray[i]);
     }
 
     // Sonifying Processing and George P. do this:
@@ -88,7 +86,6 @@ class Input
     for (int i = 0; i < this.numInputs; i++)
     {
       g.addInput(uGenArray[i]);
-      println("uGenArray[" + i + "] = " + uGenArray[i]);
     } // for
     ac.out.addInput(g); //<>//
 
@@ -99,7 +96,6 @@ class Input
       while (this.sfsArray[i] == null) {
       }
       this.sfsArray[i].addInput(uGenArray[i]); //<>//
-      println("sfsArray[" + i + "] = " + sfsArray[i]);
     }
 
     this.fftArray  = new FFT[this.numInputs];
@@ -109,7 +105,6 @@ class Input
       while (this.fftArray[i] == null) {
       }
       this.sfsArray[i].addListener(this.fftArray[i]); //<>//
-      println("fftArray[" + i + "] = " + fftArray[i]);
     } // for
 
     // The PowerSpectrum is what will actually perform the FFT:
@@ -120,7 +115,6 @@ class Input
       while (this.psArray[i] == null) {
       }
       this.fftArray[i].addListener(psArray[i]); //<>//
-      println("psArray[" + i + "] = " + psArray[i]);
     } // for
 
     // Using my version of the Frequency class instead to allow access to amplitude.
@@ -131,7 +125,6 @@ class Input
       while (this.frequencyArray[i] == null) {
       }
       this.psArray[i].addListener(frequencyArray[i]); //<>//
-      println("frequencyArray[" + i + "] = " + frequencyArray[i]);
     } // for //<>//
 
     for (int i = 0; i < this.numInputs; i++)

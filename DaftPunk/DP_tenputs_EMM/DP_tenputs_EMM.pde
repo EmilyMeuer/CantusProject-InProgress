@@ -1,6 +1,9 @@
 /**
   * TODO: Clean up variable names (associate w/voice part, singer, or color?)
   *
+  * 07/07
+  * Added "drum box" - rectangle that lights on keyPress, to be hooked to Makey-Makey.
+  *
   * Emily Meuer
   * 07/07/2016
   * Updates to allow for more than 4 inputs.
@@ -36,7 +39,7 @@
 // Calibrate:
 int  volAdjust             = 20;  // divide amp by this.
 float speed                = 10;   // divide amp by this to get a ball move speed.
-float amplify              = 1000;    // not used - previously multiplied against amplitude to get a ball move speed.
+float amplify              = 1000;    // multiplied against amplitude to get a ball move speed.
 int  whichInputMovesBalls  = 2;  // this line moves the balls in the background.
 
 Input myIns;   //this is for the new input class
@@ -102,7 +105,26 @@ void setup()
 void draw()
 {
   background(0);
-
+  
+  //DRUM BOX
+  // will be hooked to makey makey, so that hitting the drum
+  // lights the rectangle around the screen.
+  if(keyPressed)
+  {
+    stroke(255);    
+  }
+  else
+  {
+    stroke(155,155,155);
+    //println("volb1 is "+volb1);
+  }
+  fill(0);
+  rectMode(CORNERS);
+  for(int pix = 7; pix>0; pix--)
+  {
+    rect(width/20-pix,height*0.95+pix,width-width/20+pix,height-height*0.95-pix);
+  }
+  
   // drawing the balls in the background:
   myLeadBall.move();
 //ARRAY OBJECTS STEP 4 (for loop)
@@ -327,17 +349,18 @@ class LeadBall {
   float xLead;
   float yLead;
   LeadBall() {
-    xLead = width;
+    xLead = width/15;
     yLead = height*0.9;
   }
   void move (){
-    xLead = xLead - (myIns.getAmplitude(whichInputMovesBalls) / speed);
-//    xLead = xLead - in.getAdjustedFundAsHz()/10;
+    xLead = xLead - speed*myIns.getAmplitude(whichInputMovesBalls) * amplify;
+//    xLead = xLead - myIns.getAdjustedFundAsHz(whichInputMovesBalls)/10;
 //    println("xLead = " + xLead + "; yLead = " + yLead);
-  if (xLead < 0){
+  if (xLead < width/15){
 //      yLead = height*0.9-in.getAdjustedFundAsHz();
       yLead = (height * 0.9) - myIns.getAdjustedFundAsHz(whichInputMovesBalls);
-      xLead = width;
+//      println("  set yLead to " + yLead);
+      xLead = width-width/15;
     }//if x<0
   fill(200,100,200);
   ellipse(xLead,yLead,10,10);
@@ -365,11 +388,12 @@ class Ball{
     fill(c,100,100); 
     ellipse(x,y,10,10);
     if (ballNumber != 0){
-      x = (myLeadBall.getXpos() + ballNumber*width/balls) % width;
-        if ((x < 1) && (x > -1)) {
-          y = myIns.getAdjustedFundAsHz(whichInputMovesBalls);
-// Could use the following line instead to get y vals and adjust the 500 to an expected high pitch cutoff.
-//          y = map(myIns.getAdjustedFundAsHz(1), 0, 500, height * 0.9, 0);
+      x = (myLeadBall.getXpos() + ballNumber*(width-width/15)/balls) % (width-width/15);
+        if ((x < width/20)) {
+          x = width-width/15;
+        y = height*0.9-myIns.getAdjustedFundAsHz(whichInputMovesBalls);
+          //y = in.getAdjustedFundAsHz();
+       // println("  y = " + y);
         }
     }
   }//move
