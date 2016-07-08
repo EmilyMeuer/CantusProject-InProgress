@@ -18,6 +18,7 @@ import javax.sound.sampled.AudioFormat;
 class Input
 {
   /*
+  Ignore this NB!!
   Notate bene: inputNum passed to constructor must be 4 greater
   than the actual desired number of inputs.
   
@@ -87,79 +88,79 @@ class Input
     {
       g.addInput(uGenArray[i]);
     } // for
-    ac.out.addInput(g); //<>//
+    ac.out.addInput(g);
 
     this.sfsArray  = new ShortFrameSegmenter[this.numInputs];
-    for (int i = 0; i < this.sfsArray.length; i++)
+    for (int i = 0; i < this.sfsArray.length; i++) //<>//
     {
       this.sfsArray[i] = new ShortFrameSegmenter(ac);
       while (this.sfsArray[i] == null) {
       }
-      this.sfsArray[i].addInput(uGenArray[i]); //<>//
+      this.sfsArray[i].addInput(uGenArray[i]);
     }
 
-    this.fftArray  = new FFT[this.numInputs];
+    this.fftArray  = new FFT[this.numInputs]; //<>//
     for (int i = 0; i < this.fftArray.length; i++)
     {
       this.fftArray[i] = new FFT();
       while (this.fftArray[i] == null) {
       }
-      this.sfsArray[i].addListener(this.fftArray[i]); //<>//
+      this.sfsArray[i].addListener(this.fftArray[i]);
     } // for
 
     // The PowerSpectrum is what will actually perform the FFT:
-    this.psArray  = new PowerSpectrum[this.numInputs];
+    this.psArray  = new PowerSpectrum[this.numInputs]; //<>//
     for (int i = 0; i < this.psArray.length; i++)
     {
       this.psArray[i] = new PowerSpectrum();
       while (this.psArray[i] == null) {
       }
-      this.fftArray[i].addListener(psArray[i]); //<>//
+      this.fftArray[i].addListener(psArray[i]);
     } // for
 
     // Using my version of the Frequency class instead to allow access to amplitude.
     this.frequencyArray  = new FrequencyEMM[this.numInputs];
-    for (int i = 0; i < this.frequencyArray.length; i++)
+    for (int i = 0; i < this.frequencyArray.length; i++) //<>//
     {
       this.frequencyArray[i] = new FrequencyEMM(44100);
       while (this.frequencyArray[i] == null) {
       }
-      this.psArray[i].addListener(frequencyArray[i]); //<>//
-    } // for //<>//
+      this.psArray[i].addListener(frequencyArray[i]);
+    } // for
 
     for (int i = 0; i < this.numInputs; i++)
     {
-      ac.out.addDependent(sfsArray[i]); //<>//
-    } // for - addDependent
+      ac.out.addDependent(sfsArray[i]);
+    } // for - addDependent //<>//
 
     this.sensitivity  = 3; //<>//
 
     this.ac.start();
 
-    this.fundamentalArray = new float[this.numInputs];
+    this.fundamentalArray = new float[this.numInputs]; //<>//
     this.adjustedFundArray = new float[this.numInputs];
 
-    this.setFund();
+    this.setFund(); //<>//
   } // constructor(int)
 
-  /** //<>//
+  /**
    * Constructor for creating a one (or two?)-channel Input object 
    * from the machine's default audio input device;
    * does not require Jack.
    */
   Input()
   {
-    // Could just call this(1) if I add a way to specify the AudioContext as well.
+    // Could just call this(1) if I add a way to specify the AudioContext as well. //<>//
 
     this.ac  = new AudioContext();
-    //<>//
+   
     this.inputsUGen  = ac.getAudioInput();
 
     // Sonifying Processing and George P. do this:
     Gain g = new Gain(this.ac, 1, 0.5);
     g.addInput(inputsUGen);
     ac.out.addInput(g);
-
+ //<>//
     sfs = new ShortFrameSegmenter(ac);
     sfs.addInput(ac.out);
 
@@ -167,20 +168,20 @@ class Input
     sfs.addListener(fft);
 
     // The PowerSpectrum is what will actually perform the FFT:
-    ps = new PowerSpectrum(); //<>//
+    ps = new PowerSpectrum();
 
     fft.addListener(ps);
     /*
      frequency = new Frequency(44100.0f);
      // connect the PowerSpectrum to the Frequency object
-     ps.addListener(frequency); //<>//
-     */
+     ps.addListener(frequency);
+     */ //<>//
     // Using my version of the Frequency class instead to allow access to amplitude.
 
     frequency  = new FrequencyEMM(44100);
     ps.addListener(frequency);
 
-    ac.out.addDependent(sfs);
+    ac.out.addDependent(sfs); //<>//
 
     this.sensitivity  = 1;
 
@@ -221,11 +222,9 @@ class Input
     for (int i = 0; i < this.numInputs; i++)
     {
       //     println("setFund(); this.frequencyArray[i] = " + this.frequencyArray[i].getFeatures());
-      
-      try
-      {
-        // catching the null pointer that sometimes comes from the following line.
-        // (want to assign the value of .getFeatures() to a variable and check for null, but can't, b/c it returns a float. :/)
+
+      // want to assign the value of .getFeatures() to a variable and check for null,
+      // but can't, b/c it returns a float. :/
       if (this.frequencyArray[i].getFeatures() != null) {
         //       println("i = " + i);
         //       println("setFund(); this.fundamentalArray[i] = " + this.fundamentalArray[i] + "this.frequencyArray[i].getFeatures() = " + this.frequencyArray[i].getFeatures());
@@ -243,11 +242,11 @@ class Input
    */
   float  getAdjustedFund(int inputNum) {
     inputNumErrorCheck(inputNum, "getAdjustedFund(int)");
-
+/*
     if (inputNum > 4 && inputNum < this.numInputs - 4) {
       inputNum  = inputNum + 4;
     } // if
-
+*/
     setFund();
     return this.adjustedFundArray[inputNum - 1];
   } // getAdjustedFund()
@@ -258,9 +257,11 @@ class Input
   float  getAdjustedFundAsHz(int inputNum) {
     inputNumErrorCheck(inputNum, "getAdjustedFundAsHz(int)");
 
+/*
     if (inputNum > 4 && inputNum < this.numInputs - 4) {
       inputNum  = inputNum + 4;
     } // if
+*/
 
     setFund();
     return this.adjustedFundArray[inputNum - 1];
@@ -273,9 +274,11 @@ class Input
   float  getAdjustedFundAsMidiNote(int inputNum) {
     inputNumErrorCheck(inputNum, "getAdjustedFundAsMidiNote(int)");
 
+/*
     if (inputNum > 4 && inputNum < this.numInputs - 4) {
       inputNum  = inputNum + 4;
     } // if
+*/
 
     setFund();
     return Pitch.ftom(this.adjustedFundArray[inputNum - 1]);
@@ -287,9 +290,11 @@ class Input
   float  getFund(int inputNum) {
     inputNumErrorCheck(inputNum, "getFund(int)");
 
+/*
     if (inputNum > 4 && inputNum < this.numInputs - 4) {
       inputNum  = inputNum + 4;
     } // if
+*/
 
     setFund();
     return this.fundamentalArray[inputNum - 1];
@@ -301,9 +306,11 @@ class Input
   float getFundAsHz(int inputNum) {
     inputNumErrorCheck(inputNum, "getFundAsHz(int)");
 
+/*
     if (inputNum > 4 && inputNum < this.numInputs - 4) {
       inputNum  = inputNum + 4;
     } // if
+*/
 
     setFund();
     return this.fundamentalArray[inputNum - 1];
@@ -315,9 +322,11 @@ class Input
   float  getFundAsMidiNote(int inputNum) {
     inputNumErrorCheck(inputNum, "getFundAsMidiNote(int)");
 
+/*
     if (inputNum > 4 && inputNum < this.numInputs - 4) {
       inputNum  = inputNum + 4;
     } // if
+*/
 
     setFund();
     return Pitch.ftom(this.fundamentalArray[inputNum - 1]);
@@ -412,9 +421,11 @@ class Input
   float getAmplitude(int inputNum) {
     inputNumErrorCheck(inputNum, "getAmplitude(int)");
 
+/*
     if (inputNum > 4 && inputNum < this.numInputs - 4) {
       inputNum  = inputNum + 4;
     } // if
+*/
 
     return this.frequencyArray[inputNum - 1].getAmplitude();
   } // getAmplitude

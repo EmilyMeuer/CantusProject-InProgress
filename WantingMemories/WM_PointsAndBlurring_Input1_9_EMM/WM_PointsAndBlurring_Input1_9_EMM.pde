@@ -4,7 +4,7 @@
   */
   
 // Calibrate:
-int volumeAdjust  = 10;
+int volumeAdjust  = 50;
 
 PImage      one;
 PImage      two;
@@ -156,6 +156,8 @@ int scene = 1;
 void setup()
 {
   background(0);
+  
+  fullScreen();
   /*collageTwo = loadImage("collageTwo.png");
    collageTwo.resize(width, height);
    background(collageTwo);*/
@@ -365,8 +367,7 @@ void setup()
   nineEblur.resize(width/4, height/4);
   tenEblur.resize(width/4, height/4);
 
-  left  = new Input(true, false);
-  right = new Input(false, true);
+  input  = new Input(9);
 
 
   /*allInputs = new MultipleInputs("WM parts - Tenor.mp3");//one
