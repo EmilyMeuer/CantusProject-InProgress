@@ -50,6 +50,16 @@ PImage      eightD;
 PImage      nineD;
 PImage      tenD;
 
+PImage      oneE;
+PImage      twoE;
+PImage      threeE;
+PImage      fourE;
+PImage      sixE;
+PImage      sevenE;
+PImage      eightE;
+PImage      nineE;
+PImage      tenE;
+
 PImage      oneBblur;
 PImage      twoBblur;
 PImage      threeBblur;
@@ -79,6 +89,16 @@ PImage      sevenDblur;
 PImage      eightDblur;
 PImage      nineDblur;
 PImage      tenDblur;
+
+PImage      oneEblur;
+PImage      twoEblur;
+PImage      threeEblur;
+PImage      fourEblur;
+PImage      sixEblur;
+PImage      sevenEblur;
+PImage      eightEblur;
+PImage      nineEblur;
+PImage      tenEblur;
 
 PImage      collage;
 PImage      collageTwo;
@@ -143,7 +163,7 @@ void setup()
   two  = loadImage("two.jpg");
   three = loadImage("three.jpg");
   four = loadImage("four.jpg");
-  five = loadImage("five.jpg");
+  five = loadImage("fiveRGB.jpg");
   //five = loadImage("five.jpg");
   six = loadImage("six.jpg");
   seven = loadImage("seven.jpg");
@@ -170,6 +190,26 @@ void setup()
   eightC = loadImage("eightC.jpg");
   nineC = loadImage("nineC.jpeg");
   tenC = loadImage("tenC.jpeg");
+
+  oneD = loadImage("oneD.jpeg");
+  twoD = loadImage("twoD.jpeg");
+  threeD = loadImage("threeD.jpeg");
+  fourD = loadImage("fourD.JPG");
+  sixD = loadImage("sixD.JPG");
+  sevenD = loadImage("sevenD.jpeg");
+  eightD = loadImage("eightD.jpg");
+  nineD = loadImage("nineD.jpg");
+  tenD = loadImage("tenD.jpg");
+
+  oneE = loadImage("oneE.jpg");
+  twoE = loadImage("twoE.jpg");
+  threeE = loadImage("threeE.jpg");
+  fourE = loadImage("fourE.jpg");
+  sixE = loadImage("sixE.jpg");
+  sevenE = loadImage("sevenE.jpg");
+  eightE = loadImage("eightE.jpg");
+  nineE = loadImage("nineE.jpg");
+  tenE = loadImage("tenE.jpg");
 
   oneBlur  = loadImage("oneBlur.jpg");
   twoBlur  = loadImage("twoBlur.jpg");
@@ -203,6 +243,26 @@ void setup()
   nineCblur = loadImage("nineCblur.jpg");
   tenCblur = loadImage("tenCblur.jpg");
 
+  oneDblur  = loadImage("oneDblur.jpg");
+  twoDblur  = loadImage("twoDblur.jpg");
+  threeDblur = loadImage("threeDblur.jpg");
+  fourDblur = loadImage("fourDblur.jpg");
+  sixDblur = loadImage("sixDblur.jpg");
+  sevenDblur = loadImage("sevenDblur.jpg");
+  eightDblur = loadImage("eightDblur.jpg");
+  nineDblur = loadImage("nineDblur.jpg");
+  tenDblur = loadImage("tenDblur.jpg");
+
+  oneEblur  = loadImage("oneEblur.jpg");
+  twoEblur  = loadImage("twoEblur.jpg");
+  threeEblur = loadImage("threeEblur.jpg");
+  fourEblur = loadImage("fourEblur.jpg");
+  sixEblur = loadImage("sixEblur.jpg");
+  sevenEblur = loadImage("sevenEblur.jpg");
+  eightEblur = loadImage("eightEblur.jpg");
+  nineEblur = loadImage("nineEblur.jpg");
+  tenEblur = loadImage("tenEblur.jpg");
+
   one.resize(width/4, height/4); 
   two.resize(width/2, height/4); 
   three.resize(width/4, height/4); 
@@ -234,12 +294,30 @@ void setup()
   nineC.resize(width/4, height/4);
   tenC.resize(width/4, height/4);
 
+  oneD.resize(width/4, height/4); 
+  twoD.resize(width/2, height/4); 
+  threeD.resize(width/4, height/4); 
+  fourD.resize(width/4, height/2); 
+  sixD.resize(width/4, height/2); 
+  sevenD.resize(width/4, height/4); 
+  eightD.resize(width/4, height/4); 
+  nineD.resize(width/4, height/4);
+  tenD.resize(width/4, height/4);
+
+  oneE.resize(width/4, height/4); 
+  twoE.resize(width/2, height/4); 
+  threeE.resize(width/4, height/4); 
+  fourE.resize(width/4, height/2); 
+  sixE.resize(width/4, height/2); 
+  sevenE.resize(width/4, height/4); 
+  eightE.resize(width/4, height/4); 
+  nineE.resize(width/4, height/4);
+  tenE.resize(width/4, height/4);
 
   oneBlur.resize(width/4, height/4); 
   twoBlur.resize(width/2, height/4); 
   threeBlur.resize(width/4, height/4); 
-  fourBlur.resize(width/4, height/2); 
-  //fiveBlur.resize(width/2, height/2); 
+  fourBlur.resize(width/4, height/2);  
   sixBlur.resize(width/4, height/2); 
   sevenBlur.resize(width/4, height/4); 
   eightBlur.resize(width/4, height/4); 
@@ -265,6 +343,26 @@ void setup()
   eightCblur.resize(width/4, height/4); 
   nineCblur.resize(width/4, height/4);
   tenCblur.resize(width/4, height/4);
+
+  oneDblur.resize(width/4, height/4); 
+  twoDblur.resize(width/2, height/4); 
+  threeDblur.resize(width/4, height/4); 
+  fourDblur.resize(width/4, height/2); 
+  sixDblur.resize(width/4, height/2); 
+  sevenDblur.resize(width/4, height/4); 
+  eightDblur.resize(width/4, height/4); 
+  nineDblur.resize(width/4, height/4);
+  tenDblur.resize(width/4, height/4);
+
+  oneEblur.resize(width/4, height/4); 
+  twoEblur.resize(width/2, height/4); 
+  threeEblur.resize(width/4, height/4); 
+  fourEblur.resize(width/4, height/2); 
+  sixEblur.resize(width/4, height/2); 
+  sevenEblur.resize(width/4, height/4); 
+  eightEblur.resize(width/4, height/4); 
+  nineEblur.resize(width/4, height/4);
+  tenEblur.resize(width/4, height/4);
 
   left  = new Input(true, false);
   right = new Input(false, true);
@@ -770,6 +868,455 @@ void draw()
     tenthBlur = tenCblur;
   }
 
+  if (scene == 20) {
+
+    first = oneD;
+    second = twoC;
+    third = threeC;
+    fourth = fourC;
+    fifth = five;
+    sixth = sixC;
+    seventh = sevenC;
+    eighth = eightC;
+    ninth = nineC;
+    tenth = tenC;
+
+    firstBlur = oneDblur;
+    secondBlur = twoCblur;
+    thirdBlur = threeCblur;
+    fourthBlur = fourCblur;
+    fifthBlur = fiveBlur;
+    sixthBlur = sixCblur;
+    seventhBlur = sevenCblur;
+    eighthBlur = eightCblur;
+    ninthBlur = nineCblur;
+    tenthBlur = tenCblur;
+  }
+
+  if (scene == 21) {
+
+    first = oneD;
+    second = twoD;
+    third = threeC;
+    fourth = fourC;
+    fifth = five;
+    sixth = sixC;
+    seventh = sevenC;
+    eighth = eightC;
+    ninth = nineC;
+    tenth = tenC;
+
+    firstBlur = oneDblur;
+    secondBlur = twoDblur;
+    thirdBlur = threeCblur;
+    fourthBlur = fourCblur;
+    fifthBlur = fiveBlur;
+    sixthBlur = sixCblur;
+    seventhBlur = sevenCblur;
+    eighthBlur = eightCblur;
+    ninthBlur = nineCblur;
+    tenthBlur = tenCblur;
+  }
+
+  if (scene == 22) {
+
+    first = oneD;
+    second = twoD;
+    third = threeD;
+    fourth = fourC;
+    fifth = five;
+    sixth = sixC;
+    seventh = sevenC;
+    eighth = eightC;
+    ninth = nineC;
+    tenth = tenC;
+
+    firstBlur = oneDblur;
+    secondBlur = twoDblur;
+    thirdBlur = threeDblur;
+    fourthBlur = fourCblur;
+    fifthBlur = fiveBlur;
+    sixthBlur = sixCblur;
+    seventhBlur = sevenCblur;
+    eighthBlur = eightCblur;
+    ninthBlur = nineCblur;
+    tenthBlur = tenCblur;
+  }
+
+  if (scene == 23) {
+
+    first = oneD;
+    second = twoD;
+    third = threeD;
+    fourth = fourD;
+    fifth = five;
+    sixth = sixC;
+    seventh = sevenC;
+    eighth = eightC;
+    ninth = nineC;
+    tenth = tenC;
+
+    firstBlur = oneDblur;
+    secondBlur = twoDblur;
+    thirdBlur = threeDblur;
+    fourthBlur = fourDblur;
+    fifthBlur = fiveBlur;
+    sixthBlur = sixCblur;
+    seventhBlur = sevenCblur;
+    eighthBlur = eightCblur;
+    ninthBlur = nineCblur;
+    tenthBlur = tenCblur;
+  }
+
+  if (scene == 24) {
+
+    first = oneD;
+    second = twoD;
+    third = threeD;
+    fourth = fourD;
+    fifth = five;
+    sixth = sixD;
+    seventh = sevenC;
+    eighth = eightC;
+    ninth = nineC;
+    tenth = tenC;
+
+    firstBlur = oneDblur;
+    secondBlur = twoDblur;
+    thirdBlur = threeDblur;
+    fourthBlur = fourDblur;
+    fifthBlur = fiveBlur;
+    sixthBlur = sixDblur;
+    seventhBlur = sevenCblur;
+    eighthBlur = eightCblur;
+    ninthBlur = nineCblur;
+    tenthBlur = tenCblur;
+  }
+
+  if (scene == 25) {
+
+    first = oneD;
+    second = twoD;
+    third = threeD;
+    fourth = fourD;
+    fifth = five;
+    sixth = sixD;
+    seventh = sevenD;
+    eighth = eightC;
+    ninth = nineC;
+    tenth = tenC;
+
+    firstBlur = oneDblur;
+    secondBlur = twoDblur;
+    thirdBlur = threeDblur;
+    fourthBlur = fourDblur;
+    fifthBlur = fiveBlur;
+    sixthBlur = sixDblur;
+    seventhBlur = sevenDblur;
+    eighthBlur = eightCblur;
+    ninthBlur = nineCblur;
+    tenthBlur = tenCblur;
+  }
+
+  if (scene == 26) {
+
+    first = oneD;
+    second = twoD;
+    third = threeD;
+    fourth = fourD;
+    fifth = five;
+    sixth = sixD;
+    seventh = sevenD;
+    eighth = eightD;
+    ninth = nineC;
+    tenth = tenC;
+
+    firstBlur = oneDblur;
+    secondBlur = twoDblur;
+    thirdBlur = threeDblur;
+    fourthBlur = fourDblur;
+    fifthBlur = fiveBlur;
+    sixthBlur = sixDblur;
+    seventhBlur = sevenDblur;
+    eighthBlur = eightDblur;
+    ninthBlur = nineCblur;
+    tenthBlur = tenCblur;
+  }
+
+  if (scene == 27) {
+
+    first = oneD;
+    second = twoD;
+    third = threeD;
+    fourth = fourD;
+    fifth = five;
+    sixth = sixD;
+    seventh = sevenD;
+    eighth = eightD;
+    ninth = nineD;
+    tenth = tenC;
+
+    firstBlur = oneDblur;
+    secondBlur = twoDblur;
+    thirdBlur = threeDblur;
+    fourthBlur = fourDblur;
+    fifthBlur = fiveBlur;
+    sixthBlur = sixDblur;
+    seventhBlur = sevenDblur;
+    eighthBlur = eightDblur;
+    ninthBlur = nineDblur;
+    tenthBlur = tenCblur;
+  }
+
+  if (scene == 28) {
+
+    first = oneD;
+    second = twoD;
+    third = threeD;
+    fourth = fourD;
+    fifth = five;
+    sixth = sixD;
+    seventh = sevenD;
+    eighth = eightD;
+    ninth = nineD;
+    tenth = tenD;
+
+    firstBlur = oneDblur;
+    secondBlur = twoDblur;
+    thirdBlur = threeDblur;
+    fourthBlur = fourDblur;
+    fifthBlur = fiveBlur;
+    sixthBlur = sixDblur;
+    seventhBlur = sevenDblur;
+    eighthBlur = eightDblur;
+    ninthBlur = nineDblur;
+    tenthBlur = tenDblur;
+  }
+
+  if (scene == 29) {
+
+    first = oneE;
+    second = twoD;
+    third = threeD;
+    fourth = fourD;
+    fifth = five;
+    sixth = sixD;
+    seventh = sevenD;
+    eighth = eightD;
+    ninth = nineD;
+    tenth = tenD;
+
+    firstBlur = oneEblur;
+    secondBlur = twoDblur;
+    thirdBlur = threeDblur;
+    fourthBlur = fourDblur;
+    fifthBlur = fiveBlur;
+    sixthBlur = sixDblur;
+    seventhBlur = sevenDblur;
+    eighthBlur = eightDblur;
+    ninthBlur = nineDblur;
+    tenthBlur = tenDblur;
+  }
+
+  if (scene == 30) {
+
+    first = oneE;
+    second = twoE;
+    third = threeD;
+    fourth = fourD;
+    fifth = five;
+    sixth = sixD;
+    seventh = sevenD;
+    eighth = eightD;
+    ninth = nineD;
+    tenth = tenD;
+
+    firstBlur = oneEblur;
+    secondBlur = twoEblur;
+    thirdBlur = threeDblur;
+    fourthBlur = fourDblur;
+    fifthBlur = fiveBlur;
+    sixthBlur = sixDblur;
+    seventhBlur = sevenDblur;
+    eighthBlur = eightDblur;
+    ninthBlur = nineDblur;
+    tenthBlur = tenDblur;
+  }
+
+  if (scene == 31) {
+
+    first = oneE;
+    second = twoE;
+    third = threeE;
+    fourth = fourD;
+    fifth = five;
+    sixth = sixD;
+    seventh = sevenD;
+    eighth = eightD;
+    ninth = nineD;
+    tenth = tenD;
+
+    firstBlur = oneEblur;
+    secondBlur = twoEblur;
+    thirdBlur = threeEblur;
+    fourthBlur = fourDblur;
+    fifthBlur = fiveBlur;
+    sixthBlur = sixDblur;
+    seventhBlur = sevenDblur;
+    eighthBlur = eightDblur;
+    ninthBlur = nineDblur;
+    tenthBlur = tenDblur;
+  }
+
+  if (scene == 32) {
+
+    first = oneE;
+    second = twoE;
+    third = threeE;
+    fourth = fourE;
+    fifth = five;
+    sixth = sixD;
+    seventh = sevenD;
+    eighth = eightD;
+    ninth = nineD;
+    tenth = tenD;
+
+    firstBlur = oneEblur;
+    secondBlur = twoEblur;
+    thirdBlur = threeEblur;
+    fourthBlur = fourEblur;
+    fifthBlur = fiveBlur;
+    sixthBlur = sixDblur;
+    seventhBlur = sevenDblur;
+    eighthBlur = eightDblur;
+    ninthBlur = nineDblur;
+    tenthBlur = tenDblur;
+  }
+
+  if (scene == 33) {
+
+    first = oneE;
+    second = twoE;
+    third = threeE;
+    fourth = fourE;
+    fifth = five;
+    sixth = sixE;
+    seventh = sevenD;
+    eighth = eightD;
+    ninth = nineD;
+    tenth = tenD;
+
+    firstBlur = oneEblur;
+    secondBlur = twoEblur;
+    thirdBlur = threeEblur;
+    fourthBlur = fourEblur;
+    fifthBlur = fiveBlur;
+    sixthBlur = sixEblur;
+    seventhBlur = sevenDblur;
+    eighthBlur = eightDblur;
+    ninthBlur = nineDblur;
+    tenthBlur = tenDblur;
+  }
+
+  if (scene == 34) {
+
+    first = oneE;
+    second = twoE;
+    third = threeE;
+    fourth = fourE;
+    fifth = five;
+    sixth = sixE;
+    seventh = sevenE;
+    eighth = eightD;
+    ninth = nineD;
+    tenth = tenD;
+
+    firstBlur = oneEblur;
+    secondBlur = twoEblur;
+    thirdBlur = threeEblur;
+    fourthBlur = fourEblur;
+    fifthBlur = fiveBlur;
+    sixthBlur = sixEblur;
+    seventhBlur = sevenEblur;
+    eighthBlur = eightDblur;
+    ninthBlur = nineDblur;
+    tenthBlur = tenDblur;
+  }
+
+  if (scene == 35) {
+
+    first = oneE;
+    second = twoE;
+    third = threeE;
+    fourth = fourE;
+    fifth = five;
+    sixth = sixE;
+    seventh = sevenE;
+    eighth = eightE;
+    ninth = nineD;
+    tenth = tenD;
+
+    firstBlur = oneEblur;
+    secondBlur = twoEblur;
+    thirdBlur = threeEblur;
+    fourthBlur = fourEblur;
+    fifthBlur = fiveBlur;
+    sixthBlur = sixEblur;
+    seventhBlur = sevenEblur;
+    eighthBlur = eightEblur;
+    ninthBlur = nineDblur;
+    tenthBlur = tenDblur;
+  }
+
+  if (scene == 36) {
+
+    first = oneE;
+    second = twoE;
+    third = threeE;
+    fourth = fourE;
+    fifth = five;
+    sixth = sixE;
+    seventh = sevenE;
+    eighth = eightE;
+    ninth = nineE;
+    tenth = tenD;
+
+    firstBlur = oneEblur;
+    secondBlur = twoEblur;
+    thirdBlur = threeEblur;
+    fourthBlur = fourEblur;
+    fifthBlur = fiveBlur;
+    sixthBlur = sixEblur;
+    seventhBlur = sevenEblur;
+    eighthBlur = eightEblur;
+    ninthBlur = nineEblur;
+    tenthBlur = tenDblur;
+  }
+
+  if (scene == 37) {
+
+    first = oneE;
+    second = twoE;
+    third = threeE;
+    fourth = fourE;
+    fifth = five;
+    sixth = sixE;
+    seventh = sevenE;
+    eighth = eightE;
+    ninth = nineE;
+    tenth = tenE;
+
+    firstBlur = oneEblur;
+    secondBlur = twoEblur;
+    thirdBlur = threeEblur;
+    fourthBlur = fourEblur;
+    fifthBlur = fiveBlur;
+    sixthBlur = sixEblur;
+    seventhBlur = sevenEblur;
+    eighthBlur = eightEblur;
+    ninthBlur = nineEblur;
+    tenthBlur = tenEblur;
+  }
 
   //Drawing blurred images over background
   image (firstBlur, 0, 0);

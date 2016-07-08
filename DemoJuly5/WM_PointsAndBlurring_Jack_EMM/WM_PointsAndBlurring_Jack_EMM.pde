@@ -134,7 +134,7 @@ void draw()
   image (tenBlur, 3*(width/4), (3*(height/4)));
 
   // volume of input:  (could multiply by volume adjust, if necessary)
-/*
+
   oneLevel  = (int)Math.floor(input.getAmplitude(1));
   twoLevel  = (int)Math.floor(input.getAmplitude(2));
   threeLevel  = (int)Math.floor(input.getAmplitude(3));
@@ -145,8 +145,8 @@ void draw()
   eightLevel  = (int)Math.floor(input.getAmplitude(3));
   nineLevel  = (int)Math.floor(input.getAmplitude(4));
   tenLevel  = (int)Math.floor(input.getAmplitude(1));
-*/
 
+/*
   //Trying pitch instead:
   oneLevel  = (int)Math.floor(input.getAdjustedFund(1) / fundAdjust);
   twoLevel  = (int)Math.floor(input.getAdjustedFund(2) / fundAdjust);
@@ -158,7 +158,7 @@ void draw()
   eightLevel  = (int)Math.floor(input.getAdjustedFund(3) / fundAdjust);
   nineLevel  = (int)Math.floor(input.getAdjustedFund(4) / fundAdjust);
   tenLevel  = (int)Math.floor(input.getAdjustedFund(1) / fundAdjust);
-
+*/
   //showing regular images as amplitude of each part is adjusted
   tint(255, (Math.min(oneLevel, 255)));
   image(one, 0, 0, width/4, height/4);
