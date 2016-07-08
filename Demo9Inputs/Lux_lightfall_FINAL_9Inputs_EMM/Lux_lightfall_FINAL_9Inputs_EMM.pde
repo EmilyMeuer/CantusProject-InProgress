@@ -113,7 +113,7 @@ void draw() {
 
   if (scene == 1) { //start of piece, measure 1
     // tenor solo:
-    myCandle[3].freqPoints(myInput.getAdjustedFundAsHz(1), myInput.getAmplitude(1) / sceneOneTenorAmpAdjust); //tenor solo controlls this
+    myCandle[3].freqPoints(myInput.getAdjustedFundAsHz(4), myInput.getAmplitude(4) / sceneOneTenorAmpAdjust); //tenor solo controlls this
  
     // other voices:
     for (int i = 0; i < 9 && i != 3; i++)
@@ -130,7 +130,7 @@ void draw() {
   }
 
   if (scene == 2) { //at first "calida", measure 9
-    myCandle[3].highlight(myInput.getAmplitude(1) / sceneTwoTenorAmpAdjust, width*0.6, height*0.15); //tenor1 controls this
+    myCandle[3].highlight(myInput.getAmplitude(4) / sceneTwoTenorAmpAdjust, width*0.6, height*0.15); //tenor1 controls this
 
     for (int i = 1; i < 9 && i != 3; i++)
     {
@@ -141,7 +141,7 @@ void draw() {
   }
 
   if (scene == 3) { //at first "pura", measure 17
-    myCandle[3].highlight(myInput.getAmplitude(1) / sceneThreeTenorAmpAdjust, width*0.45, height*0.3); //tenor1 still controls this
+    myCandle[3].highlight(myInput.getAmplitude(4) / sceneThreeTenorAmpAdjust, width*0.45, height*0.3); //tenor1 still controls this
 
     for (int i = 1; i < 9 && i != 3; i++)
     {
@@ -161,7 +161,7 @@ void draw() {
   }
 
   if (scene == 5) { //right after the grand pause after "angeli", measure 30
-    myCandle[3].freqPoints(myInput.getAdjustedFundAsHz(1), myInput.getAmplitude(1) / sceneFiveTenorAmpAdjust); //tenor solo controls this
+    myCandle[3].freqPoints(myInput.getAdjustedFundAsHz(4), myInput.getAmplitude(4) / sceneFiveTenorAmpAdjust); //tenor solo controls this
 
     for (int i = 1; i < 9 && i != 3; i++)
     {
@@ -177,7 +177,7 @@ void draw() {
   }
 
   if (scene == 6) { // at "natum" of lower voices (not tenor soli), measure 38
-    myCandle[3].highlight(myInput.getAmplitude(1) / sceneSixTenorAmpAdjust, width*0.15, height*0.8); //tenor soli control this
+    myCandle[3].highlight(myInput.getAmplitude(4) / sceneSixTenorAmpAdjust, width*0.15, height*0.8); //tenor soli control this
     myCandle[1].highlight(myInput.getAmplitude(2) / sceneSixTenorAmpAdjust, width*0.15, height*0.8); //tenor soli control this
 
     for (int i = 2; i < 9 && i != 3 && i != 1; i++)

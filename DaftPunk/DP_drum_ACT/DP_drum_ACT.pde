@@ -289,7 +289,7 @@ class LeadBall {
   if (xLead < width/15){
 //      yLead = height*0.9-in.getAdjustedFundAsHz();
       yLead = (height * 0.9) - in.getAdjustedFundAsHz();
-      println("  set yLead to " + yLead);
+ //     println("  set yLead to " + yLead);
       xLead = width-width/15;
     }//if x<0
   fill(200,100,200);
