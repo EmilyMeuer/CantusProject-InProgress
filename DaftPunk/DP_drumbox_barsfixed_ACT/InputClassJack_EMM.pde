@@ -221,9 +221,11 @@ class Input
     for (int i = 0; i < this.numInputs; i++)
     {
       //     println("setFund(); this.frequencyArray[i] = " + this.frequencyArray[i].getFeatures());
-
-      // want to assign the value of .getFeatures() to a variable and check for null,
-      // but can't, b/c it returns a float. :/
+      
+      try
+      {
+        // catching the null pointer that sometimes comes from the following line.
+        // (want to assign the value of .getFeatures() to a variable and check for null, but can't, b/c it returns a float. :/)
       if (this.frequencyArray[i].getFeatures() != null) {
         //       println("i = " + i);
         //       println("setFund(); this.fundamentalArray[i] = " + this.fundamentalArray[i] + "this.frequencyArray[i].getFeatures() = " + this.frequencyArray[i].getFeatures());
