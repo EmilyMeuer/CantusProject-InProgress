@@ -52,7 +52,7 @@ public class DrawRosette extends Scene
   
   void drawAndRaiseThreshold(float radius) 
   {
-    println("Draw.drawAndRaiseThreshold: input.getAverageFund(1, input.numInputs) = " + input.getAverageFund(1, input.numInputs));
+//    println("Draw.drawAndRaiseThreshold: input.getAverageFund(1, input.numInputs) = " + input.getAverageFund(1, input.numInputs));
     
     // Draws a line each time the pitch crosses a frequency threshold, and ups the threshold each time:
     if ( (stroke < 16) && (input.getAverageFund(1, input.numInputs) > freqThresholds[stroke/3]) && millis() > waitUntil ) {
@@ -70,7 +70,7 @@ public class DrawRosette extends Scene
     if ( millis() > time  && stroke < 16) {
       drawRosetteThree(radius, stroke, originalThree);
   
-      println("stroke = " + stroke + "; time = " + time + "; millis() = " + millis());
+//      println("stroke = " + stroke + "; time = " + time + "; millis() = " + millis());
   
       time = millis() + 1000;
       stroke++;
@@ -86,7 +86,7 @@ public class DrawRosette extends Scene
     if ( (input.getAverageFund(1, input.numInputs) > thresholdFreq)  && (stroke < 16) ) {
       drawRosetteThree(radius, stroke, originalThree);
   
-      println("stroke = " + stroke + "; input.getAdjustedFundAsHz() = " + input.getAdjustedFundAsHz(1) + "; thresholdFreq = " + thresholdFreq);
+ //     println("stroke = " + stroke + "; input.getAdjustedFundAsHz() = " + input.getAdjustedFundAsHz(1) + "; thresholdFreq = " + thresholdFreq);
   
       stroke++;
     } // if

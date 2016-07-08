@@ -1,6 +1,6 @@
 class Candle {
-  float xGlow;
-  float yGlow;
+  float xGlow;        // x pos of candle
+  float yGlow;        // y pos of candle
   float xSpaced;
   float size;
   float curFreq;
@@ -41,19 +41,23 @@ class Candle {
   
   void hover(float inFreq, float inAmp) {
     xGlow = xSpaced;
-    yGlow = height - inFreq*2;
-    size = inAmp*width/2*sizeAdjust;
+//    yGlow = height - inFreq * 2;
+    yGlow = height - inFreq;
+//    size = inAmp*width/2*sizeAdjust;
+    size  = inAmp;
     constrain(yGlow,0,height);
   }//void hover
   
   void circle(float inAmp, float inFreq, float inXCenter, float inYCenter) {
-    float rad = 100+5000*inAmp;
+//    float rad = 100+5000*inAmp;
+    float rad = 100 + inAmp;
     float deg = inFreq;
     xGlow = cos(radians(deg))*rad+inXCenter;
     yGlow = sin(radians(deg))*rad+inYCenter;
     constrain(xGlow, 0, width);
     constrain(yGlow, 0, height);
-    size = inAmp*width/2*sizeAdjust;
+//    size = inAmp*width/2*sizeAdjust;
+    size = inAmp;
     if (inAmp < 0.01) {
       deg = random(360);
     }
@@ -77,7 +81,8 @@ class Candle {
  }//void angels
  
  void highlight(float inAmp, float inXGlow, float inYGlow) {
-   size = inAmp*width*2*sizeAdjust;
+//   size = inAmp*width*2*sizeAdjust;
+   size = inAmp;
    xGlow = inXGlow;
    yGlow = inYGlow;
  }

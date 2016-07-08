@@ -27,8 +27,17 @@
   * - adjusts for any screen size
  */
   
+<<<<<<< HEAD
 //AudioInput in;
 //MultipleInputs ins;
+=======
+// Calibrate:
+int  volAdjust             = 20;  // divide amp by this.
+float speed                = 10;   // divide amp by this to get a ball move speed.
+float amplify              = 1000;    // not used - previously multiplied against amplitude to get a ball move speed.
+int  whichInputMovesBalls  = 2;  // this line moves the balls in the background.
+
+>>>>>>> a662761839677c487d030d45212bc5d3eb47b89d
 Input myIns;   //this is for the new input class
 
 // variables for balls:
@@ -39,9 +48,12 @@ Ball[] myBall;
 //how many balls across the screen
 int balls = 30;
 
+<<<<<<< HEAD
 //calibration constants:
 float amplify = 1000;
 float speed = 1;
+=======
+>>>>>>> a662761839677c487d030d45212bc5d3eb47b89d
 
 int b1VolAdjust = 100;
 int b2VolAdjust = 100;
@@ -80,14 +92,23 @@ void setup()
 void draw()
 {
   background(0);
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> a662761839677c487d030d45212bc5d3eb47b89d
   // drawing the balls in the background:
   myLeadBall.move();
 //ARRAY OBJECTS STEP 4 (for loop)
   for(int i = 0; i < myBall.length; i++) {
     myBall[i].move();
   }//for
+<<<<<<< HEAD
   
+=======
+
+
+>>>>>>> a662761839677c487d030d45212bc5d3eb47b89d
   int refy = round(3*height/4);
   //println("refy is "+refy);
   int refx = round(width/11);
@@ -109,26 +130,46 @@ void draw()
   
 //  Input bass1 = ins.get(0);
   //Input bass1 = myIns.get(1);
+<<<<<<< HEAD
   float rpvol = b1VolAdjust*myIns.getAmplitude(1);  //'volume' of bass1, used for columns RED and PINK
   float rpvol = b1VolAdjust*myIns.getAmplitude(1) / 200;  //'volume' of bass1, used for columns RED and PINK
+=======
+  float rpvol = myIns.getAmplitude(1) / volAdjust;  //'volume' of bass1, used for columns RED and PINK
+ // float rpvol = b1VolAdjust*myIns.getAmplitude(1) / 200;  //'volume' of bass1, used for columns RED and PINK
+>>>>>>> a662761839677c487d030d45212bc5d3eb47b89d
   float rppit = myIns.getAdjustedFundAsHz(1);  //'pitch' of bass1, used for columns RED and PINK
   
 //  Input bass2 = ins.get(1);
   //Input bass2 = myIns.get(2);
+<<<<<<< HEAD
   float ofvol = b2VolAdjust*myIns.getAmplitude(2);
   float ofvol = b2VolAdjust*myIns.getAmplitude(2) / 200;
+=======
+  float ofvol = myIns.getAmplitude(2) / volAdjust;
+ // float ofvol = b2VolAdjust*myIns.getAmplitude(2) / 200;
+>>>>>>> a662761839677c487d030d45212bc5d3eb47b89d
   float ofpit = myIns.getAdjustedFundAsHz(2);
   
 //  Input tenor1 = ins.get(2);
   //Input tenor1 = myIns.get(3);
+<<<<<<< HEAD
   float ypvol = t1VolAdjust*myIns.getAmplitude(3);
   float ypvol = t1VolAdjust*myIns.getAmplitude(3) / 200;
+=======
+  float ypvol = myIns.getAmplitude(3) / volAdjust;
+//  float ypvol = t1VolAdjust*myIns.getAmplitude(3) / 200;
+>>>>>>> a662761839677c487d030d45212bc5d3eb47b89d
   float yppit = myIns.getAdjustedFundAsHz(3);
   
 //  Input tenor2 = ins.get(3);
   //Input tenor2 = myIns.get(4);
+<<<<<<< HEAD
   float ggpvol = t2VolAdjust*myIns.getAmplitude(4);
   float ggpvol = t2VolAdjust*myIns.getAmplitude(4) / 200;
+=======
+  float ggpvol = myIns.getAmplitude(4) / volAdjust;
+//  float ggpvol = t2VolAdjust*myIns.getAmplitude(4) / 200;
+>>>>>>> a662761839677c487d030d45212bc5d3eb47b89d
   float ggppit = myIns.getAdjustedFundAsHz(4);
   
   //realistically there will be ten of these
@@ -268,13 +309,21 @@ class LeadBall {
     yLead = height*0.9;
   }
   void move (){
+<<<<<<< HEAD
     xLead = xLead - speed*myIns.getAmplitude(1)*amplify;
+=======
+    xLead = xLead - (myIns.getAmplitude(whichInputMovesBalls) / speed);
+>>>>>>> a662761839677c487d030d45212bc5d3eb47b89d
 //    xLead = xLead - in.getAdjustedFundAsHz()/10;
 //    println("xLead = " + xLead + "; yLead = " + yLead);
   if (xLead < 0){
 //      yLead = height*0.9-in.getAdjustedFundAsHz();
+<<<<<<< HEAD
       yLead = (height * 0.9) - myIns.getAdjustedFundAsHz(1);
       println("  set yLead to " + yLead);
+=======
+      yLead = (height * 0.9) - myIns.getAdjustedFundAsHz(whichInputMovesBalls);
+>>>>>>> a662761839677c487d030d45212bc5d3eb47b89d
       xLead = width;
     }//if x<0
   fill(200,100,200);
@@ -305,9 +354,15 @@ class Ball{
     if (ballNumber != 0){
       x = (myLeadBall.getXpos() + ballNumber*width/balls) % width;
         if ((x < 1) && (x > -1)) {
+<<<<<<< HEAD
 //        y = height*0.9-in.getAdjustedFundAsHz();
           y = myIns.getAdjustedFundAsHz(1);
         println("  y = " + y);
+=======
+          y = myIns.getAdjustedFundAsHz(whichInputMovesBalls);
+// Could use the following line instead to get y vals and adjust the 500 to an expected high pitch cutoff.
+//          y = map(myIns.getAdjustedFundAsHz(1), 0, 500, height * 0.9, 0);
+>>>>>>> a662761839677c487d030d45212bc5d3eb47b89d
         }
     }
   }//move
