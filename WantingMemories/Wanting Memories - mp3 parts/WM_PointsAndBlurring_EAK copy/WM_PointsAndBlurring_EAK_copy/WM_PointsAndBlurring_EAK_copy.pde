@@ -1,3 +1,11 @@
+/*
+  07/08/2016
+  Jack 9 inputs.
+  */
+  
+// Calibrate:
+int volumeAdjust  = 10;
+
 PImage      one;
 PImage      two;
 PImage      three;
@@ -126,9 +134,7 @@ PImage      eighthBlur;
 PImage      ninthBlur;
 PImage      tenthBlur;
 
-MultipleInputs allInputs;
-Input       left;
-Input       right;
+Input       input;
 
 int oneLevel;
 int twoLevel;
@@ -396,6 +402,7 @@ void draw()
   }
 
   if (scene == 1) {
+    
     first = one;
     second = two;
     third = three;
@@ -1331,6 +1338,19 @@ void draw()
   image (tenthBlur, 3*(width/4), (3*(height/4)));
 
   // volume of input:
+  
+  oneLevel  = (int)Math.floor(input.getAmplitude(1) / volumeAdjust);
+  twoLevel  = (int)Math.floor(input.getAmplitude(2) / volumeAdjust);
+  threeLevel  = (int)Math.floor(input.getAmplitude(3) / volumeAdjust);
+  fourLevel  = (int)Math.floor(input.getAmplitude(4) / volumeAdjust);
+  // fiveLevel  = (int)Math.floor(input.getAmplitude() * 1500);
+  sixLevel  = (int)Math.floor(input.getAmplitude(5) / volumeAdjust);
+  sevenLevel  = (int)Math.floor(input.getAmplitude(6) / volumeAdjust);
+  eightLevel  = (int)Math.floor(input.getAmplitude(7) / volumeAdjust);
+  nineLevel  = (int)Math.floor(input.getAmplitude(8) / volumeAdjust);
+  tenLevel  = (int)Math.floor(input.getAmplitude(9) / volumeAdjust);
+  
+  /*
   oneLevel  = (int)Math.floor(left.getAmplitude() * 1000);
   twoLevel  = (int)Math.floor(right.getAmplitude() * 1000);
   threeLevel  = (int)Math.floor(left.getAmplitude() * 1500);
@@ -1341,7 +1361,7 @@ void draw()
   eightLevel  = (int)Math.floor(right.getAmplitude() * 1500);
   nineLevel  = (int)Math.floor(left.getAmplitude() * 1500);
   tenLevel  = (int)Math.floor(right.getAmplitude() * 1500);
-
+*/
   //showing regular images as amplitude of each part is adjusted
   tint(255, (Math.min(oneLevel, 255)));
   image(first, 0, 0, width/4, height/4);
@@ -1355,6 +1375,7 @@ void draw()
   tint(255, (Math.min(fourLevel, 255)));
   image(fourth, 0, height/4, width/4, height/2);
 
+if(scene > 9){
   float pointillizeFive = map((Math.min(fiveLevel, 30)), 0, 30, smallPoint, largePoint);
   int randPixelNum = (int)(random(five.pixels.length));
   int randPixel = five.pixels[randPixelNum];
@@ -1366,7 +1387,7 @@ void draw()
   for (int i = 0; i < cornerXY.length; i++) {
     fill(pixFive, 128);
     ellipse(xFive + cornerXY[0], yFive + cornerXY[1], pointillizeFive, pointillizeFive);
-  }
+  }}
 
   //  tint(255, (Math.min(fiveLevel, 255)));
   //image(five, width/4, height/4, width/2, height/2);
