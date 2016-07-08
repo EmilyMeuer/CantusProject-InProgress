@@ -396,6 +396,7 @@ void draw()
   }
 
   if (scene == 1) {
+    
     first = one;
     second = two;
     third = three;
@@ -1355,6 +1356,7 @@ void draw()
   tint(255, (Math.min(fourLevel, 255)));
   image(fourth, 0, height/4, width/4, height/2);
 
+if(scene > 9){
   float pointillizeFive = map((Math.min(fiveLevel, 30)), 0, 30, smallPoint, largePoint);
   int randPixelNum = (int)(random(five.pixels.length));
   int randPixel = five.pixels[randPixelNum];
@@ -1366,7 +1368,7 @@ void draw()
   for (int i = 0; i < cornerXY.length; i++) {
     fill(pixFive, 128);
     ellipse(xFive + cornerXY[0], yFive + cornerXY[1], pointillizeFive, pointillizeFive);
-  }
+  }}
 
   //  tint(255, (Math.min(fiveLevel, 255)));
   //image(five, width/4, height/4, width/2, height/2);
