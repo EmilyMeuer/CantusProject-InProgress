@@ -91,9 +91,10 @@ class GameOfLife extends Scene
 
   void setLiveColor()
   {
-    pitchColor();      // method inherited from Scene that sets red and blue depending on pitches of high and low inputs.
+    //pitchColor();      // method inherited from Scene that sets red and blue depending on pitches of high and low inputs.
  //   green = (green + 30) % 255;
-    liveColor  = color(red, green, blue);
+    //liveColor  = color(red, green, blue);
+    liveColor = color(153,49,245);  //royal purple
   } // setLiveColor
 
   color getLiveColor() {  
