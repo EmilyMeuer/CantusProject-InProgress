@@ -20,11 +20,11 @@ int  adjustTenorSoloAmp = 400;  // number by which tenor amplitude will be divid
 // before sending it to freqPoints, where it controls light size.
 float fallThreshold = 3;    // candles go back to the top when their line's amp is lower than this.
 
-int    sceneOneTenorAmpAdjust     = 800;
-int    sceneTwoTenorAmpAdjust     = 1;
-float  sceneThreeTenorAmpAdjust   = 0.05;
-int    sceneFiveTenorAmpAdjust    = 1000;
-int    sceneSixTenorAmpAdjust     = 1;
+int    sceneOneTenorAmpAdjust     = 1000;  // divide
+int    sceneTwoTenorAmpAdjust     = 3;   // multiply
+float  sceneThreeTenorAmpAdjust   = 1;      // divide by this
+int    sceneFiveTenorAmpAdjust    = 500; // divide
+int    sceneSixTenorAmpAdjust     = 1;    // divide
 int    sceneSixAllFundAdjust      = 5000; // multiply by this number.
 
 Input  myInput;
@@ -60,6 +60,8 @@ void setup()
 }
 
 void draw() {
+  try
+  {
   background(0);
   
 //  println("myInput.getAmplitude(6) = " + myInput.getAmplitude(6));
@@ -134,7 +136,7 @@ void draw() {
   }
 
   if (scene == 2) { //at first "calida", measure 9
-    myCandle[3].highlight(myInput.getAmplitude(4) / sceneTwoTenorAmpAdjust, width*0.6, height*0.15); //tenor1 controls this
+    myCandle[3].highlight(myInput.getAmplitude(4) * sceneTwoTenorAmpAdjust, width*0.6, height*0.15); //tenor1 controls this
 
 
     for (int i = 1; i < 9; i++)
@@ -202,6 +204,7 @@ void draw() {
 
     colorLightfall(false, 60);
   }
+}catch(NullPointerException npe)  {}
 }// draw
 
 
@@ -264,4 +267,4 @@ void colorLightfall(boolean onTint, float inShowImage) {
     }//for y
   }//for x
   updatePixels();
-}
+} // colorLightfall

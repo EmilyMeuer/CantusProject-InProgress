@@ -1,4 +1,4 @@
-/*
+ /*
   06/29/2016
  Emily Meuer
  
@@ -57,7 +57,8 @@ void setup()
 
 void draw()
 {
-
+try
+{
   if (mousePressed && millis() > waitUntil)  
   {  
     waitUntil  = millis() + 300;
@@ -81,4 +82,6 @@ void draw()
     
     gameOfLife.run();
   } // scene 4
+}
+catch(NullPointerException npe)  {}
 } //draw()

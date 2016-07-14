@@ -9,7 +9,7 @@ class RosetteV3Colors extends RosetteV3
    */
    
    // Calibrate:
-   int[]  growFrequencies = {    // a rosette is drawn each time the "low voice" avg frequency
+ /*  int[]  growFrequencies = {    // a rosette is drawn each time the "low voice" avg frequency
      160,                        // passes one of these points.
      190,
      200,
@@ -17,7 +17,16 @@ class RosetteV3Colors extends RosetteV3
      255,
      325
    }; // growFrequencies
-  
+*/ 
+
+   int[]  growFrequencies = {    // a rosette is drawn each time the "low voice" avg frequency
+     150,                        // passes one of these points.
+     550,
+     600,
+     650,
+     700,
+     750
+   }; // growFrequencies
   RosetteV3Colors(Input input, int tenorCutoff)
   {
     super(input);

@@ -47,7 +47,7 @@ public class DrawRosette extends Scene
   public void run()
   {
     translate(width/2, height/2);
-    drawAndRaiseThreshold(500);
+    drawAndRaiseThreshold(300);
   } // run()
   
   void drawAndRaiseThreshold(float radius) 
