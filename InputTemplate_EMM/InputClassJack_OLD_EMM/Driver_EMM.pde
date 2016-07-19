@@ -8,7 +8,7 @@ import processing.serial.*;
  */
 
 Input      testInput;
-MultipleInputs  multipleInputs;
+//MultipleInputs  multipleInputs;
 Serial          port;
 Input      input;
 
