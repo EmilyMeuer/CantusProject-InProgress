@@ -12,6 +12,12 @@
 // Calibrate:
 int  volumeAdjust  = 2;   // not currently used.
 
+//Creating variables for all the images used. Each picture is numbered based 
+//on its spot in the grid (i.e. the top left picture is "one" and 
+//the bottom right picture is "ten"). Pictures are also categorized by their scene number
+//(i.e. the second scene has pictures titled "oneB", "twoB", etc.).
+//Pictures with "blur" in the name are just the blurred version of the original picture
+//(i.e. "oneBblur" is the blurred version of "oneB").
 PImage      one;
 PImage      two;
 PImage      three;
@@ -94,9 +100,7 @@ PImage      eightDblur;
 PImage      nineDblur;
 PImage      tenDblur;
 
-PImage      collage;
-PImage      collageTwo;
-
+//Creating universal variables for the pictures so they can be easily changed for each scene.
 
 PImage      first;
 PImage      second;
@@ -122,6 +126,7 @@ PImage      tenthBlur;
 
 Input       input;
 
+//Creating variables for the 9 different sound inputs.
 int oneLevel;
 int twoLevel;
 int threeLevel;
@@ -133,9 +138,11 @@ int eightLevel;
 int nineLevel;
 int tenLevel;
 
+//Creating variables for the size of the dots used in the center picture.
 int smallPoint = 4;
 int largePoint = 4;
 
+//Creating a variable to manage the scene number.
 int scene = 1;
 
 
@@ -146,12 +153,11 @@ int scene = 1;
 
 void setup()
 {
+  //Setting up background and making it full screen.
   fullScreen();
   background(0);
-  /*collageTwo = loadImage("collageTwo.png");
-   collageTwo.resize(width, height);
-   background(collageTwo);*/
 
+  //Loading all the images ... 
   one  = loadImage("one.jpeg");
   two  = loadImage("two.jpg");
   three = loadImage("three.jpg");
@@ -216,6 +222,7 @@ void setup()
   nineCblur = loadImage("nineCblur.jpg");
   tenCblur = loadImage("tenCblur.jpg");
 
+  //Resizing all the images ...
   one.resize(width/4, height/4); 
   two.resize(width/2, height/4); 
   three.resize(width/4, height/4); 
@@ -279,6 +286,7 @@ void setup()
   nineCblur.resize(width/4, height/4);
   tenCblur.resize(width/4, height/4);
 
+  //I did not do this part ... Emily? 
   input = new Input(13);
   
 
@@ -300,12 +308,15 @@ void setup()
 void draw()
 {
 
+  //Keeping rack of the scene number. Scene is changed by pressing the spacebar.
   if (keyPressed) {
     scene ++;
     delay(500);
     println(scene);
   }
 
+
+  //Changing which pictures show up based on scene ... the longhand way.
   if (scene == 1) {
     first = one;
     second = two;
@@ -817,6 +828,7 @@ void draw()
   tint(255, (Math.min(fourLevel, 255)));
   image(fourth, 0, height/4, width/4, height/2);
 
+  //Pointillizing center image 
   float pointillizeFive = map((Math.min(fiveLevel, 30)), 0, 30, smallPoint, largePoint);
   int randPixelNum = (int)(random(five.pixels.length));
   int randPixel = five.pixels[randPixelNum];
@@ -825,6 +837,7 @@ void draw()
   color pixFive = five.get(xFive, yFive);
   int[] cornerXY = getImageXandY(4);
 
+  //Making sure points are showing up only in the center area
   for (int i = 0; i < cornerXY.length; i++) {
     fill(pixFive, 128);
     ellipse(xFive + cornerXY[0], yFive + cornerXY[1], pointillizeFive, pointillizeFive);
@@ -849,7 +862,7 @@ void draw()
   image(tenth, 3*(width/4), 3*(height/4), width/4, height/4);
 }
 
-
+//I did not write this either ... Emily?
 int[] getImageXandY(int imageNum)
 {
 
