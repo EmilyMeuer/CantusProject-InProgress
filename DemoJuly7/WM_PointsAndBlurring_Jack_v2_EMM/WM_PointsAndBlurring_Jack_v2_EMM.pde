@@ -145,12 +145,6 @@ int largePoint = 4;
 //Creating a variable to manage the scene number.
 int scene = 1;
 
-
-/*FFT         fft;
- AudioInput  input;
- int         level;
- Minim       minim;*/
-
 void setup()
 {
   //Setting up background and making it full screen.
