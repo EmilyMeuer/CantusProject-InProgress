@@ -159,9 +159,14 @@ PImage[] B;
 PImage[] Bblur;
 PImage[] C;
 PImage[] Cblur;
+PImage[][]  allImages;
+PImage[][]  allBlurs;
 int[]    levels;
 
 int  waitUntil;
+// arrayLoc and picLoc used to determine which pics to change in each scene:
+int  arrayLoc;
+int  picLoc;
 
 void setup()
 {
@@ -169,8 +174,11 @@ void setup()
   fullScreen();
   background(0);
   
-  displayed      = new PImage[10];
-  displayedBlur  = new PImage[10];
+  displayed      = new PImage[9];
+  displayedBlur  = new PImage[9];
+  
+  allImages  = new PImage[3][];
+  allBlurs   = new PImage[3][];
 
   //Loading all the images ... 
   one  = loadImage("one.jpeg");
@@ -189,13 +197,14 @@ void setup()
                       two,
                       three,
                       four,
-                      five,
+   //                   five,
                       six,
                       seven,
                       eight,
                       nine,
                       ten
   };
+  allImages[0]  = A;
 
   oneB = loadImage("oneB.jpg");
   twoB = loadImage("twoB.jpg");
@@ -211,13 +220,14 @@ void setup()
                       twoB,
                       threeB,
                       fourB,
-                      five,
+  //                    five,
                       sixB,
                       sevenB,
                       eightB,
                       nineB,
                       tenB
   };
+  allImages[1]  = B;
 
   oneC = loadImage("oneC.jpg");
   twoC = loadImage("twoC.jpg");
@@ -233,13 +243,14 @@ void setup()
                       twoC,
                       threeC,
                       fourC,
-                      five,
+  //                    five,
                       sixC,
                       sevenC,
                       eightC,
                       nineC,
                       tenC
   };
+  allImages[2]  = C;
 
   oneBlur  = loadImage("oneBlur.jpg");
   twoBlur  = loadImage("twoBlur.jpg");
@@ -256,13 +267,14 @@ void setup()
                       twoBlur,
                       threeBlur,
                       fourBlur,
-                      five,
+  //                    five,
                       sixBlur,
                       sevenBlur,
                       eightBlur,
                       nineBlur,
                       tenBlur
   };
+  allBlurs[0]  = Ablur;
 
   oneBblur  = loadImage("oneBblur.jpg");
   twoBblur  = loadImage("twoBblur.jpg");
@@ -279,13 +291,14 @@ void setup()
                       twoBblur,
                       threeBblur,
                       fourBblur,
-                      five,
+   //                   five,
                       sixBblur,
                       sevenBblur,
                       eightBblur,
                       nineBblur,
                       tenBblur
   };
+  allBlurs[1]  = Bblur;
 
   oneCblur  = loadImage("oneCblur.jpg");
   twoCblur  = loadImage("twoCblur.jpg");
@@ -301,15 +314,17 @@ void setup()
                       twoCblur,
                       threeCblur,
                       fourCblur,
-                      five,
+  //                    five,
                       sixCblur,
                       sevenCblur,
                       eightCblur,
                       nineCblur,
                       tenCblur
   };
+  allBlurs[2]  = Cblur;
 
   //Resizing all the images ...
+  // ** Do this in a loop: do individually for each image, but loop through allImages/allBlurs. **
   one.resize(width/4, height/4); 
   two.resize(width/2, height/4); 
   three.resize(width/4, height/4); 
@@ -404,13 +419,31 @@ void draw()
     waitUntil = millis() + 500;
   }
   
+  arrayLoc  = scene / 10;
+  picLoc    = scene % 10;
+  
+  int i;
+  
+  for(i = 0; i < picLoc; i++)
+  {
+    displayed[i]      = allImages[arrayLoc+1][i];
+    displayedBlur[i]  = allBlurs[arrayLoc+1][i];
+  } // for
+  
+  for(i = picLoc; i < allImages[arrayLoc].length; i++)
+  {
+    displayed[i]      = allImages[arrayLoc][i];
+    displayedBlur[i]  = allBlurs[arrayLoc][i];
+  } // for
+  
+  /*
   for(int i = 0; i < displayed.length; i++)
   {
     displayed[i] = A[i];
     displayedBlur[i] = Ablur[i];
     
   } // for
-
+*/
 /*
   //Changing which pictures show up based on scene ... the longhand way.
   if (scene == 1) {
@@ -895,11 +928,11 @@ void draw()
   image (Ablur[2], (3*(width/4)), 0);
   image (Ablur[3], 0, height/4);
   // image (fifthBlur, width/4, height/4);
-  image (Ablur[5], (3*(width/4)), height/4);
-  image (Ablur[6], 0, (3*(height/4)));
-  image (Ablur[7], width/4, (3*(height/4)));
-  image (Ablur[8], width/2, (3*(height/4)));
-  image (Ablur[9], 3*(width/4), (3*(height/4)));
+  image (Ablur[4], (3*(width/4)), height/4);
+  image (Ablur[5], 0, (3*(height/4)));
+  image (Ablur[6], width/4, (3*(height/4)));
+  image (Ablur[7], width/2, (3*(height/4)));
+  image (Ablur[8], 3*(width/4), (3*(height/4)));
   /*
   image (firstBlur, 0, 0);
   image (secondBlur, width/4, 0);
@@ -914,21 +947,27 @@ void draw()
   */
 
   // volume of input:
-  levels  = new int[10];
+  levels  = new int[9];
   
-  for(int i = 0; i < levels.length; i++)
+  for(int j = 0; j < levels.length; j++)
   {
-    // input queried must be i+1 when i is less than 5,
-    // but i after that (since the 5th image isn't connected to a singer).
+    /*
+    I think the following is now false:
+    
+    // input queried must be j+1 when j is less than 5,
+    // but j after that (since the 5th image isn't connected to a singer).
     // (Could connect it, but then we'll have to do this fanagaling with the image display / getImageXandY.)
     int x;
-    if(i < 5)  {  
-      x = i+1;  
+    if(j < 5)  {  
+      x = j+1;  
     }  else  {
-      x = i;
+      x = j;
     } // if - x
+    */
     
-    levels[i]  = (int)Math.floor(input.getAmplitude(x) / volumeAdjust);
+//    levels[j]  = (int)Math.floor(input.getAmplitude(x) / volumeAdjust);    
+    levels[j]  = (int)Math.floor(input.getAmplitude((j%2) + 1) / volumeAdjust);
+  
   } // for
   
   /*
@@ -947,8 +986,9 @@ void draw()
   int[]  coordinates;
 
   //showing regular images as amplitude of each part is adjusted
-  for(int i = 0; i < displayed.length; i++)
+  for(i = 0; i < displayed.length; i++)
   {
+    println("i = " + i);
     tint(255, (Math.min(levels[i], 255)));
     
     coordinates  = getImageXandY(i);
@@ -983,7 +1023,7 @@ void draw()
   int[] cornerXY = getImageXandY(4);
 
   //Making sure points are showing up only in the center area
-  for (int i = 0; i < cornerXY.length; i++) {
+  for (i = 0; i < cornerXY.length; i++) {
     fill(pixFive, 128);
     ellipse(xFive + cornerXY[0], yFive + cornerXY[1], pointillizeFive, pointillizeFive);
   }
@@ -1021,7 +1061,7 @@ int[] getImageXandY(int imageNum)
   int x;
   int y;
   
-  println("getImageXandY: imageNum = " + imageNum);
+//  println("getImageXandY: imageNum = " + imageNum);
   // takes into account the different sizing of images on the bottom row:
   if(imageNum == 8)
   {
