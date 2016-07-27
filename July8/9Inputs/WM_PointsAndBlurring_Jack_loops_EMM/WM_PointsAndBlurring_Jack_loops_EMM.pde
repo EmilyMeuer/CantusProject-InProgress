@@ -2,6 +2,10 @@
   07/21/2016
   Emily Meuer
   Update to add loops (rather than manually adjust which pictures blur).
+  
+  ** Here's the issue:
+  Displaying 5 where 5 should be, but I actually want 5 where 6 should be, etc.
+  **
 
   07/07/2016
   Emily Meuer
@@ -957,6 +961,7 @@ void draw()
     // input queried must be j+1 when j is less than 5,
     // but j after that (since the 5th image isn't connected to a singer).
     // (Could connect it, but then we'll have to do this fanagaling with the image display / getImageXandY.)
+    
     int x;
     if(j < 5)  {  
       x = j+1;  
@@ -988,10 +993,19 @@ void draw()
   //showing regular images as amplitude of each part is adjusted
   for(i = 0; i < displayed.length; i++)
   {
-    println("i = " + i);
+//    println("i = " + i);
     tint(255, (Math.min(levels[i], 255)));
     
-    coordinates  = getImageXandY(i);
+    int x;
+    // Since count starts at 0, this includes the 5th image connected to a voice --
+    // level 5, voice 5, image 5, but at location 6, b/c of middle picture.
+    if(i >= 4)  {  
+      x = i+1;  
+    }  else  {
+      x = i;
+    } // if - x
+    
+    coordinates  = getImageXandY(x);
     image(displayed[i], coordinates[0], coordinates[1]);
   } // for - display blurred-over-clear pics
   
@@ -1083,7 +1097,7 @@ int[] getImageXandY(int imageNum)
 
 /**
  * Determines whether either the x or y corner coordinate of an image is at 0, (height or width)/4, or 3*([height or width]/4).
- * (That is, is it in the first, second, or third row of images; now only used to position image 5 in the center.)
+ * (That is, is it in the first, second, or third row of images.)
  *
  * @param  x    int specifying whether to base the following calculations on height or on width.
  * @param  loc  int specifying which image is in question; must be between 0 and 2.
