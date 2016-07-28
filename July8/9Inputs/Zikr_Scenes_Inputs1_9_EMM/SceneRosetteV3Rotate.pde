@@ -13,6 +13,12 @@ class RosetteV3Rotate extends RosetteV3Colors
    int  changeInRotation  = 400;  // higher number = slower rotation
                                   // (pitch is divided by this number, and the resulting decimal value is added to rotateBy).
 
+  /**
+   *  Constructor; makes a RosetteV3Rotate with the given Input and tenorCutoff.
+   *
+   *  @param  input        an Input, used to get bass and tenor pitch and amp.
+   *  @param  tenorCutoff  an int at which the mics divide into basses (below) and tenors (this and all above).
+   */
   RosetteV3Rotate(Input input, int tenorCutoff)
   {
     super(input, tenorCutoff);
@@ -20,6 +26,10 @@ class RosetteV3Rotate extends RosetteV3Colors
     this.tenorCutoff  = tenorCutoff;
   } // RosetteV3Rotate
 
+  /**
+   *  Called in draw() in the Zikr_Scenes_Inputs1_9_EMM tab;
+   *  calculates rotateBy based on the average tenor pitch and calls RosetteV3Colors.run().
+   */
   void run()
   {
     if (input.getAverageAmp(this.tenorCutoff, input.numInputs) > amp) {

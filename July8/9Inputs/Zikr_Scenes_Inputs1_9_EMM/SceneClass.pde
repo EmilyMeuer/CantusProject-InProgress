@@ -4,7 +4,7 @@ public abstract class Scene
     06/29/2016
    Emily Meuer
    
-   Interface to allow a sketch to cycle through different scenes.
+   Abstract class to allow a sketch to cycle through different scenes.
    
    (Could have a next and previous capability.)
    */
@@ -45,13 +45,19 @@ public abstract class Scene
   }
 
   /**
-   * Sets the color based on low and high pitches.
+   * Sets the color based on the pitch of the low and high groups of mics (basses and tenors).
    */
   void pitchColor() {
     red   = Math.min(255 * (input.getAverageFund(1, this.tenorCutoff - 1) / highPitch), 255);
     blue  = Math.min(255 * (input.getAverageFund(this.tenorCutoff, input.numInputs) / highPitch), 255);
   } // pitchColor
 
+  /**
+   *  Outermost rosette.  Wide angles; has a large opening in the center.
+   *
+   *  @param  radius       ** a float with the length of the side (not actually a radius?)
+   *  @param  strokeColor  color with which the rosette is to be drawn.
+   */
   void rosettePartOne(float radius, color strokeColor) {
     for (int i = 0; i < 4; i++) {
       x1 = radius*cos(PI/2*i);
@@ -79,6 +85,12 @@ public abstract class Scene
     }
   } // rosettePartOne
 
+  /**
+   *  Middle rosette.
+   *
+   *  @param  radius       ** a float with the length of the side (not actually a radius?)
+   *  @param  strokeColor  color with which the rosette is to be drawn.
+   */
   void rosettePartTwo(float radius, color strokeColor) {
     for (int i = 0; i < 8; i++) {
       x1 = radius*cos(PI/4*3*i+PI/8);
@@ -94,6 +106,12 @@ public abstract class Scene
     }
   } // rosettePartTwo
 
+  /**
+   *  Innermost rosette; has the smallest angles.
+   *
+   *  @param  radius       ** a float with the length of the side (not actually a radius?)
+   *  @param  strokeColor  color with which the rosette is to be drawn.
+   */
   void rosettePartThree(float radius, color strokeColor) {
     for (int i = 0; i < 16; i++) {
       x1 = radius*cos(PI/4*3*i);
