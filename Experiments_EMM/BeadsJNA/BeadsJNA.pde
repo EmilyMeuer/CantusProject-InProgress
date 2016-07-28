@@ -24,32 +24,33 @@ import beads.SpectralDifference;
 import beads.PeakDetector;
 
 /*
-  George Profenza
- 
- Edited by Emily Meuer
- 06/21/2016
- 
- To run w/out Jack, uncomment these lines in setup:
- ac = new AudioContext();
- UGen microphoneIn = ac.getAudioInput();
- ...and comment out any other initializing of these same variables (e.g., "ac = new AudioContext(new AudioServerIO.Jack());").
- May get errors that the line cannot be found, but its worth a try!
- 
- (This is an example from a link from this tutorial: https://groups.google.com/forum/?hl=en&fromgroups=#!topic/beadsproject/dSvxUM1l9S0,
- and sent by George P. in response to SO question.)
- 
- Good discussion here:
- https://groups.google.com/forum/#!topic/beadsproject/oWEVUNHSztE/discussion
- 
- Comments on FFT (they first begin in draw()):
- This float[] (i.e., features) is the FFT buffer!
- So we just need to find out what frequencies go to what place in the buffer.
- Perhaps this Pitch class will help? I kind of doubt it... 
- http://www.beadsproject.net/doc/net/beadsproject/beads/data/Pitch.html
- Otherwise FFT has methods binNumber and binFrequency that look like what we want.
- Those might not work with the PowerSpectrum?
- If they don't, can we just call calculateReal() or calculateImaginary() and not use the PS?
- */
+  Original version by George Profenza
+  
+  Edited by Emily Meuer
+  06/21/2016
+  
+  To run w/out Jack, uncomment these lines in setup:
+    ac = new AudioContext();
+    UGen microphoneIn = ac.getAudioInput();
+  ...and comment out any other initializing of these same variables (e.g., "ac = new AudioContext(new AudioServerIO.Jack());").
+  May get errors that the line cannot be found, but its worth a try!
+  
+  (This is an example from a link from this tutorial: https://groups.google.com/forum/?hl=en&fromgroups=#!topic/beadsproject/dSvxUM1l9S0,
+  and sent by George P. in response to SO question.)
+  
+  Good discussion here:
+  https://groups.google.com/forum/#!topic/beadsproject/oWEVUNHSztE/discussion
+  
+  Comments on FFT (they first begin in draw()):
+  This float[] (i.e., features) is the FFT buffer!
+  So we just need to find out what frequencies go to what place in the buffer.
+  Perhaps this Pitch class will help? I kind of doubt it... 
+    http://www.beadsproject.net/doc/net/beadsproject/beads/data/Pitch.html
+  Otherwise FFT has methods binNumber and binFrequency that look like what we want.
+    Those might not work with the PowerSpectrum?
+    If they don't, can we just call calculateReal() or calculateImaginary() and not use the PS?
+      ^ Don't do this!  Not necessary!  Turns out that the wheel has been invented already.
+*/
 
 public class BeadsJNA extends PApplet {
 
@@ -74,13 +75,13 @@ public class BeadsJNA extends PApplet {
 
   public void setup() {
     // Beads works primarily in "UGens" - unit generators - that it strings together in "chains."
-
+    
     ac = new AudioContext();
-    //      ac = new AudioContext(new AudioServerIO.Jack(),512,AudioContext.defaultAudioFormat(4,4));
-    //    ac = new AudioContext(new AudioServerIO.Jack());
-
-
-    //    UGen microphoneIn = ac.getAudioInput(new int[]{1,2,3,4});
+//      ac = new AudioContext(new AudioServerIO.Jack(),512,AudioContext.defaultAudioFormat(4,4));
+//    ac = new AudioContext(new AudioServerIO.Jack());
+    
+    
+//    UGen microphoneIn = ac.getAudioInput(new int[]{1,2,3,4});
     UGen  mic1  = ac.getAudioInput(new int[] {1} );
     UGen  mic2  = ac.getAudioInput(new int[] {2} );
     //    UGen microphoneIn = ac.getAudioInput();
@@ -94,8 +95,6 @@ public class BeadsJNA extends PApplet {
     Gain g2 = new Gain(ac, 1, 0.5f);
     g2.addInput(mic2);
     ac.out.addInput(g2);
-    // Do I really even need to add them to ac.out for this?
-
     println("no. of inputs:  " + ac.getAudioInput().getOuts()); 
 
     // This splits up the frames for audio analysis - don't exactly understand why.
@@ -130,22 +129,18 @@ public class BeadsJNA extends PApplet {
     // connect the PowerSpectrum to the Frequency object
     ps.addListener(f);
 
-    ps.addListener(f);
+    
+  //set up spectral difference
+  SpectralDifference sd = new SpectralDifference(ac.getSampleRate());
+  // sd.setFreqWindow(80.f,1100.f);
+  sd.setFreqWindow(2000.f, 10000.f);
+  ps.addListener(sd);
 
-    //set up spectral difference
-    SpectralDifference sd = new SpectralDifference(ac.getSampleRate());
-// Does this translate directly into the spacing of the frequencies?
-// I.e., could map locations from 0-526 to 80-1100 to find the pitch?
-// (I think so!  That would be wonderful!)
-    sd.setFreqWindow(80.f,1100.f);
-//    sd.setFreqWindow(2000.f, 10000.f);
-    ps.addListener(sd);
+  // Peak Detector
+  PeakDetector pd = new PeakDetector();
+  sd.addListener(pd);    
 
-    // Peak Detector
-    PeakDetector pd = new PeakDetector();
-    sd.addListener(pd);    
-
-
+  
     fft2.addListener(ps2);
 
     // Linking the ShortFrameSegmenters back to the AudioContext,
@@ -177,6 +172,8 @@ public class BeadsJNA extends PApplet {
         line(x, height, x, height - barHeight);
       }
     } // if
+    
+    println("f = " + f.getFeatures());
 
     setFund();
 

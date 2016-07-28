@@ -255,18 +255,18 @@ class LeadBall {
   float xLead;
   float yLead;
   LeadBall() {
-    xLead = width;
+    xLead = width/15;
     yLead = height*0.9;
   }
   void move (){
     xLead = xLead - speed*in.getAmplitude()*amplify;
 //    xLead = xLead - in.getAdjustedFundAsHz()/10;
 //    println("xLead = " + xLead + "; yLead = " + yLead);
-  if (xLead < 0){
+  if (xLead < width/15){
 //      yLead = height*0.9-in.getAdjustedFundAsHz();
       yLead = (height * 0.9) - in.getAdjustedFundAsHz();
       println("  set yLead to " + yLead);
-      xLead = width;
+      xLead = width-width/15;
     }//if x<0
   fill(200,100,200);
   ellipse(xLead,yLead,10,10);
@@ -294,10 +294,11 @@ class Ball{
     fill(c,100,100); 
     ellipse(x,y,10,10);
     if (ballNumber != 0){
-      x = (myLeadBall.getXpos() + ballNumber*width/balls) % width;
-        if ((x < 1) && (x > -1)) {
-//        y = height*0.9-in.getAdjustedFundAsHz();
-          y = in.getAdjustedFundAsHz();
+      x = (myLeadBall.getXpos() + ballNumber*(width-width/15)/balls) % (width-width/15);
+        if ((x < width/20)) {
+          x = width-width/15;
+        y = height*0.9-in.getAdjustedFundAsHz();
+          //y = in.getAdjustedFundAsHz();
         println("  y = " + y);
         }
     }
