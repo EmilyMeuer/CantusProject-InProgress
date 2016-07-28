@@ -53,7 +53,7 @@ void setup()
   rosetteV3Rotate  = new RosetteV3Rotate(leftInput, rightInput, rotateTenorCutoff);
   gameOfLife       = new GameOfLife(rightInput, gameOfLifeTenorCutoff, "ring");
 
-  scene = 1;
+  scene = 0;
   waitUntil  = millis();
 } // setup()
 
@@ -61,26 +61,26 @@ void draw()
 {
 try
 {
-  if (mousePressed && millis() > waitUntil)  
+  if (keyPressed && millis() > waitUntil)  
   {  
-    waitUntil  = millis() + 300;
-    scene++;
+    waitUntil  = millis() + 100;
+    scene = (scene + 1) % 4;
     println("scene = " + scene);
   }
 
-  if (scene == 1) {
+  if (scene == 0) {
     drawRosette.run();
   } // scene 1
 
-  if (scene == 2) {
+  if (scene == 1) {
     rosetteV3Colors.run();
   } // scene 2
 
-  if (scene == 3) {
+  if (scene == 2) {
     rosetteV3Rotate.run();
   } // scene 3
   
-  if (scene >= 4)  {
+  if (scene >= 3)  {
     
     gameOfLife.run();
   } // scene 4

@@ -40,7 +40,7 @@
  */
 
 // Calibrate:
-float  volAdjust             = 0.001;  // divide amp by this.
+float  volAdjust           = 0.001;  // divide amp by this.
 float speed                = 10;   // divide amp by this to get a ball move speed.
 float amplify              = 100;    // multiply amp by this to slow the ball speed.
 int  whichInputMovesBalls  = 2;  // this line moves the balls in the background.
@@ -181,21 +181,21 @@ void draw()
   float  orangeVol  = rightInput.getAmplitude() / volAdjust;
   float  yellowVol  = leftInput.getAmplitude() / volAdjust;
   float  lightGreenVol  = rightInput.getAmplitude() / volAdjust;
-  float  forestGreenVol  = leftInput.getAmplitude() / volAdjust;
+  float  forestGreenVol  = rightInput.getAmplitude() / volAdjust;
   float  periwinkleVol  = rightInput.getAmplitude() / volAdjust;
-  float  purpleVol  = leftInput.getAmplitude() / volAdjust;
+  float  purpleVol  = rightInput.getAmplitude() / volAdjust;
   float  fuchsiaVol  = rightInput.getAmplitude() / volAdjust;
-  float  pinkVol  = leftInput.getAmplitude() / volAdjust;
+  float  pinkVol  = rightInput.getAmplitude() / volAdjust;
 
-  float  redPitch  = leftInput.getAdjustedFundAsHz();
+  float  redPitch  = rightInput.getAdjustedFundAsHz();
   float  orangePitch  = rightInput.getAdjustedFundAsHz();
-  float  yellowPitch  = leftInput.getAdjustedFundAsHz();
+  float  yellowPitch  = rightInput.getAdjustedFundAsHz();
   float  lightGreenPitch  = rightInput.getAdjustedFundAsHz();
-  float  forestGreenPitch  = leftInput.getAdjustedFundAsHz();
+  float  forestGreenPitch  = rightInput.getAdjustedFundAsHz();
   float  periwinklePitch  = rightInput.getAdjustedFundAsHz();
-  float  purplePitch  = leftInput.getAdjustedFundAsHz();
+  float  purplePitch  = rightInput.getAdjustedFundAsHz();
   float  fuchsiaPitch  = rightInput.getAdjustedFundAsHz();
-  float  pinkPitch  = leftInput.getAdjustedFundAsHz();
+  float  pinkPitch  = rightInput.getAdjustedFundAsHz();
 
   //realistically there will be ten of these
   //and I'm thinking about naming them after
@@ -290,6 +290,7 @@ void draw()
   }
   oldt2=pitcht2/(volt2+1);
 
+/*
   //FOREST GREEN
   stroke(255);
   rectMode(CORNERS);
@@ -390,7 +391,7 @@ void draw()
   }
   oldb1 = pitchb1/(volb1+1);
   */
-
+/*
   //PINK
   stroke(255);
   rectMode(CORNERS);
@@ -405,7 +406,8 @@ void draw()
     oldPink=oldPink+pitchb1/(volb1+1);
   }
   oldb1=pitchb1/(volb1+1);
-  }
+  */
+  } // try
   catch (NullPointerException npe)  {}
 } // draw()
 

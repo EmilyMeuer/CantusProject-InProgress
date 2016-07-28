@@ -14,7 +14,7 @@
  */
 
 // Calibrate:
-int  volumeAdjust  = 200;   // not currently used.
+int  volumeAdjust  = 400;
 
 // The following is kept for the info it gives about picture spacing;
 // however, variables are no longer used, as the images are loaded directly into their arrays.
