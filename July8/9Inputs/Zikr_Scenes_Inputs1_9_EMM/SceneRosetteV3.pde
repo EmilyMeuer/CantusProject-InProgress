@@ -4,9 +4,10 @@ abstract class RosetteV3 extends Scene
     06/29/2016
    Emily Meuer
    
-   Base rosette class.
+   Abstract, base rosette class.
    */
 
+  // The following specify the length of the radius of each of the 6 rosettes:
   float radius1;
   float radius2;
   float radius3;
@@ -14,8 +15,13 @@ abstract class RosetteV3 extends Scene
   float radius5;
   float radius6;
 
-  float  rotateBy;
+  float  rotateBy;    // amt by which the rosette should be rotated.
 
+  /**
+   *  Constructor; makes a RosetteV3 with the given Input and pre-determined radii.
+   *
+   *  @param  input        an Input, used to get bass pitch.
+   */
   RosetteV3(Input  input)
   {
 //    this.leftInput  = leftInput;
@@ -32,11 +38,16 @@ abstract class RosetteV3 extends Scene
     this.radius6 = 725;
   } // RosetteV3
 
+  /**
+   *  Called in draw() in the Zikr_Scenes_Inputs1_9_EMM tab;
+   *  draws 6 rosettes with the above radii and rotated by rotateBy and -rotateBy (every other).
+   */
   void run()
   {
     background(0);
     translate(width/2, height/2);
 
+    // pitch is controlled by the basses:
     float pitch = input.getAverageFund(1, this.tenorCutoff - 1);
 // Again, want to add tenors?  Autem, nisi fallor, they don't sing here.
 
@@ -90,6 +101,7 @@ abstract class RosetteV3 extends Scene
 
 /*
 // Do we actually want rotation here?  If so, we'll have to give it tenorCutoff.
+// ^ No, we do this in RosetteV3Rotate.run() (in the SceneRosetteV3Rotate tab).
     if (input.getAverageFund(this.tenorCutoff, input.numInputs) > 3) {
       this.rotateBy = (this.rotateBy + (input.getAverageFund(this.tenorCutoff, input.numInputs) / 400)) % 360;
     }

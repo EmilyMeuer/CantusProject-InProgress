@@ -27,6 +27,13 @@ class RosetteV3Colors extends RosetteV3
      700,
      750
    }; // growFrequencies
+   
+  /**
+   *  Constructor; makes a RosetteV3Colors with the given Input and tenorCutoff.
+   *
+   *  @param  input        an Input, used to get bass and tenor pitch and amp.
+   *  @param  tenorCutoff  an int at which the mics divide into basses (below) and tenors (this and all above).
+   */
   RosetteV3Colors(Input input, int tenorCutoff)
   {
     super(input);
@@ -34,6 +41,11 @@ class RosetteV3Colors extends RosetteV3
     this.tenorCutoff = tenorCutoff;
   } // RosetteV3
 
+  /**
+   *  Called in draw() in the Zikr_Scenes_Inputs1_9_EMM tab;
+   *  draws 6 rosettes with the above radii and rotated by rotateBy and -rotateBy (every other) -
+   *  as in RosetteV3.run(), but with more green in each rosette.
+   */
   void run()
   {
     background(0);

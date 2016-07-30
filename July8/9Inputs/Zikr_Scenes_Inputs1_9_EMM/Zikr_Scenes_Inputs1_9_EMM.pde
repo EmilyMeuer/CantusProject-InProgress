@@ -6,7 +6,7 @@
  to be cycled through on (mousePressed/keyPressed).
  
  Calibration options:
- [ Tab                       : variableName        (controls what) ]
+ [ Tab                     :  variableName        (controls what) ]
  Zikr_Scenes_EMM           :  drawTenorCutoff    (controls which voices control which functionality)
  colorsTenorCutoff
  rotateTenorCutoff       
@@ -29,6 +29,7 @@ int  rotateTenorCutoff  = 5;    // mics numbered below this control rosette grow
 
 int  gameOfLifeTenorCutoff = 5; // mics numbered below this add red, mics above add blue.
 
+// Should put these in an array and loop through in scene selection!
 Scene  drawRosette;
 Scene  rosetteV3Colors;
 Scene  rosetteV3Rotate;
@@ -51,34 +52,35 @@ void setup()
   rosetteV3Rotate  = new RosetteV3Rotate(inputs, rotateTenorCutoff);
   gameOfLife       = new GameOfLife(inputs, gameOfLifeTenorCutoff, "ring");
 
-  scene = 1;
+  scene = 0;
   waitUntil  = millis();
 } // setup()
 
 void draw()
 {
+  // try-catch because of a pesky Null Pointer that I'll deal with in the future but don't want to ruin the show. :/
 try
 {
-  if (mousePressed && millis() > waitUntil)  
+  if (keyPressed && millis() > waitUntil)  
   {  
     waitUntil  = millis() + 300;
-    scene++;
+    scene = (scene + 1) % 4;
     println("scene = " + scene);
   }
 
-  if (scene == 1) {
+  if (scene == 0) {
     drawRosette.run();
   } // scene 1
 
-  if (scene == 2) {
+  if (scene == 1) {
     rosetteV3Colors.run();
   } // scene 2
 
-  if (scene == 3) {
+  if (scene == 2) {
     rosetteV3Rotate.run();
   } // scene 3
   
-  if (scene >= 4)  {
+  if (scene >= 3)  {
     
     gameOfLife.run();
   } // scene 4

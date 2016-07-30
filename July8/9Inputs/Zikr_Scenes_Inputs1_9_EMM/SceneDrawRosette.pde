@@ -33,7 +33,13 @@ public class DrawRosette extends Scene
    C 4       -  261.63
    Fb (E) 4  -  329.63
    */
-
+  
+  /**
+   *  Constructor; creates a DrawRosette with the given Input and tenorCutoff.
+   *
+   *  @param  input        an Input that can be used to control when or in what color the rosettes are drawn.
+   *  @param  tenorCutoff  int that specifies which mics belong to the tenors (this and all higher are tenors; lower numbers are basses).
+   */
   public DrawRosette(Input input, int tenorCutoff)
   {
     this.input         = input;
@@ -44,12 +50,21 @@ public class DrawRosette extends Scene
     waitUntil          = millis();
   } // constructor
   
+  /**
+   *  Called in draw in the Zikr_Scenes_Inputs1_9_EMM tab.
+   */
   public void run()
   {
     translate(width/2, height/2);
     drawAndRaiseThreshold(300);
   } // run()
   
+  /**
+   *  Draws one more stroke of rosetteThree each time a pitch threshold is passed,
+   *  and raises the threshold that must be passed for the next stroke.
+   *
+   *  @param  radius  ** a float specifiying how long each stroke of the rosette is.
+   */
   void drawAndRaiseThreshold(float radius) 
   {
 //    println("Draw.drawAndRaiseThreshold: input.getAverageFund(1, input.numInputs) = " + input.getAverageFund(1, input.numInputs));
@@ -64,6 +79,12 @@ public class DrawRosette extends Scene
     } // if
   } // drawAndRaiseThreshold(float)
   
+  /**
+   *  Draws one more stroke of rosetteThree every "time" milliseconds, 
+   *  where "time" is a variable specified earlier in the class.
+   *
+   *  @param  radius  ** a float specifiying how long each stroke of the rosette is.
+   */
   void drawOnDelay(float radius)
   {
     // draws a line every second:
@@ -77,6 +98,12 @@ public class DrawRosette extends Scene
     } // if
   } // drawOnDelay
   
+  /**
+   *  Draws one more stroke of rosetteThree each time a pitch threshold is passed.
+   *
+   *  @param  radius         ** a float specifiying how long each stroke of the rosette is.
+   *  @param  thresholdFreq  a float specifying which pitch must be met or passed to draw a stroke.
+   */
   void drawPastThreshold(float radius, float thresholdFreq)
   {
     // Force the threshold to be crossed multiple times before triggering?
@@ -92,6 +119,13 @@ public class DrawRosette extends Scene
     } // if
   } // drawPastThreshold(float)
   
+  /**
+   *  Draws the specified stroke of rosetteThree.
+   *
+   *  @param  radius         ** a float specifiying how long each stroke of the rosette is.
+   *  @param  whichStroke    an int specifying which stroke should be drawn; must be between 0 and 15.
+   *  @param  strokeColor    a color in which the rosette will be drawn.
+   */
   void drawRosetteThree(float radius, int whichStroke, color strokeColor) {
     if (whichStroke > 15) {
       throw new IllegalArgumentException("Zikr_Scenes_EMM.drawRosetteThree: int parameter " + whichStroke + " is greater than the number of lines in the rosette.");

@@ -1,6 +1,6 @@
-class GameOfLife extends Scene
+class GameOfLife extends Scene //<>//
 {
-  /* //<>//
+  /*
    07/04/2016
    Emily Meuer
    Turning GameOfLife_ColorChange_EMM into a Scene class.
@@ -17,23 +17,30 @@ class GameOfLife extends Scene
    * translation from JavaScript to Processing
    */
 
-  color liveColor;
-  color deadColor;
+  color liveColor;    // color of live squares; currently purple.
+  color deadColor;    // color of dead squares; currently white.
 
-  int      tileSize;
-  int[][]  newboard;
-  int[][]  oldboard;
-  int i=0;
-  int j=0;
+  int      tileSize;    //  the board is this many tiles wide.
+  int[][]  newboard;    //  holds the values for the generation being currently calculated.
+  int[][]  oldboard;    //  holds the values for the previous generation that will determine the values in newboard.
+  int i=0;    // counts through new and oldboard.
+  int j=0;    // counts through new and oldboard.
 
   float  red;
   float  green  = 50;
   float  blue;
 
-  String  seed;
-  int     waitUntil;
-  int     genCount;
+  String  seed;        // specifies whether the board will seed with a "ring", "square", or "rPentomino". 
+  int     waitUntil;   // keeps a long press from counting as many consecutive pressed.
+  int     genCount;    // keeps track of the number of generations.
 
+  /**
+   *  Constructor; creates a GameOfLife with the given Input, tenorCutoff, and seed.
+   *
+   *  @param  input        an Input, previously used to control the color but not currently doing anything.
+   *  @param  tenorCutoff  an int at which the mics divide into basses (below) and tenors (this and all above).
+   *  @param  seed         a String specifying whether the board will seed with a "ring", "square", or "rPentomino".  
+   */
   GameOfLife(Input input, int tenorCutoff, String seed)
   {
     this.input        = input;
@@ -41,14 +48,14 @@ class GameOfLife extends Scene
     this.seed         = seed;
 
     this.tileSize = width/10;
-    
+
     // It's fine until j = 89.
-    println("height = " + height);
-    
+    println("GameOfLife.constructor: height = " + height);
+
     /*
     this.newboard = new int[height/10][tileSize];
-    this.oldboard = new int[height/10][tileSize];
-    */
+     this.oldboard = new int[height/10][tileSize];
+     */
 
     this.newboard = new int[tileSize][height/10];
     this.oldboard = new int[tileSize][height/10];
@@ -60,11 +67,22 @@ class GameOfLife extends Scene
     this.waitUntil  = millis();
   } // constructor(Input, int, String)
 
+  /**
+   *  Constructor that creates a GameOfLife with the given Input and tenorCutoff and seeds with "ring".
+   *
+   *  @param  input        an Input, previously used to control the color but not currently doing anything.
+   *  @param  tenorCutoff  an int at which the mics divide into basses (below) and tenors (this and all above).
+   */
   GameOfLife(Input input, int tenorCutoff)
   {
     this(input, tenorCutoff, "ring");
   } // constructor(Input, int)
 
+  /**
+   *  Called in draw() in the Zikr_Scenes_Inputs1_9_EMM tab;
+   *  if this is the first generation, it seeds the board (seed specified in constructor),
+   *  else it creates the next generation on mouse press.
+   */
   void run()
   {
     strokeWeight(1);
@@ -82,25 +100,36 @@ class GameOfLife extends Scene
       } // seed if's
     } // genCount == 0
 
-    if (keyPressed && millis() > this.waitUntil)
+    if (mousePressed && millis() > this.waitUntil)
     {
       nextGeneration();
       this.waitUntil += 100;
-    } // keyPressed
+    } // mousePressed
   }// run()
 
+  /**
+   *  Setter for the liveColor instance variable;
+   *  can be modified to use pitchColor to determine the color.
+   */
   void setLiveColor()
   {
     //pitchColor();      // method inherited from Scene that sets red and blue depending on pitches of high and low inputs.
- //   green = (green + 30) % 255;
+    //   green = (green + 30) % 255;
     //liveColor  = color(red, green, blue);
-    liveColor = color(153,49,245);  //royal purple
+    liveColor = color(153, 49, 245);  //royal purple
   } // setLiveColor
 
+  /**
+   *  Getter for the liveColor instance variable.
+   */
   color getLiveColor() {  
     return liveColor;
   }
 
+  /**
+   *  Loops through oldboard and determines the value of the corresponding cell in newboard
+   *  based on how many dead and alive neighbors each oldboard cell has.
+   */
   void nextGeneration()
   {
     setLiveColor();
@@ -124,7 +153,7 @@ class GameOfLife extends Scene
           }//else dead
         }//if get
 
-        else if (get(i*10+5, j*10+5) != deadColor)  //dealing with the living
+        if (oldboard[i][j] == 1)              //dealing with the living
         {
           if (liveCount<2 || liveCount>3)
           {
@@ -137,6 +166,7 @@ class GameOfLife extends Scene
       }//for j
     }//for i
 
+
     for (i=0; i<oldboard.length; i++)
     {
       for (j=0; j<oldboard[i].length; j++)
@@ -144,6 +174,8 @@ class GameOfLife extends Scene
         //      setLiveColor();
         color curLiveColor  = getLiveColor();
 
+        //  resets oldboard to the values in newboard (since newboard is now the oldboard for the next generation),
+        //  and draws the squares corresponding to each array position / cell.
         if (newboard[i][j]==0)
         {
           oldboard[i][j]=0;
@@ -159,16 +191,20 @@ class GameOfLife extends Scene
         }
       }
     }
-    
+
     this.genCount++;
   } // nextGeneration()
 
+  /**
+   *  Seeds the board with a square.
+   */
   void seedSquare()
   {
     for (i=0; i<oldboard.length; i++)
     {
       for (j=0; j<oldboard[i].length; j++)
       {
+        //   sets the middle 9 cells to alive and draws their squares in livecolor.
         if (i>=(oldboard.length)/2-1 && (i<=(oldboard.length)/2+1) &&(j<=(oldboard[i].length)/2+1) && (j>=(oldboard[i].length)/2-1))
         {
           stroke(0);
@@ -186,15 +222,19 @@ class GameOfLife extends Scene
     }// for - i
   } // seedSquare
 
+  /**
+   *  Seeds the board with a ring.
+   */
   void seedRing()
   {
     for (i=0; i<oldboard.length; i++)
     {
       for (j=0; j<oldboard[i].length; j++)
       {
+        //   sets the 8 cells around the center to alive and draws their squares in livecolor.
         if ((i==(oldboard.length)/2-1 && (j<=(oldboard[i].length)/2+1) && 
-            (j>=(oldboard[i].length)/2-1)) || ((i==(oldboard.length)/2+1) && 
-            (j<=(oldboard[i].length)/2+1) && (j>=(oldboard[i].length)/2-1)))
+          (j>=(oldboard[i].length)/2-1)) || ((i==(oldboard.length)/2+1) && 
+          (j<=(oldboard[i].length)/2+1) && (j>=(oldboard[i].length)/2-1)))
         {
           stroke(0);
           fill(liveColor);
@@ -217,12 +257,16 @@ class GameOfLife extends Scene
     }// for - i
   } // seedRing
 
+  /**
+   *  Seeds the board with an r-pentomino shape.
+   */
   void seedRPentomino()
   {
     for (i=0; i<oldboard.length; i++)
     {
       for (j=0; j<oldboard[i].length; j++)
       {
+        //   sets the r-pentomino positions in the arrays to alive and draws their squares in livecolor.
         if (i==(oldboard.length)/2 && (j>=(oldboard[i].length)/2-1) &&(j<=(oldboard[i].length)/2+1))
         {
           stroke(0);
@@ -252,6 +296,14 @@ class GameOfLife extends Scene
     }// for - i (drawing the initial board, R-pentomino)
   } // seedRPentomino
 
+  /**
+   *  Counts how many dead neighbors a cell at a particular location has.
+   *  
+   *  @param  i  an int specifying the cell's location in the first dimension of the array.
+   *  @param  j  an int specifying the cell's location in the second dimension of the array.
+   *
+   *  @return  int  the number of dead cells that surround the cell in question.
+   */
   int getDeadCount(int i, int j)
   {
     int dead=0;
@@ -271,6 +323,14 @@ class GameOfLife extends Scene
     return dead;
   }//dead count
 
+  /**
+   *  Counts how many living neighbors a cell at a particular location has.
+   *  
+   *  @param  i  an int specifying the cell's location in the first dimension of the array.
+   *  @param  j  an int specifying the cell's location in the second dimension of the array.
+   *
+   *  @return  int  the number of living cells that surround the cell in question.
+   */
   int getAliveCount(int i, int j)
   {
     int alive=0;
